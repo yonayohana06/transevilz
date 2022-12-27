@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:transevilz/onboarding/onboarding.dart';
 
 class OnBoardCarousel extends StatefulWidget {
-  const OnBoardCarousel({super.key});
+  final Function(int) onChanged;
+  const OnBoardCarousel({super.key, required this.onChanged});
 
   @override
   State<OnBoardCarousel> createState() => _OnBoardCarouselState();
@@ -23,8 +25,8 @@ class _OnBoardCarouselState extends State<OnBoardCarousel> {
       if (_currentPage < 2) {
         _currentPage++;
       } else {
-        // _currentPage = 3;
-        dispose();
+        _currentPage = 0;
+        // dispose();
       }
 
       _pageController.animateToPage(
@@ -49,39 +51,75 @@ class _OnBoardCarouselState extends State<OnBoardCarousel> {
       height: 400,
       child: PageView(
         controller: _pageController,
+        onPageChanged: (currentPage) {
+          widget.onChanged(currentPage);
+        },
         children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 45),
-            width: 200,
-            height: 200,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/onboarding/slide-1.png'),
-                fit: BoxFit.contain,
+          Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 45),
+                width: 200,
+                height: 200,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/onboarding/slide-1.png'),
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(height: 40),
+              const OnBoardDesc(
+                headline: 'Teknologi terkini yang memberikan kemudahan\n'
+                    'bagi Anda',
+                desc: 'Lorem Ipsum is simply dummy text of the printing\n'
+                    'and typesetting industry.',
+              )
+            ],
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 45),
-            width: 200,
-            height: 200,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/onboarding/slide-2.png'),
-                fit: BoxFit.contain,
+          Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 45),
+                width: 200,
+                height: 200,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/onboarding/slide-2.png'),
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(height: 40),
+              const OnBoardDesc(
+                headline: 'Anda dapat melakukan\n transfer antar Negara\n'
+                    'dengan Mudah',
+                desc: 'Lorem Ipsum is simply dummy text of the printing\n'
+                    'and typesetting industry.',
+              )
+            ],
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 45),
-            width: 200,
-            height: 200,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/onboarding/slide-3.png'),
-                fit: BoxFit.contain,
+          Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 45),
+                width: 200,
+                height: 200,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/onboarding/slide-3.png'),
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(height: 40),
+              const OnBoardDesc(
+                headline: 'Lalu, Tunggu Apalagi,\n Gabung sekarang dengan\n'
+                    'TransEvilz',
+                desc: 'Lorem Ipsum is simply dummy text of the printing\n'
+                    'and typesetting industry.',
+              )
+            ],
           ),
         ],
       ),

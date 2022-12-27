@@ -1,16 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:transevilz/onboarding/onboarding.dart';
 
-class OnBoardingScreen extends StatelessWidget {
+class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
 
+  @override
+  State<OnBoardingScreen> createState() => _OnBoardingScreenState();
+}
+
+class _OnBoardingScreenState extends State<OnBoardingScreen> {
+  int _currentPage = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(height: 40),
-          OnBoardCarousel(),
+          const SizedBox(height: 60),
+          OnBoardCarousel(
+            onChanged: (currentPage) {
+              setState(() {
+                _currentPage = currentPage;
+              });
+            },
+          ),
+          const SizedBox(height: 40),
+          OnBoardIndicator(currentPage: _currentPage),
+          Flexible(flex: 1, child: Container()),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                fixedSize: const Size(100, 45),
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () {},
+              child: const Text("Mulai"),
+            ),
+          ),
+          const SizedBox(height: 40),
         ],
       ),
     );
