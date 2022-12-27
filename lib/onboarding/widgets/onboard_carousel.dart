@@ -70,7 +70,7 @@ class _OnBoardCarouselState extends State<OnBoardCarousel> {
               ),
               const SizedBox(height: 40),
               const OnBoardDesc(
-                headline: 'Teknologi terkini yang memberikan kemudahan\n'
+                headline: 'Teknologi terkini\n yang memberikan kemudahan\n'
                     'bagi Anda',
                 desc: 'Lorem Ipsum is simply dummy text of the printing\n'
                     'and typesetting industry.',
