@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:transevilz/register/screens/register_profile_form.dart';
 import 'package:transevilz/register/widget/reuse_app_bar.dart';
 
 class OtpScreen extends StatelessWidget {
@@ -7,6 +8,7 @@ class OtpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -88,10 +90,10 @@ class OtpScreen extends StatelessWidget {
                             widget: Text(
                               '1',
                               style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFF2075F3),
-                                  fontFamily: 'Montserrat'
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF2075F3),
+                                fontFamily: 'Montserrat',
                               ),
                             ),
                           ),
@@ -186,6 +188,14 @@ class OtpScreen extends StatelessWidget {
                           ),
                           SizedBox(),
                           OtpButton(
+                            onPressing: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RegisterProfileForm(),
+                                ),
+                              );
+                            },
                             widget: Text(
                               '0',
                               style: TextStyle(
@@ -212,11 +222,14 @@ class OtpScreen extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: 'Belum dapat kode otp?',
+                      style: TextStyle(
+                        color: Color(0xFF7A7A7A)
+                      )
                     ),
                     TextSpan(
-                      text: 'Belum dapat kode otp?',
+                      text: ' KIRIM ULANG KODE OTP',
                       style: TextStyle(
-                        color: Colors.black
+                        color: Colors.green
                       )
                     )
                   ]

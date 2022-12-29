@@ -43,6 +43,7 @@ dependencies:
   firebase_storage: ^11.0.9
   cloud_firestore: ^4.3.0
   path_provider: ^2.0.11
+  dropdown_button2: ^1.9.2
 
 dev_dependencies:
   flutter_test:
@@ -98,14 +99,14 @@ flutter:
   #         weight: 700
 
   fonts:
-    - family: Dm Sans
+    - family: DM Sans
       fonts:
         - asset: assets/fonts/DMSans-Bold.ttf
         - asset: assets/fonts/DMSans-Medium.ttf
         - asset: assets/fonts/DMSans-Regular.ttf
     - family: Poppins
       fonts:
-        - asset: assets/fonts/Poppins-ExtraBold.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
     - family: Montserrat
       fonts:
         - asset: assets/fonts/Montserrat-Bold.ttf

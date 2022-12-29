@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ReuseAppBar extends StatelessWidget {
-  const ReuseAppBar({Key? key, required this.title}) : super(key: key);
+  ReuseAppBar({Key? key, required this.title, this.onpress}) : super(key: key);
   final String title;
+  VoidCallback? onpress;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,17 +15,18 @@ class ReuseAppBar extends StatelessWidget {
           Align(
               alignment: Alignment.topLeft,
               child: InkWell(
-                  child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      height: 30,
-                      width: 30,
-                      child: Center(
-                        child: Icon(
-                          Icons.arrow_back_rounded,
-                          color: Color(0xFF2075F3),
-                        ),
-                      )
-                  )
+                onTap: onpress,
+                child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    height: 30,
+                    width: 30,
+                    child: Center(
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        color: Color(0xFF2075F3),
+                      ),
+                    )
+                ),
               )
           ),
           Align(
