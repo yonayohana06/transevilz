@@ -40,7 +40,7 @@ class _View extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "Sudah punya akun ?  ",
+                        "Belum punya akun ?  ",
                         style: TextStyle(
                           color: Color(0xFF929292),
                           fontSize: 12,

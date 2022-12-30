@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transevilz/app/app.dart';
 import 'package:transevilz/forgot/forgot.dart';
 import 'package:transevilz/login/login.dart';
@@ -46,33 +48,13 @@ class ForgotScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.all(24),
-                    child: _Form(),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 26),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size(MediaQuery.of(context).size.width, 45),
-                        backgroundColor: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => NewPassword(),
-                          ),
-                        );
-                      },
-                      child: const Text("Kirim"),
+                  BlocProvider(
+                    create: (context) => ForgotBloc(),
+                    child: Container(
+                      margin: const EdgeInsets.all(24),
+                      child: _Form(),
                     ),
                   ),
-                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -86,31 +68,140 @@ class ForgotScreen extends StatelessWidget {
 class _Form extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const TitleForm(title: 'Email'),
-        TextFormField(
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.all(10),
-            fillColor: const Color(0xFFE5F2FF),
-            filled: true,
-            hintStyle: const TextStyle(
-              color: Colors.grey,
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
+    return BlocListener<ForgotBloc, ForgotState>(
+      listener: (context, state) {
+        if (state is EmailSuccess) {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                actions: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            fixedSize:
+                                Size(MediaQuery.of(context).size.width, 45),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const NewPassword(),
+                              ),
+                              (route) => false,
+                            );
+                          },
+                          child: const Text("Cek Email Sekarang"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+                content: const Text(
+                  "Permohonan Perubahan kata sandi telah dikirim ke email anda",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                title: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/forgot/email-verification.png"),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        }
+        if (state is EmailFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 2),
             ),
-            hintText: 'Email',
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(10),
+          );
+        }
+      },
+      child: Form(
+        key: context.read<ForgotBloc>().formKey,
+        onChanged: () => context.read<ForgotBloc>().add(StatusButton()),
+        child: Column(
+          children: [
+            const TitleForm(title: 'Email'),
+            TextFormField(
+              inputFormatters: [
+                FilteringTextInputFormatter.deny(
+                    context.read<ForgotBloc>().emailFormat)
+              ],
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              controller: context.read<ForgotBloc>().email,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(10),
+                fillColor: const Color(0xFFE5F2FF),
+                filled: true,
+                hintStyle: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                ),
+                hintText: 'Email',
+                border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              keyboardType: TextInputType.emailAddress,
+              validator: context.read<ForgotBloc>().validateEmail,
             ),
-            suffixIcon: const Icon(
-              Icons.remove_red_eye,
-              color: Colors.blue,
+            const SizedBox(height: 40),
+            BlocBuilder<ForgotBloc, ForgotState>(
+              builder: (context, state) {
+                if (context.read<ForgotBloc>().buttonEnable) {
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(MediaQuery.of(context).size.width, 45),
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () =>
+                        context.read<ForgotBloc>().add(SubmitEmail()),
+                    child: const Text("Kirim"),
+                  );
+                }
+                return ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(MediaQuery.of(context).size.width, 45),
+                    backgroundColor: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: null,
+                  child: const Text("Kirim"),
+                );
+              },
             ),
-          ),
+            const SizedBox(height: 10),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

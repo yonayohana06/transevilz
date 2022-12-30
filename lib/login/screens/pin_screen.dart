@@ -63,95 +63,186 @@ class PinScreen extends StatelessWidget {
 class _Form extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: context.read<LoginBloc>().formKey,
-      onChanged: () => context.read<LoginBloc>().add(ButtonLogin()),
-      child: Column(
-        children: [
-          BlocBuilder<LoginBloc, LoginState>(
-            builder: (context, state) {
-              return Column(
-                children: [
-                  const TitleForm(title: 'Buat Pin Evilz'),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: context.read<LoginBloc>().pin,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.all(10),
-                      fillColor: const Color(0xFFE5F2FF),
-                      filled: true,
-                      hintStyle: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintText: 'Masukkan 6 digit Pin',
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      suffixIcon: GestureDetector(
-                        child: Icon(
-                          context.read<LoginBloc>().showPass
-                              ? FeatherIcons.eyeOff
-                              : FeatherIcons.eye,
-                          color: Colors.blue,
-                          size: 20,
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state is PinSucces) {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) {
+              // Future.delayed(
+              //   const Duration(seconds: 1),
+              //   () => Navigator.pushReplacement(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => const LoginScreen(),
+              //     ),
+              //   ),
+              // );
+              return AlertDialog(
+                actions: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            fixedSize:
+                                Size(MediaQuery.of(context).size.width, 45),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text("OK"),
                         ),
-                        onTap: () =>
-                            context.read<LoginBloc>().add(ShowPassword()),
                       ),
-                    ),
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    maxLength: 10,
-                    validator: context.read<LoginBloc>().validatePin,
-                    keyboardType: TextInputType.phone,
-                    obscureText: context.read<LoginBloc>().showPass,
-                  ),
-                  const SizedBox(height: 24),
-                  const TitleForm(title: 'Konfirmasi Pin Evilz'),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: context.read<LoginBloc>().confirmPin,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.all(10),
-                      fillColor: const Color(0xFFE5F2FF),
-                      filled: true,
-                      hintStyle: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintText: 'Masukkan 6 digit Pin yang telah dibuat',
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      suffixIcon: GestureDetector(
-                        child: Icon(
-                          context.read<LoginBloc>().showPin
-                              ? FeatherIcons.eyeOff
-                              : FeatherIcons.eye,
-                          color: Colors.blue,
-                          size: 20,
-                        ),
-                        onTap: () => context.read<LoginBloc>().add(ShowPin()),
-                      ),
-                    ),
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    maxLength: 10,
-                    validator: context.read<LoginBloc>().validateConfirmPin,
-                    keyboardType: TextInputType.phone,
-                    obscureText: context.read<LoginBloc>().showPin,
+                    ],
                   ),
                 ],
+                content: const Text(
+                  "PIN berhasil dibuat",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                title: const Text(
+                  "Berhasil",
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
               );
             },
-          ),
-          Flexible(flex: 1, child: Container()),
-          BlocBuilder<LoginBloc, LoginState>(
-            builder: (context, state) {
-              if (context.read<LoginBloc>().isEnableButton) {
+          );
+        }
+        if (state is PinFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+      },
+      child: Form(
+        key: context.read<LoginBloc>().formKey,
+        onChanged: () => context.read<LoginBloc>().add(ButtonLogin()),
+        child: Column(
+          children: [
+            BlocBuilder<LoginBloc, LoginState>(
+              builder: (context, state) {
+                return Column(
+                  children: [
+                    const TitleForm(title: 'Buat Pin Evilz'),
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: context.read<LoginBloc>().pin,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.all(10),
+                        fillColor: const Color(0xFFE5F2FF),
+                        filled: true,
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintText: 'Masukkan 6 digit Pin',
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        suffixIcon: GestureDetector(
+                          child: Icon(
+                            context.read<LoginBloc>().showPass
+                                ? FeatherIcons.eyeOff
+                                : FeatherIcons.eye,
+                            color: Colors.blue,
+                            size: 20,
+                          ),
+                          onTap: () =>
+                              context.read<LoginBloc>().add(ShowPassword()),
+                        ),
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(16),
+                      ],
+                      validator: context.read<LoginBloc>().validatePin,
+                      keyboardType: TextInputType.phone,
+                      obscureText: context.read<LoginBloc>().showPass,
+                    ),
+                    const SizedBox(height: 24),
+                    const TitleForm(title: 'Konfirmasi Pin Evilz'),
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: context.read<LoginBloc>().confirmPin,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.all(10),
+                        fillColor: const Color(0xFFE5F2FF),
+                        filled: true,
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintText: 'Masukkan 6 digit Pin yang telah dibuat',
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        suffixIcon: GestureDetector(
+                          child: Icon(
+                            context.read<LoginBloc>().showPin
+                                ? FeatherIcons.eyeOff
+                                : FeatherIcons.eye,
+                            color: Colors.blue,
+                            size: 20,
+                          ),
+                          onTap: () => context.read<LoginBloc>().add(ShowPin()),
+                        ),
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(16),
+                      ],
+                      validator: context.read<LoginBloc>().validateConfirmPin,
+                      keyboardType: TextInputType.phone,
+                      obscureText: context.read<LoginBloc>().showPin,
+                    ),
+                  ],
+                );
+              },
+            ),
+            Flexible(flex: 1, child: Container()),
+            BlocBuilder<LoginBloc, LoginState>(
+              builder: (context, state) {
+                if (context.read<LoginBloc>().isEnableButton) {
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(MediaQuery.of(context).size.width, 45),
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      context.read<LoginBloc>().add(SubmitPin());
+                    },
+                    child: const Text("Kirim"),
+                  );
+                }
                 return ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(MediaQuery.of(context).size.width, 45),
@@ -160,27 +251,14 @@ class _Form extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {
-                    context.read<LoginBloc>().add(SubmitPin());
-                  },
+                  onPressed: null,
                   child: const Text("Kirim"),
                 );
-              }
-              return ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  fixedSize: Size(MediaQuery.of(context).size.width, 45),
-                  backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: null,
-                child: const Text("Kirim"),
-              );
-            },
-          ),
-          const SizedBox(height: 20),
-        ],
+              },
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }

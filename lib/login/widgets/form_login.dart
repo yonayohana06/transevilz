@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:transevilz/forgot/forgot.dart';
@@ -26,35 +27,24 @@ class _View extends StatelessWidget {
             barrierDismissible: true,
             context: context,
             builder: (context) {
-              // Future.delayed(
-              //   const Duration(seconds: 1),
-              //   () => Navigator.pushReplacement(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => const PinScreen(),
-              //     ),
-              //   ),
-              // );
-              return AlertDialog(
-                actions: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("OK"),
+              Future.delayed(
+                const Duration(seconds: 1),
+                () => Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PinScreen(),
                   ),
-                ],
-                // content: Container(
-                //   alignment: Alignment.center,
-                //   height: 40,
-                //   width: 20,
-                //   child: const CircularProgressIndicator(
-                //     valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                //   ),
-                // ),
+                ),
+              );
+              return AlertDialog(
+                content: Container(
+                  alignment: Alignment.center,
+                  height: 40,
+                  width: 20,
+                  child: const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                  ),
+                ),
                 title: const Text(
                   "Login Berhasil",
                   style: TextStyle(color: Colors.green, fontSize: 16),
@@ -83,6 +73,10 @@ class _View extends StatelessWidget {
               children: [
                 const TitleForm(title: 'Email'),
                 TextFormField(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.deny(
+                        context.read<LoginBloc>().emailFormat)
+                  ],
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: context.read<LoginBloc>().email,
                   decoration: InputDecoration(
@@ -100,11 +94,17 @@ class _View extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
+                  keyboardType: TextInputType.emailAddress,
                   validator: context.read<LoginBloc>().validateEmail,
                 ),
                 const SizedBox(height: 24),
                 const TitleForm(title: 'Kata Sandi'),
                 TextFormField(
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(16),
+                    FilteringTextInputFormatter.allow(
+                        context.read<LoginBloc>().emoji)
+                  ],
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: context.read<LoginBloc>().password,
                   decoration: InputDecoration(

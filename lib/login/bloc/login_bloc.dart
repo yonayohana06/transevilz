@@ -12,7 +12,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (isValid) {
         emit(LoginLoading());
         print('Form Validated Succesfully');
-        if (email.text == 'user@gmail.com' && password.text == "User1234") {
+        if (email.text == 'user@gmail.com' && password.text == "User1234#") {
           emit(LoginSucces());
         } else {
           emit(LoginFailed('Login gagal, email atau password salah'));
@@ -24,11 +24,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (isValid) {
         emit(LoginLoading());
         print('Form Validated Succesfully');
-        // if (email.text == 'user@gmail.com' && password.text == "User1234") {
-        //   emit(LoginSucces());
-        // } else {
-        //   emit(LoginFailed('Login gagal, email atau password salah'));
-        // }
+        if (pin.text.isNotEmpty && confirmPin.text.isNotEmpty) {
+          emit(PinSucces());
+        } else {
+          emit(PinFailed('Harap isi form'));
+        }
       }
     });
     on<ButtonLogin>((event, emit) {
@@ -55,20 +55,23 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (v == null || v.isEmpty) {
       return 'Email diperlukan';
     }
-    if (!RegExp(r'\S+@\S+').hasMatch(v)) {
-      return 'Email harus dengan format @';
+    if (!RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
+        .hasMatch(v)) {
+      return 'Format email invalid';
     }
     return null;
   }
 
   String? validatePassword(String? v) {
-    RegExp regex = RegExp(r'^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).{8,}$');
+    RegExp regex =
+        RegExp(r'^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[@#&*]).{8,}$');
     if (v == null || v.isEmpty) {
       return 'Kata sandi diperlukan';
     } else if (v.length < 8) {
       return 'Terlalu pendek, kata sandi minimal 8 karakter';
     } else if (!regex.hasMatch(v)) {
-      return 'Kata sandi harus berisi minimal satu angka\ndan satu huruf besar';
+      return "Kata sandi harus berisi huruf besar, angka\n"
+          "dan simbol (@, *, #, &)";
     }
     return null;
   }
@@ -92,6 +95,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
     return null;
   }
+
+  //filter emoji
+  RegExp emoji = RegExp("[A-Za-z0-9@*#&]*");
+
+  //filter email
+  RegExp emailFormat = RegExp("[A-Z]*");
 
   //Login
   bool showPass = true;
