@@ -10,8 +10,11 @@ class OnBoardIndicator extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _View(color: currentPage == 0 ? Colors.blue : Colors.grey),
-        _View(color: currentPage == 1 ? Colors.blue : Colors.grey),
+        _View(color: currentPage == 0 ? Colors.blue : Colors.blue),
+        _View(
+            color: currentPage == 1 || currentPage == 2
+                ? Colors.blue
+                : Colors.grey),
         _View(color: currentPage == 2 ? Colors.blue : Colors.grey)
       ],
     );

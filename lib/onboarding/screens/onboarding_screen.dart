@@ -10,6 +10,7 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   int _currentPage = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
