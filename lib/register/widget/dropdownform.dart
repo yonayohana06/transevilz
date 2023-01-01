@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class EvilDropDown extends StatelessWidget {
   final String hint;
   final String? value;
-  final List<String> dropdownItems;
+  final List<Map> dropdownItems;
   final ValueChanged<String?>? onChanged;
   final DropdownButtonBuilder? selectedItemBuilder;
   final Alignment? hintAlignment;
@@ -84,7 +84,7 @@ class EvilDropDown extends StatelessWidget {
         value: value,
         items: dropdownItems
             .map((item) => DropdownMenuItem<String>(
-          value: item,
+          value: item.toString(),
           child: Container(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 7),
               margin: EdgeInsets.symmetric(vertical: 2),
@@ -97,13 +97,29 @@ class EvilDropDown extends StatelessWidget {
               alignment: valueAlignment,
               child: Row(
                 children: [
-                  Text(
-                    item,
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w400
+                  Image.asset(item['image']),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      item['name'],
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      item['numcode'],
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF2075F3)
+                      ),
+                      textAlign: TextAlign.end,
                     ),
                   ),
                 ],

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:transevilz/app/app.dart';
-import 'package:transevilz/register/screens/otp.dart';
-import 'package:transevilz/register/screens/register_profile_form.dart';
 import 'package:transevilz/register/screens/register_screen.dart';
 
 class AppScreen extends StatelessWidget {
@@ -12,7 +9,7 @@ class AppScreen extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Trans Evilz',
-      home: RegisterScreen(),
+      home: RegisterRequire(),
     );
   }
 }
