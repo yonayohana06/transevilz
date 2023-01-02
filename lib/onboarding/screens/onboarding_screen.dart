@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:transevilz/login/login.dart';
 import 'package:transevilz/onboarding/onboarding.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -38,7 +39,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginScreen(),
+                  ),
+                  (route) => false,
+                );
+              },
               child: const Text("Mulai"),
             ),
           ),

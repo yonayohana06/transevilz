@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:transevilz/app/app.dart';
-import 'package:transevilz/onboarding/onboarding.dart';
 
 class AppScreen extends StatelessWidget {
   const AppScreen({super.key});
@@ -10,7 +9,7 @@ class AppScreen extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Trans Evilz',
-      home: OnBoardingScreen(),
+      home: SplashScreen(),
     );
   }
 }

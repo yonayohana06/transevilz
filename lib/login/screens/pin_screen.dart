@@ -177,7 +177,7 @@ class _Form extends StatelessWidget {
                       ),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(16),
+                        LengthLimitingTextInputFormatter(6),
                       ],
                       validator: context.read<LoginBloc>().validatePin,
                       keyboardType: TextInputType.phone,
@@ -215,7 +215,7 @@ class _Form extends StatelessWidget {
                       ),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(16),
+                        LengthLimitingTextInputFormatter(6),
                       ],
                       validator: context.read<LoginBloc>().validateConfirmPin,
                       keyboardType: TextInputType.phone,
