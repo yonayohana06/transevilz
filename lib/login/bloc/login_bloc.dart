@@ -53,11 +53,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   String? validateEmail(String? v) {
     if (v == null || v.isEmpty) {
-      return 'Email diperlukan';
+      return 'Anda harus mengisi bagian ini';
     }
     if (!RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
         .hasMatch(v)) {
-      return 'Format email invalid';
+      return 'Format email salah';
     }
     return null;
   }
@@ -66,7 +66,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     RegExp regex =
         RegExp(r'^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[@#&*]).{8,}$');
     if (v == null || v.isEmpty) {
-      return 'Kata sandi diperlukan';
+      return 'Anda harus mengisi bagian ini';
     } else if (v.length < 8) {
       return 'Terlalu pendek, kata sandi minimal 8 karakter';
     } else if (!regex.hasMatch(v)) {
@@ -78,7 +78,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   String? validatePin(String? v) {
     if (v == null || v.isEmpty) {
-      return 'Pin diperlukan';
+      return 'Anda harus mengisi bagian ini';
     } else if (v.length < 6) {
       return 'Terlalu pendek, kata sandi minimal 6 angka';
     }
@@ -87,7 +87,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   String? validateConfirmPin(String? v) {
     if (v == null || v.isEmpty) {
-      return 'Konfirmasi Pin diperlukan';
+      return 'Anda harus mengisi bagian ini';
     } else if (v.length < 6) {
       return 'Terlalu pendek, minimal 6 karakter';
     } else if (v != pin.text) {

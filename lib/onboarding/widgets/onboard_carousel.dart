@@ -59,8 +59,8 @@ class _OnBoardCarouselState extends State<OnBoardCarousel> {
             children: [
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 45),
-                width: 200,
-                height: 200,
+                width: 240,
+                height: 240,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/onboarding/slide-1.png'),
@@ -81,8 +81,8 @@ class _OnBoardCarouselState extends State<OnBoardCarousel> {
             children: [
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 45),
-                width: 200,
-                height: 200,
+                width: 240,
+                height: 240,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/onboarding/slide-2.png'),
@@ -103,8 +103,8 @@ class _OnBoardCarouselState extends State<OnBoardCarousel> {
             children: [
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 45),
-                width: 200,
-                height: 200,
+                width: 240,
+                height: 240,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/onboarding/slide-3.png'),

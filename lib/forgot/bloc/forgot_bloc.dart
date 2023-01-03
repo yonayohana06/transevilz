@@ -56,11 +56,11 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState> {
 
   String? validateEmail(String? v) {
     if (v == null || v.isEmpty) {
-      return 'Email diperlukan';
+      return 'Anda harus mengisi bagian ini';
     }
     if (!RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
         .hasMatch(v)) {
-      return 'Format email invalid';
+      return 'Format email salah';
     }
     return null;
   }
@@ -69,7 +69,7 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState> {
     RegExp regex =
         RegExp(r'^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[@#&*]).{8,}$');
     if (v == null || v.isEmpty) {
-      return 'Kata sandi diperlukan';
+      return 'Anda harus mengisi bagian ini';
     } else if (v.length < 8) {
       return 'Terlalu pendek, kata sandi minimal 8 karakter';
     } else if (!regex.hasMatch(v)) {
@@ -81,7 +81,7 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState> {
 
   String? validateConfirmPass(String? v) {
     if (v == null || v.isEmpty) {
-      return 'Konfirmasi Pin diperlukan';
+      return 'Anda harus mengisi bagian ini';
     } else if (v.length < 8) {
       return 'Terlalu pendek, minimal 8 karakter';
     } else if (v != newPass.text) {

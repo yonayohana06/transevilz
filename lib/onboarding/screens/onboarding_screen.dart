@@ -16,17 +16,21 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: 60),
-          OnBoardCarousel(
-            onChanged: (currentPage) {
-              setState(() {
-                _currentPage = currentPage;
-              });
-            },
+          // const SizedBox(height: 60),
+          Flexible(flex: 1, child: Container()),
+          Center(
+            child: OnBoardCarousel(
+              onChanged: (currentPage) {
+                setState(() {
+                  _currentPage = currentPage;
+                });
+              },
+            ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 80),
           OnBoardIndicator(currentPage: _currentPage),
           Flexible(flex: 1, child: Container()),
           Container(
