@@ -74,7 +74,7 @@ class _View extends StatelessWidget {
             ),
             Container(
               margin: const EdgeInsets.all(24),
-              child: FormLogin(),
+              child: const FormLogin(),
             ),
           ],
         ),

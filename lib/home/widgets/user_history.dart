@@ -4,11 +4,11 @@ class UserHistory extends StatelessWidget {
   UserHistory({super.key});
 
   final List<Widget> history = [
-    const _View(),
-    const _View(),
-    const _View(),
-    const _View(),
-    const _View(),
+    _View(),
+    _View(),
+    _View(),
+    _View(),
+    _View(),
   ];
 
   @override
@@ -37,8 +37,6 @@ class UserHistory extends StatelessWidget {
 }
 
 class _View extends StatelessWidget {
-  const _View({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Container(

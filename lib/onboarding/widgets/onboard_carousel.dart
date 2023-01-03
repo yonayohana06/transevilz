@@ -21,7 +21,7 @@ class _OnBoardCarouselState extends State<OnBoardCarousel> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       if (_currentPage < 2) {
         _currentPage++;
       } else {
@@ -31,7 +31,7 @@ class _OnBoardCarouselState extends State<OnBoardCarousel> {
 
       _pageController.animateToPage(
         _currentPage,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeIn,
       );
     });
