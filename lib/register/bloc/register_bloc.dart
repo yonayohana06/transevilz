@@ -369,4 +369,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       return 'Anda harus mengisi bagian ini';
     }
   }
+
+  String? validateCheckBox(String? v) {
+    if(v==false) {
+      return 'Mohon setujui bagian ini';
+    }
+  }
 }
