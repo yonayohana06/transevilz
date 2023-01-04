@@ -12,6 +12,9 @@ part 'register_event.dart';
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
+  //Otp
+  String? otpDummy = '123456';
+  final codeSubmit = TextEditingController();
   //RegistrationForm
   String chosen = 'wni';
   final email = TextEditingController();
@@ -32,6 +35,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   DateTime? pickedDate;
   File? imageContain;
   bool? ambigous;
+  bool checkBox = false;
   //
   bool submitValidator = false;
   final phoneNumber = TextEditingController();
@@ -338,7 +342,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2006),
     );
     if(pickedDate != null) {
       tanggalLahir.text = DateFormat('MM/dd/yyyy').format(pickedDate!);

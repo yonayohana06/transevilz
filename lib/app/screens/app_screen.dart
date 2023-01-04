@@ -11,7 +11,7 @@ class AppScreen extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Trans Evilz',
-      home: OtpScreen(),
+      home: RegisterRequire(),
     );
   }
 }

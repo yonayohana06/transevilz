@@ -32,12 +32,56 @@ class RegisterProfileForm extends StatefulWidget {
 }
 
 class _RegisterProfileFormState extends State<RegisterProfileForm> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
+      bottomNavigationBar: BottomAppBar(
+        elevation: 0,
+        child: Container(
+          color: Colors.white,
+          margin: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          child: BlocBuilder<RegisterBloc, RegisterState>(
+            builder: (context, state) {
+              if(context.read<RegisterBloc>().isActive) {
+                return ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize:
+                    Size(MediaQuery.of(context).size.width, 45),
+                    backgroundColor: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context){
+                        return SuccessDialog(
+                          image: Image.asset('assets/images/success.png'),
+                          status: 'Cek email anda untuk melakukan aktivasi akun',
+                          buttonlabel: 'Cek Email Sekarang',
+                        );
+                      },
+                    ));
+                  },
+                  child: const Text("Kirim"),
+                );
+              }
+              return ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: Size(MediaQuery.of(context).size.width, 45),
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: null,
+                child: const Text("Kirim"),
+              );
+            },
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -50,7 +94,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                 margin: EdgeInsets.symmetric(horizontal: 24),
                 child: SingleChildScrollView(
                   child: Container(
-                    margin: EdgeInsets.only(top: 64, bottom: 126),
+                    margin: EdgeInsets.only(top: 64),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -452,6 +496,30 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   obscureText: context.read<RegisterBloc>().showConfirmPass,
                                   validator: context.read<RegisterBloc>().validateConfirmPassword,
                                 ),
+                                SizedBox(height: 24),
+                                FormField<bool>(
+                                  builder: (context) {
+                                    return Row(
+                                      children: [
+                                        Text('Accept')
+                                      ],
+                                    );
+                                  },
+                                )
+                                // Container(
+                                //   margin: EdgeInsets.only(left: 15, bottom: 20),
+                                //   child: CheckBoxWidget(
+                                //     value: context.read<RegisterBloc>().checkBox,
+                                //     onpress: () {
+                                //       setState(() {
+                                //         context.read<RegisterBloc>().checkBox=!context.read<RegisterBloc>().checkBox;
+                                //       });
+                                //     },
+                                //   ),
+                                // ),
+                                // context.read<RegisterBloc>().checkBox == false
+                                //     ? Text('Anda harus menyetujui syarat dan ketentuan')
+                                //     : Text('')
                               ],
                             );
                           },
@@ -463,55 +531,6 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
               ),
             ),
             ReuseAppBar(title: 'Registrasi'),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 25),
-                  child: BlocBuilder<RegisterBloc, RegisterState>(
-                    builder: (context, state) {
-                      if(context.read<RegisterBloc>().isActive) {
-                        return ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            fixedSize:
-                            Size(MediaQuery.of(context).size.width, 45),
-                            backgroundColor: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context){
-                                  return SuccessDialog(
-                                    image: Image.asset('assets/images/success.png'),
-                                    status: 'Cek email anda untuk melakukan aktivasi akun',
-                                    buttonlabel: 'Cek Email Sekarang',
-                                  );
-                                },
-                            ));
-                          },
-                          child: const Text("Kirim"),
-                        );
-                      }
-                      return ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: Size(MediaQuery.of(context).size.width, 45),
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: null,
-                        child: const Text("Kirim"),
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
           ],
         ),
       ),
