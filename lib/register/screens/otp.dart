@@ -14,6 +14,7 @@ class OtpScreen extends StatelessWidget {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ReuseAppBar(title: ''),
               const SizedBox(height: 10),
@@ -70,6 +71,32 @@ class OtpScreen extends StatelessWidget {
                     fillColor: const Color(0xFFF1F7FF),
                   ),
                   textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 20),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Belum dapat kode otp?',
+                          style: TextStyle(
+                            color: Color(0xFF7A7A7A),
+                            fontSize: 12,
+                          ),
+                        ),
+                        TextSpan(
+                            text: ' KIRIM ULANG KODE OTP',
+                            style: TextStyle(
+                              color: Color(0xFF2ACA10),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600
+                            )
+                        )
+                      ]
+                  ),
                 ),
               ),
               Expanded(
@@ -192,7 +219,7 @@ class OtpScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => RegisterProfileForm(),
+                                  builder: (context) => RegisterProfileReq(),
                                 ),
                               );
                             },
@@ -217,25 +244,6 @@ class OtpScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Belum dapat kode otp?',
-                      style: TextStyle(
-                        color: Color(0xFF7A7A7A)
-                      )
-                    ),
-                    TextSpan(
-                      text: ' KIRIM ULANG KODE OTP',
-                      style: TextStyle(
-                        color: Colors.green
-                      )
-                    )
-                  ]
-                ),
-              ),
-              SizedBox(height: 44),
             ],
           ),
         ),

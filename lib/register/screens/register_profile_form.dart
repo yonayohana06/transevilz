@@ -1,7 +1,28 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:transevilz/register/bloc/register_bloc.dart';
 import 'package:transevilz/register/widget/checkbox.dart';
 import 'package:transevilz/register/widget/dialog.dart';
+import 'package:transevilz/register/widget/dropdownform.dart';
 import 'package:transevilz/register/widget/reuse_app_bar.dart';
+
+import '../widget/title_form.dart';
+
+class RegisterProfileReq extends StatelessWidget {
+  const RegisterProfileReq({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => RegisterBloc(),
+      child: RegisterProfileForm(),
+    );
+  }
+}
+
 
 class RegisterProfileForm extends StatefulWidget {
   RegisterProfileForm({Key? key}) : super(key: key);
@@ -11,8 +32,6 @@ class RegisterProfileForm extends StatefulWidget {
 }
 
 class _RegisterProfileFormState extends State<RegisterProfileForm> {
-  bool checkBox = false;
-  nationality? _kewarganegaraan = nationality.wni;
 
   @override
   Widget build(BuildContext context) {
@@ -22,778 +41,480 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
       body: SafeArea(
         child: Stack(
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 24),
-              child: SingleChildScrollView(
-                child: Container(
-                  margin: EdgeInsets.only(top: 64, bottom: 126),
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xFFF1F7FF),
-                          shape: BoxShape.circle
-                        ),
-                        height: 60,
-                        width: 60,
-                        child: Center(
-                          child: Image.asset(
-                            'assets/images/user-plus.png',
-                            height: 28.8,
-                            width: 28.8,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        'Tambah gambar',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'DM Sans',
-                          color: Color(0xFF7A7A7A),
-                          letterSpacing: 0.096,
-                          height: 1.315,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      Row(
-                        children: [
-                          const Text(
-                            'Email',
-                            style: TextStyle(
-                              letterSpacing: -0.96,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(width: 2),
-                          const Text(
-                            '*',
-                            style: TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFFDC3328),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      SizedBox(
-                        height: 39,
-                        child: TextFormField(
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFFF1F7FF),
-                            hintText: 'Email',
-                            hintStyle: const TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFF929292),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 30),
-                      Row(
-                        children: [
-                          Text(
-                            'Kewarganegaraan',
-                            style: TextStyle(
-                              letterSpacing: -0.96,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFFDC3328),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: RadioListTile(
-                              value: 1,
-                              groupValue: null,
-                              onChanged: (index) {
-
-                              },
-                              title: Text(
-                                'WNI',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'DM Sans',
-                                    color: Color(0xFF3A3A3A)
+            Form(
+              key: context.read<RegisterBloc>().formkey,
+              onChanged: () {
+                context.read<RegisterBloc>().add(RegisterFormButtonEvent());
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 24),
+                child: SingleChildScrollView(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 64, bottom: 126),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        BlocBuilder<RegisterBloc, RegisterState>(
+                          builder: (context, state) {
+                            print(state);
+                            return Column(
+                              children: [
+                                BlocBuilder<RegisterBloc, RegisterState>(
+                                  builder: (context, state) {
+                                    if (state is RegisterFormButton) {
+                                      return Container(
+                                        height: 60,
+                                        width: 60,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(60),
+                                          child: context.read<RegisterBloc>().imageContain == null
+                                              ? Container(
+                                            decoration: BoxDecoration(
+                                                color: Color(0xFFF1F7FF),
+                                                shape: BoxShape.circle
+                                            ),
+                                            height: 60,
+                                            width: 60,
+                                            child: Center(
+                                              child: Image.asset(
+                                                'assets/images/user-plus.png',
+                                                height: 28.8,
+                                                width: 28.8,
+                                              ),
+                                            ),
+                                          )
+                                              : Image.file(context.read<RegisterBloc>().imageContain!, fit: BoxFit.fitWidth,),
+                                        ),
+                                      );
+                                    }
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFFF1F7FF),
+                                          shape: BoxShape.circle
+                                      ),
+                                      height: 60,
+                                      width: 60,
+                                      child: Center(
+                                        child: Image.asset(
+                                          'assets/images/user-plus.png',
+                                          height: 28.8,
+                                          width: 28.8,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              ),
-                              contentPadding: EdgeInsets.zero,
-                            ),
-                          ),
-                          Expanded(
-                            child: RadioListTile(
-                              value: 1,
-                              groupValue: null,
-                              onChanged: (index) {
-
-                              },
-                              title: Text(
-                                'WNA',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'DM Sans',
-                                    color: Color(0xFF3A3A3A)
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      context.read<RegisterBloc>().add(ImageDisplayEvent());
+                                    });
+                                  },
+                                  child: Text(
+                                    'Tambah gambar',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'DM Sans',
+                                      color: Color(0xFF7A7A7A),
+                                      letterSpacing: 0.096,
+                                      height: 1.315,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                              ),
-                              contentPadding: EdgeInsets.zero,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        children: const [
-                          Text(
-                            'Tipe Dokumen',
-                            style: TextStyle(
-                                letterSpacing: -0.96,
-                                height: 1.315,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                fontFamily: 'DM Sans',
-                                color: Colors.black
-                            ),
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFFDC3328),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      SizedBox(
-                        height: 39,
-                        child: TextFormField(
-                          textInputAction: TextInputAction.go,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFFF1F7FF),
-                            hintText: 'Pilih Tipe Dokumen',
-                            hintStyle: const TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFF929292),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        children: const [
-                          Text(
-                            'Nomor Dokumen',
-                            style: TextStyle(
-                                letterSpacing: -0.96,
-                                height: 1.315,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                fontFamily: 'DM Sans',
-                                color: Colors.black
-                            ),
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFFDC3328),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      SizedBox(
-                        height: 39,
-                        child: TextFormField(
-                          textInputAction: TextInputAction.go,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFFF1F7FF),
-                            hintText: 'Masukan no dokumen',
-                            hintStyle: const TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFF929292),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        children: const [
-                          Text(
-                            'Nama Depan',
-                            style: TextStyle(
-                                letterSpacing: -0.96,
-                                height: 1.315,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                fontFamily: 'DM Sans',
-                                color: Colors.black
-                            ),
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFFDC3328),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      SizedBox(
-                        height: 39,
-                        child: TextFormField(
-                          textInputAction: TextInputAction.go,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFFF1F7FF),
-                            hintText: 'Nama depan',
-                            hintStyle: const TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFF929292),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        children: const [
-                          Text(
-                            'Nama Belakang',
-                            style: TextStyle(
-                                letterSpacing: -0.96,
-                                height: 1.315,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                fontFamily: 'DM Sans',
-                                color: Colors.black
-                            ),
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFFDC3328),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      SizedBox(
-                        height: 39,
-                        child: TextFormField(
-                          textInputAction: TextInputAction.go,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFFF1F7FF),
-                            hintText: 'Nama Belakang',
-                            hintStyle: const TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFF929292),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        children: const [
-                          Text(
-                            'Tempat Lahir',
-                            style: TextStyle(
-                                letterSpacing: -0.96,
-                                height: 1.315,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                fontFamily: 'DM Sans',
-                                color: Colors.black
-                            ),
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFFDC3328),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      SizedBox(
-                        height: 39,
-                        child: TextFormField(
-                          textInputAction: TextInputAction.go,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFFF1F7FF),
-                            hintText: 'Tempat Lahir',
-                            hintStyle: const TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFF929292),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        children: const [
-                          Text(
-                            'Tanggal Lahir',
-                            style: TextStyle(
-                                letterSpacing: -0.96,
-                                height: 1.315,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                fontFamily: 'DM Sans',
-                                color: Colors.black
-                            ),
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFFDC3328),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      SizedBox(
-                        height: 39,
-                        child: TextFormField(
-                          textInputAction: TextInputAction.go,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFFF1F7FF),
-                            hintText: 'mm/dd/yyyy',
-                            hintStyle: const TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFF929292),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        children: const [
-                          Text(
-                            'Alamat',
-                            style: TextStyle(
-                                letterSpacing: -0.96,
-                                height: 1.315,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                fontFamily: 'DM Sans',
-                                color: Colors.black
-                            ),
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFFDC3328),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      TextFormField(
-                        style: TextStyle(fontSize: 12),
-                        maxLines: 6,
-                        textInputAction: TextInputAction.go,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFFF1F7FF),
-                            hintText: 'Alamat',
-                            hintStyle: const TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFF929292),
-                            ),
-                            contentPadding: EdgeInsets.only(top: 15, left: 12),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        children: [
-                          Text(
-                            'Kewarganegaraan',
-                            style: TextStyle(
-                              letterSpacing: -0.96,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFFDC3328),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: RadioListTile(
-                              value: 1,
-                              groupValue: null,
-                              onChanged: (index) {
-
-                              },
-                              title: Text(
-                                'Laki-laki',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'DM Sans',
-                                    color: Color(0xFF3A3A3A)
+                                SizedBox(height: 20),
+                                TitleForm(title: 'Email'),
+                                TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.deny(
+                                        context.read<RegisterBloc>().emailFormat)
+                                  ],
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  controller: context.read<RegisterBloc>().email,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(10),
+                                    fillColor: const Color(0xFFE5F2FF),
+                                    filled: true,
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    hintText: 'Email',
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  keyboardType: TextInputType.emailAddress,
+                                  validator: context.read<RegisterBloc>().validateEmail,
                                 ),
-                              ),
-                              contentPadding: EdgeInsets.zero,
-                            ),
-                          ),
-                          Expanded(
-                            child: RadioListTile(
-                              value: 1,
-                              groupValue: null,
-                              onChanged: (index) {
+                                const SizedBox(height: 24),
+                                TitleForm(title: 'Tipe Dokumen'),
+                                DropdownButtonFormField2(
+                                  itemPadding: EdgeInsets.zero,
+                                  buttonHeight: 40,
+                                  hint: Text(
+                                    'Pilih Tipe Dokumen',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  buttonDecoration: BoxDecoration(
+                                    color: Color(0xFFE5F2FF)
+                                  ),
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.only(bottom: 10, left: 10, right: 10,),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide.none
+                                    ),
+                                    filled: true,
+                                    fillColor: Color(0xFFE5F2FF),
 
-                              },
-                              title: Text(
-                                'Perempuan',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'DM Sans',
-                                  color: Color(0xFF3A3A3A)
+                                  ),
+                                  value: context.read<RegisterBloc>().type,
+                                  items: context.read<RegisterBloc>().docType
+                                      .map((e) => DropdownMenuItem(
+                                    value: e.toString(),
+                                      child: Container(
+                                        child: Text(e),
+                                      ),
+                                  )
+                                  ).toList(),
+                                  onChanged: (v) {
+                                    setState(() {
+                                      context.read<RegisterBloc>().type = v;
+                                    });
+                                  },
                                 ),
-                              ),
-                              contentPadding: EdgeInsets.zero,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 30),
-                      Row(
-                        children: const [
-                          Text(
-                            'Kata sandi',
-                            style: TextStyle(
-                                letterSpacing: -0.96,
-                                height: 1.315,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                fontFamily: 'DM Sans',
-                                color: Colors.black
-                            ),
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFFDC3328),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      SizedBox(
-                        height: 39,
-                        child: TextFormField(
-                          style: TextStyle(fontSize: 12),
-                          textInputAction: TextInputAction.go,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFFF1F7FF),
-                            hintText: 'Kata sandi',
-                            hintStyle: const TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFF929292),
-                            ),
-                            contentPadding: EdgeInsets.only(left: 10)
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        children: const [
-                          Text(
-                            'Konfirmasi kata sandi',
-                            style: TextStyle(
-                                letterSpacing: -0.96,
-                                height: 1.315,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                fontFamily: 'DM Sans',
-                                color: Colors.black
-                            ),
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFFDC3328),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      SizedBox(
-                        height: 39,
-                        child: TextFormField(
-                          style: TextStyle(fontSize: 12),
-                          textInputAction: TextInputAction.go,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFFF1F7FF),
-                            hintText: 'Konfirmasi kata sandi',
-                            hintStyle: const TextStyle(
-                              letterSpacing: -0.06,
-                              height: 1.315,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              fontFamily: 'DM Sans',
-                              color: Color(0xFF929292),
-                            ),
-                            contentPadding: EdgeInsets.only(left: 10)
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 36.5),
-                      Container(
-                        margin: EdgeInsets.only(left: 15, bottom: 150),
-                        child: CheckBoxWidget(
-                          value: checkBox,
-                          onpress: () {
-                            setState(() {
-                              checkBox=!checkBox;
-                            });
+                                const SizedBox(height: 14),
+                                TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(10),
+                                    fillColor: const Color(0xFFE5F2FF),
+                                    filled: true,
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    hintText: 'Masukan no dokumen',
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  validator: context.read<RegisterBloc>().validateNoDok,
+                                ),
+                                const SizedBox(height: 24),
+                                const TitleForm(title: 'Nama Depan'),
+                                TextFormField(
+                                  controller: context.read<RegisterBloc>().namaDepan,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(10),
+                                    fillColor: const Color(0xFFE5F2FF),
+                                    filled: true,
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    hintText: 'Nama Depan',
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  validator: context.read<RegisterBloc>().validateNamaDepan,
+                                ),
+                                const SizedBox(height: 24),
+                                const TitleForm(title: 'Nama Belakang'),
+                                TextFormField(
+                                  controller: context.read<RegisterBloc>().namaBelakang,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(10),
+                                    fillColor: const Color(0xFFE5F2FF),
+                                    filled: true,
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    hintText: 'Nama Belakang',
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  validator: context.read<RegisterBloc>().validateNamaBelakang,
+                                ),
+                                const SizedBox(height: 24),
+                                const TitleForm(title: 'Tempat Lahir'),
+                                TextFormField(
+                                  controller: context.read<RegisterBloc>().tempatLahir,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(10),
+                                    fillColor: const Color(0xFFE5F2FF),
+                                    filled: true,
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    hintText: 'Tempat Lahir',
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  validator: context.read<RegisterBloc>().validateTempatLahir,
+                                ),
+                                const SizedBox(height: 24),
+                                const TitleForm(title: 'Tanggal Lahir'),
+                                TextFormField(
+                                  controller: context.read<RegisterBloc>().tanggalLahir,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(10),
+                                    fillColor: const Color(0xFFE5F2FF),
+                                    filled: true,
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    hintText: 'mm/dd/yyyy',
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    suffixIcon: GestureDetector(
+                                      child: Icon(Icons.calendar_today_outlined),
+                                      onTap: () async {
+                                        context.read<RegisterBloc>().datePicker(context);
+                                      },
+                                    )
+                                  ),
+                                  validator: context.read<RegisterBloc>().validateTanggalLahir,
+                                ),
+                                const SizedBox(height: 24),
+                                const TitleForm(title: 'Alamat'),
+                                TextFormField(
+                                  controller: context.read<RegisterBloc>().alamat,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  maxLines: 6,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(10),
+                                    fillColor: const Color(0xFFE5F2FF),
+                                    filled: true,
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    hintText: 'Alamat',
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  validator: context.read<RegisterBloc>().validateAlamat,
+                                ),
+                                const SizedBox(height: 24),
+                                const TitleForm(title: 'Jenis Kelamin'),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: RadioListTile(
+                                        value: 'wni',
+                                        groupValue: context.read<RegisterBloc>().chosen,
+                                        onChanged: (index) {
+                                          setState(() {
+                                            context.read<RegisterBloc>().chosen=index.toString();
+                                          });
+                                        },
+                                        title: Text(
+                                          'WNI',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'DM Sans',
+                                              color: Color(0xFF3A3A3A)
+                                          ),
+                                        ),
+                                        contentPadding: EdgeInsets.zero,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: RadioListTile(
+                                        value: 'wna',
+                                        groupValue: context.read<RegisterBloc>().chosen,
+                                        onChanged: (index) {
+                                          setState(() {
+                                            context.read<RegisterBloc>().chosen=index.toString();
+                                          });
+                                          print(index);
+                                        },
+                                        title: Text(
+                                          'WNA',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'DM Sans',
+                                              color: Color(0xFF3A3A3A)
+                                          ),
+                                        ),
+                                        contentPadding: EdgeInsets.zero,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 24),
+                                const TitleForm(title: 'Kata Sandi'),
+                                TextFormField(
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(16),
+                                    FilteringTextInputFormatter.allow(
+                                        context.read<RegisterBloc>().passFormat)
+                                  ],
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  controller: context.read<RegisterBloc>().kataSandi,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(10),
+                                    fillColor: const Color(0xFFE5F2FF),
+                                    filled: true,
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    hintText: 'Kata Sandi',
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    suffixIcon: GestureDetector(
+                                      onTap: () {
+                                        context.read<RegisterBloc>().add(ShowPassEvent());
+                                      },
+                                      child: Icon(
+                                        context.read<RegisterBloc>().showPass
+                                            ? FeatherIcons.eyeOff
+                                            : FeatherIcons.eye,
+                                        color: Colors.blue,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                  obscureText: context.read<RegisterBloc>().showPass,
+                                  validator: context.read<RegisterBloc>().validatePassword,
+                                ),
+                                const SizedBox(height: 24),
+                                const TitleForm(title: 'Konfirmasi Kata Sandi'),
+                                TextFormField(
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  controller: context.read<RegisterBloc>().confirmKataSandi,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(10),
+                                    fillColor: const Color(0xFFE5F2FF),
+                                    filled: true,
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    hintText: 'Konfirmasi kata sandi',
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    suffixIcon: GestureDetector(
+                                      child: Icon(
+                                        context.read<RegisterBloc>().showConfirmPass
+                                            ? FeatherIcons.eyeOff
+                                            : FeatherIcons.eye,
+                                        color: Colors.blue,
+                                        size: 20,
+                                      ),
+                                      onTap: () {
+                                        context.read<RegisterBloc>().add(ShowPassConfirmEvent());
+                                      },
+                                    ),
+                                  ),
+                                  obscureText: context.read<RegisterBloc>().showConfirmPass,
+                                  validator: context.read<RegisterBloc>().validateConfirmPassword,
+                                ),
+                              ],
+                            );
                           },
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
             ReuseAppBar(title: 'Registrasi'),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
                   color: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        child: ElevatedButton(
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 25),
+                  child: BlocBuilder<RegisterBloc, RegisterState>(
+                    builder: (context, state) {
+                      if(context.read<RegisterBloc>().isActive) {
+                        return ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              fixedSize: Size(MediaQuery.of(context).size.width, 48),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              )
-                          ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => SuccessDialog(
-                                image: Image(
-                                  image: AssetImage(
-                                      'assets/images/success.png',
-                                  ),
-                                ),
-                                status: 'Cek email anda untuk melakukan aktivasi akun',
-                                buttonlabel: 'Cek Email Sekarang',
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Kirim',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                            fixedSize:
+                            Size(MediaQuery.of(context).size.width, 45),
+                            backgroundColor: Colors.blue,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context){
+                                  return SuccessDialog(
+                                    image: Image.asset('assets/images/success.png'),
+                                    status: 'Cek email anda untuk melakukan aktivasi akun',
+                                    buttonlabel: 'Cek Email Sekarang',
+                                  );
+                                },
+                            ));
+                          },
+                          child: const Text("Kirim"),
+                        );
+                      }
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: Size(MediaQuery.of(context).size.width, 45),
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                      )
-                    ],
+                        onPressed: null,
+                        child: const Text("Kirim"),
+                      );
+                    },
                   ),
-                ),
+                )
               ],
-            )
+            ),
           ],
         ),
       ),
     );
   }
-}
-
-enum nationality {
-  wni,
-  wna,
 }
