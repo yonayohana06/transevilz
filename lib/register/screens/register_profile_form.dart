@@ -61,15 +61,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context){
-                          return SuccessDialog(
+                      showDialog(
+                          context: context,
+                          builder: (context) => SuccessDialog(
                             image: Image.asset('assets/images/success.png'),
                             status: 'Cek email anda untuk melakukan aktivasi akun',
                             buttonlabel: 'Cek Email Sekarang',
-                          );
-                        },
-                      ));
+                          )
+                      );
                     },
                     child: const Text("Kirim"),
                   );
@@ -177,6 +176,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   SizedBox(height: 20),
                                   TitleForm(title: 'Email'),
                                   TextFormField(
+                                    textInputAction: TextInputAction.next,
                                     inputFormatters: [
                                       FilteringTextInputFormatter.deny(
                                           context.read<RegisterBloc>().emailFormat)
@@ -250,6 +250,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   ),
                                   const SizedBox(height: 14),
                                   TextFormField(
+                                    textInputAction: TextInputAction.next,
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.all(10),
@@ -271,6 +272,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   const SizedBox(height: 24),
                                   const TitleForm(title: 'Nama Depan'),
                                   TextFormField(
+                                    textInputAction: TextInputAction.next,
                                     controller: context.read<RegisterBloc>().namaDepan,
                                     autovalidateMode: AutovalidateMode.onUserInteraction,
                                     decoration: InputDecoration(
@@ -293,6 +295,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   const SizedBox(height: 24),
                                   const TitleForm(title: 'Nama Belakang'),
                                   TextFormField(
+                                    textInputAction: TextInputAction.next,
                                     controller: context.read<RegisterBloc>().namaBelakang,
                                     autovalidateMode: AutovalidateMode.onUserInteraction,
                                     decoration: InputDecoration(
@@ -315,6 +318,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   const SizedBox(height: 24),
                                   const TitleForm(title: 'Tempat Lahir'),
                                   TextFormField(
+                                    textInputAction: TextInputAction.next,
                                     controller: context.read<RegisterBloc>().tempatLahir,
                                     autovalidateMode: AutovalidateMode.onUserInteraction,
                                     decoration: InputDecoration(
@@ -337,6 +341,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   const SizedBox(height: 24),
                                   const TitleForm(title: 'Tanggal Lahir'),
                                   TextFormField(
+                                    textInputAction: TextInputAction.next,
                                     controller: context.read<RegisterBloc>().tanggalLahir,
                                     autovalidateMode: AutovalidateMode.onUserInteraction,
                                     decoration: InputDecoration(
@@ -365,6 +370,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   const SizedBox(height: 24),
                                   const TitleForm(title: 'Alamat'),
                                   TextFormField(
+                                    textInputAction: TextInputAction.next,
                                     controller: context.read<RegisterBloc>().alamat,
                                     autovalidateMode: AutovalidateMode.onUserInteraction,
                                     maxLines: 6,
@@ -391,7 +397,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                     children: [
                                       Expanded(
                                         child: RadioListTile(
-                                          value: 'wni',
+                                          value: 'pria',
                                           groupValue: context.read<RegisterBloc>().chosen,
                                           onChanged: (index) {
                                             setState(() {
@@ -399,7 +405,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                             });
                                           },
                                           title: Text(
-                                            'WNI',
+                                            'Laki-laki',
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600,
@@ -412,7 +418,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                       ),
                                       Expanded(
                                         child: RadioListTile(
-                                          value: 'wna',
+                                          value: 'perempuan',
                                           groupValue: context.read<RegisterBloc>().chosen,
                                           onChanged: (index) {
                                             setState(() {
@@ -421,7 +427,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                             print(index);
                                           },
                                           title: Text(
-                                            'WNA',
+                                            'Perempuan',
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600,
@@ -437,6 +443,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   const SizedBox(height: 24),
                                   const TitleForm(title: 'Kata Sandi'),
                                   TextFormField(
+                                    enableInteractiveSelection: true,
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(16),
                                       FilteringTextInputFormatter.allow(
@@ -563,7 +570,12 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                   ),
                 ),
               ),
-              ReuseAppBar(title: 'Registrasi'),
+              ReuseAppBar(
+                title: 'Registrasi',
+                onpress: () {
+                  Navigator.popUntil(context, (route) => route.isFirst);
+                },
+              ),
             ],
           ),
         ),

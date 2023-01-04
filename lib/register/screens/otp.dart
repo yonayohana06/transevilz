@@ -28,7 +28,7 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   Timer? timerCount;
-  final time = (4);
+  final time = (60);
   late int timeLeft;
 
   @override
@@ -55,7 +55,12 @@ class _OtpScreenState extends State<OtpScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ReuseAppBar(title: ''),
+              ReuseAppBar(
+                title: '',
+                onpress: () {
+                  Navigator.popUntil(context, (route) => route.isFirst);
+                },
+              ),
               const SizedBox(height: 10),
               const Text(
                 'Verifikasi Kode OTP',

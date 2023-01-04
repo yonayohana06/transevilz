@@ -16,7 +16,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   String? otpDummy = '123456';
   final codeSubmit = TextEditingController();
   //RegistrationForm
-  String chosen = 'wni';
+  String chosen = 'pria';
   final email = TextEditingController();
   final noDokumen = TextEditingController();
   final namaDepan = TextEditingController();
@@ -248,11 +248,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   String? validateEmail(String? v) {
     if (v == null || v.isEmpty) {
-      return 'Email diperlukan';
+      return 'Anda harus mengisi bagian ini';
     }
     if (!RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
         .hasMatch(v)) {
-      return 'Format email invalid';
+      return 'Format email salah';
     }
     return null;
   }
@@ -261,7 +261,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegExp regex =
     RegExp(r'^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[@#&*]).{8,}$');
     if (v == null || v.isEmpty) {
-      return 'Kata sandi diperlukan';
+      return 'Anda harus mengisi bagian ini';
     } else if (v.length < 8) {
       return 'Terlalu pendek, kata sandi minimal 8 karakter';
     } else if (!regex.hasMatch(v)) {
@@ -273,11 +273,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   String? validateConfirmPassword(String? v) {
     if (v == null || v.isEmpty) {
-      return 'Kata sandi diperlukan';
+      return 'Anda harus mengisi bagian ini';
     } else if (v.length < 8) {
       return 'Terlalu pendek, kata sandi minimal 8 karakter';
     } else if (v != kataSandi.text) {
-      return 'Kata Sandi Tidak Sama';
+      return 'Kata sandi tidak sama';
     }
     return null;
   }
@@ -291,7 +291,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         return 'Anda harus mengisi bagian ini';
       }
       if(v.length < 16) {
-        return 'KTP Salah';
+        return 'Format KTP tidak sesuai';
       }
     }
     if(type=='SIM') {
@@ -299,7 +299,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         return 'Anda harus mengisi bagian ini';
       }
       if(v.length < 12) {
-        return 'SIM Salah';
+        return 'Format SIM tidak sesuai';
       }
     }
     if(type=='Passport') {
@@ -307,7 +307,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         return 'Anda harus mengisi bagian ini';
       }
       if(v.length < 16) {
-        return 'Passport Salah';
+        return 'Format Passport tidak sesuai';
       }
     }
   }
@@ -332,7 +332,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       return 'Anda harus mengisi bagian ini';
     }
     if(!regTempatLahir.hasMatch(v)) {
-      return 'Mohon tuliskan dangan spesifik';
+      return 'Mohon tuliskan dangan spesifik (Contoh: Sleman, Yogyakarta)';
     }
     return null;
   }
@@ -340,7 +340,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   void datePicker(BuildContext context) async {
     pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: DateTime(2006),
       firstDate: DateTime(1900),
       lastDate: DateTime(2006),
     );
