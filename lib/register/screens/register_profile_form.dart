@@ -443,7 +443,6 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   const SizedBox(height: 24),
                                   const TitleForm(title: 'Kata Sandi'),
                                   TextFormField(
-                                    enableInteractiveSelection: true,
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(16),
                                       FilteringTextInputFormatter.allow(

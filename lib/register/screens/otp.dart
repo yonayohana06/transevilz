@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transevilz/register/bloc/register_bloc.dart';
 import 'package:transevilz/register/screens/register_profile_form.dart';
@@ -158,16 +159,18 @@ class _OtpScreenState extends State<OtpScreen> {
                 child: OtpKeyboard(
                   changed: (String value) {
                     if(value == 'del') {
+                      if(context.read<RegisterBloc>().codeSubmit.text.isEmpty) {
+                        return null;
+                      }
                       final deleting = context.read<RegisterBloc>().codeSubmit.text.split('');
                       deleting.removeLast();
                       final join = deleting.join('');
                       context.read<RegisterBloc>().codeSubmit.text = join;
-                      setState(() {
-
-                      });
                     }
                     else {
-                      context.read<RegisterBloc>().codeSubmit.text += value;
+                      if(context.read<RegisterBloc>().codeSubmit.text.length < 6) {
+                        context.read<RegisterBloc>().codeSubmit.text += value;
+                      }
                       if(context.read<RegisterBloc>().codeSubmit.text==context.read<RegisterBloc>().otpDummy) {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterProfileReq()));
                       }
