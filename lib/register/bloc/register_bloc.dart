@@ -375,4 +375,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       return 'Mohon setujui bagian ini';
     }
   }
+
+  //OtpLogic
+  String? otpManualKeyboard(String value) {
+    if(value == 'del') {
+      if(codeSubmit.text.isEmpty) {
+        return null;
+      }
+      final deleting = codeSubmit.text.split('');
+    }
+  }
 }

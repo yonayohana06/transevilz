@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:transevilz/register/bloc/register_bloc.dart';
 import 'package:transevilz/register/screens/otp.dart';
@@ -235,30 +236,65 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           height: 39,
                           child: Stack(
                             children: [
-                              Container(
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  textInputAction: TextInputAction.go,
-                                  controller: context.read<RegisterBloc>().phoneNumber,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.circular(10)
+                              BlocBuilder<RegisterBloc, RegisterState>(
+                                builder: (context, state) {
+                                  if(state is RegisterInitial) {
+                                    return Container(
+                                      child: TextFormField(
+                                        readOnly: true,
+                                        keyboardType: TextInputType.number,
+                                        textInputAction: TextInputAction.go,
+                                        controller: context.read<RegisterBloc>().phoneNumber,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderSide: BorderSide.none,
+                                                borderRadius: BorderRadius.circular(10)
+                                            ),
+                                            filled: true,
+                                            fillColor: const Color(0xFFF1F7FF),
+                                            hintText: 'Masukkan no.hp',
+                                            hintStyle: const TextStyle(
+                                              letterSpacing: -0.06,
+                                              height: 1.315,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 12,
+                                              fontFamily: 'DM Sans',
+                                              color: Color(0xFF929292),
+                                            ),
+                                            contentPadding: EdgeInsets.only(left: 60)
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  return Container(
+                                    child: TextFormField(
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(20),
+                                      ],
+                                      keyboardType: TextInputType.number,
+                                      textInputAction: TextInputAction.go,
+                                      controller: context.read<RegisterBloc>().phoneNumber,
+                                      decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                              borderSide: BorderSide.none,
+                                              borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          filled: true,
+                                          fillColor: const Color(0xFFF1F7FF),
+                                          hintText: 'Masukkan no.hp',
+                                          hintStyle: const TextStyle(
+                                            letterSpacing: -0.06,
+                                            height: 1.315,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 12,
+                                            fontFamily: 'DM Sans',
+                                            color: Color(0xFF929292),
+                                          ),
+                                          contentPadding: EdgeInsets.only(left: 60)
+                                      ),
                                     ),
-                                    filled: true,
-                                    fillColor: const Color(0xFFF1F7FF),
-                                    hintText: 'Masukkan no.hp',
-                                    hintStyle: const TextStyle(
-                                      letterSpacing: -0.06,
-                                      height: 1.315,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12,
-                                      fontFamily: 'DM Sans',
-                                      color: Color(0xFF929292),
-                                    ),
-                                    contentPadding: EdgeInsets.only(left: 60)
-                                  ),
-                                ),
+                                  );
+                                },
                               ),
                               Container(
                                 decoration: BoxDecoration(
