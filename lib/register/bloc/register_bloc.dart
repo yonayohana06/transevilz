@@ -42,186 +42,26 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final formkey = GlobalKey<FormState>();
   String? negara;
   bool isActive = false;
-  List<Map> json = [
-    {
-      'id':'0',
-      'image':'assets/images/australia.png',
-      'name':'Australia',
-      'numcode':'+61',
-    },
-    {
-      'id':'1',
-      'image':'assets/images/japan.png',
-      'name':'Japan',
-      'numcode':'+1',
-    },
-    {
-      'id':'2',
-      'image':'assets/images/indonesia.png',
-      'name':'Indonesia',
-      'numcode':'+62',
-    },
-    {
-      'id':'3',
-      'image':'assets/images/singapore.png',
-      'name':'Singapore',
-      'numcode':'+65',
-    },
-    {
-      'id':'4',
-      'image':'assets/images/us.png',
-      'name':'United States of America',
-      'numcode':'+1',
-    },
-  ];
 
   RegisterBloc() : super(RegisterInitial()) {
-    on<ChangeNumCode>((event, emit){
-      print(negara!.length);
-      if(negara==
-          '{id: 0, '
-              'image: assets/images/australia.png, '
-              'name: Australia, numcode: +61}'
-      ) {
-        emit(Australia());
-        RegExp regexpaus = RegExp(r'^[0-9]{8}$');
-        final match = regexpaus.hasMatch(phoneNumber.text);
-        if(match) {
-          print('valid');
-          submitValidator=match;
-          emit(RegisterButtonAustralia(submitValidator=match));
-        }
-        if(phoneNumber.text.isEmpty) {
-          emit(FieldHarusTerisiAustralia());
-          submitValidator=false;
-        }
-        if(phoneNumber.text.length <= 7
-            && phoneNumber.text.length > 0
-        ) {
-          emit(NomorTerlaluPendekAustralia());
-          submitValidator=false;
-        }
-        if(phoneNumber.text.length > 8) {
-          emit(NomorTerlaluPendekAustralia());
-          submitValidator=false;
-        }
+    on<PhoneNumValidateEvent>((event, emit) {
+      RegExp phonerex = RegExp(r'^[8][0-9]{10}');
+      final match = phonerex.hasMatch(phoneNumber.text);
+      if(match) {
+        emit(PhoneNumberValidateState(submitValidator = match));
       }
-      if(negara==
-          '{id: 1, '
-              'image: assets/images/japan.png, '
-              'name: Japan, numcode: +1}'
-      ) {
-        emit(Japan());
-        RegExp regexpaus = RegExp(r'^[0-9]{8}$');
-        final match = regexpaus.hasMatch(phoneNumber.text);
-        if(match) {
-          print('valid');
-          submitValidator=match;
-          emit(RegisterButtonJapan(submitValidator=match));
-        }
-        if(phoneNumber.text.isEmpty) {
-          emit(FieldHarusTerisiJapan());
-          submitValidator=false;
-        }
-        if(phoneNumber.text.length <= 7
-            && phoneNumber.text.length > 0
-        ) {
-          emit(NomorTerlaluPendekJapan());
-          submitValidator=false;
-        }
-        if(phoneNumber.text.length > 8) {
-          emit(NomorTerlaluPendekJapan());
-          submitValidator=false;
-        }
+      if(phoneNumber.text.length < 1) {
+        emit(PhoneNumEmptyState());
       }
-      if(negara==
-          '{id: 2, '
-              'image: assets/images/indonesia.png, '
-              'name: Indonesia, numcode: +62}'
-      ) {
-        emit(Indonesia());
-        RegExp regexpind = RegExp(r'^(8)[0-9]{10}$');
-        final match = regexpind.hasMatch(phoneNumber.text);
-        if(match) {
-          print('valid');
-          submitValidator=match;
-          emit(RegisterButtonIndonesia(submitValidator=match));
-        }
-        if(phoneNumber.text.isEmpty) {
-          emit(FieldHarusTerisiIndonesia());
-          submitValidator=false;
-        }
-        if(phoneNumber.text.length <= 10
-            && phoneNumber.text.length > 0
-        ) {
-          emit(NomorTerlaluPendekIndonesia());
-          submitValidator=false;
-        }
-        if(phoneNumber.text.length > 11) {
-          emit(NomorTerlaluPendekIndonesia());
-          submitValidator=false;
-        }
-        if(phoneNumber.text.length <= 11
-            && phoneNumber.text.length > 0 && !match) {
-          emit(NomorTerlaluPendekIndonesia());
-          submitValidator=false;
-        }
+      if(phoneNumber.text.length > 11) {
+        emit(PhoneNumberValidateState(submitValidator = false));
+        emit(PhoneNumFormatState());
       }
-      if(negara==
-          '{id: 3, '
-              'image: assets/images/singapore.png, '
-              'name: Singapore, numcode: +65}'
-      ) {
-        emit(Singapore());
-        RegExp regexpaus = RegExp(r'^[0-9]{8}$');
-        final match = regexpaus.hasMatch(phoneNumber.text);
-        if(match) {
-          print('valid');
-          submitValidator=match;
-          emit(RegisterButtonSingapore(submitValidator=match));
-        }
-        if(phoneNumber.text.isEmpty) {
-          emit(FieldHarusTerisiSingapore());
-          submitValidator=false;
-        }
-        if(phoneNumber.text.length <= 7
-            && phoneNumber.text.length > 0
-        ) {
-          emit(NomorTerlaluPendekSingapore());
-          submitValidator=false;
-        }
-        if(phoneNumber.text.length > 8) {
-          emit(NomorTerlaluPendekSingapore());
-          submitValidator=false;
-        }
-      }
-      if(negara==
-          '{id: 4, '
-              'image: assets/images/us.png, '
-              'name: United States of America, numcode: +1}'
-      ) {
-        emit(Usa());
-        RegExp regexpaus = RegExp(r'^[0-9]{8}$');
-        final match = regexpaus.hasMatch(phoneNumber.text);
-        if(match) {
-          print('valid');
-          submitValidator=match;
-          emit(RegisterButtonUsa(submitValidator=match));
-        }
-        if(phoneNumber.text.isEmpty) {
-          emit(FieldHarusTerisiUsa());
-          submitValidator=false;
-        }
-        if(phoneNumber.text.length <= 7
-            && phoneNumber.text.length > 0
-        ) {
-          emit(NomorTerlaluPendekUsa());
-          submitValidator=false;
-        }
-        if(phoneNumber.text.length > 8) {
-          emit(NomorTerlaluPendekUsa());
-          submitValidator=false;
-        }
+      if(phoneNumber.text.length < 11
+          && phoneNumber.text.length >= 1
+          && !match) {
+        emit(PhoneNumberValidateState(submitValidator = false));
+        emit(PhoneNumFormatState());
       }
     });
     on<RegisterFormButtonEvent>((event, emit) {
@@ -235,15 +75,26 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       emit(ShowConfirmPass(showConfirmPass = !showConfirmPass));
     });
     on<ImageDisplayEvent>((event, emit) async {
-      try {
-        final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-        File? img = File(image!.path);
-        imageContain = img;
-        emit(RegisterFormButton(isActive==!isActive));
-      } on PlatformException catch (e) {
-        print(e);
-      }
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      File? img = File(image!.path);
+      imageContain = img;
+      emit(RegisterInitial());
+      emit(RegisterFormButton(isActive==!isActive));
     });
+    on<ImageRefresh>((event, emit) {
+      print('test');
+      emit(RegisterFormButton(isActive==!isActive));
+    });
+  }
+
+
+  String? validatePhoneNumber(String? v) {
+    if(v==null || v.isEmpty) {
+      return 'Anda harus mengisi bagian ini';
+    }
+    if(!RegExp(r'^[8][0-9]{11}').hasMatch(v)) {
+      return 'Format No.HP tidak sesuai';
+    }
   }
 
   String? validateEmail(String? v) {

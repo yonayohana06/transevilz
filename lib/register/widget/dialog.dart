@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 
-class SuccessDialog extends StatelessWidget {
-  const SuccessDialog({
+class DialogWidget extends StatelessWidget {
+  DialogWidget({
     Key? key,
     required this.image,
     required this.status,
-    required this.buttonlabel
+    required this.buttonlabel,
+    this.onpress
   }) : super(key: key);
-  final String status;
-  final Image image;
+  final Text status;
+  final Widget image;
   final String buttonlabel;
+  VoidCallback? onpress;
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -23,6 +25,7 @@ class SuccessDialog extends StatelessWidget {
         child: Stack(
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
                   margin: EdgeInsets.only(top: 54),
@@ -33,16 +36,7 @@ class SuccessDialog extends StatelessWidget {
                 SizedBox(height: 5),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 21),
-                  child: Text(
-                    status,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'DM Sans',
-                      color: Color(0xFF3A3A3A)
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                  child: status,
                 ),
               ],
             ),

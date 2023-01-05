@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transevilz/register/bloc/register_bloc.dart';
 import 'package:transevilz/register/screens/register_profile_form.dart';
+import 'package:transevilz/register/widget/dialog.dart';
 import 'package:transevilz/register/widget/reuse_app_bar.dart';
 
 class OtpPrep extends StatelessWidget {
@@ -29,7 +30,7 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   Timer? timerCount;
-  final time = (60);
+  var time = (60);
   late int timeLeft;
 
   @override
@@ -41,6 +42,58 @@ class _OtpScreenState extends State<OtpScreen> {
         timeLeft--;
       });
       if(timeLeft==0){
+        showDialog(
+          context: context,
+          builder: (context) => DialogWidget(
+            image: Image.asset('assets/images/runout.png'),
+            status: Text(
+              'Oops! Waktu anda Habis',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                fontFamily: 'DM Sans',
+                color: Color(0xFFDC3328),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            buttonlabel: 'Coba Lagi',
+            onpress: () {
+              return Navigator.pop(context);
+            },
+          ),
+        );
+        return timerCount!.cancel();
+      }
+    });
+  }
+
+  void kirimUlang() {
+    timeLeft = time;
+    timerCount = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        timeLeft--;
+      });
+      if(timeLeft==0){
+        showDialog(
+          context: context,
+          builder: (context) => DialogWidget(
+            image: Image.asset('assets/images/runout.png'),
+            status: Text(
+              'Oops! Waktu anda Habis',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                fontFamily: 'DM Sans',
+                color: Color(0xFFDC3328),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            buttonlabel: 'Coba Lagi',
+            onpress: () {
+              return Navigator.pop(context);
+            },
+          ),
+        );
         return timerCount!.cancel();
       }
     });
@@ -123,37 +176,34 @@ class _OtpScreenState extends State<OtpScreen> {
               SizedBox(height: 20),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Belum dapat kode otp?',
-                          style: TextStyle(
-                            color: Color(0xFF7A7A7A),
-                            fontSize: 12,
-                          ),
-                        ),
-                        timeLeft == 0
-                            ? TextSpan(
-                            text: ' KIRIM ULANG KODE OTP',
-                            style: TextStyle(
-                                color: Color(0xFF2ACA10),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600
-                            )
-                        )
-                            : TextSpan(
-                          text: '',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Belum dapat kode otp?',
+                      style: TextStyle(
+                        color: Color(0xFF7A7A7A),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400
+                      ),
+                    ),
+                    timeLeft == 0 
+                        ? InkWell(
+                      onTap: () {
+                        kirimUlang();
+                      },
+                      child: Text(
+                        'KIRIM ULANG KODE OTP',
                           style: TextStyle(
                               color: Color(0xFF2ACA10),
                               fontSize: 12,
                               fontWeight: FontWeight.w600
-                          ),
-                        )
-                      ]
-                  ),
-                ),
+                          )
+                      ),
+                    )
+                        : Text(''),
+                  ],
+                )
               ),
               Expanded(
                 child: OtpKeyboard(
@@ -172,7 +222,35 @@ class _OtpScreenState extends State<OtpScreen> {
                         context.read<RegisterBloc>().codeSubmit.text += value;
                       }
                       if(context.read<RegisterBloc>().codeSubmit.text==context.read<RegisterBloc>().otpDummy) {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterProfileReq()));
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return RegisterProfileReq();
+                          }),
+                        );
+                      }
+                      if(context.read<RegisterBloc>().codeSubmit.text.length==6 && context.read<RegisterBloc>().codeSubmit.text!=context.read<RegisterBloc>().otpDummy) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => DialogWidget(
+                            image: Icon(
+                              Icons.cancel_rounded,
+                              color: Colors.red,
+                              size: 80,
+                            ),
+                            status: Text(
+                              'Oops! Kode OTP yang anda masukan salah',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'DM Sans',
+                                color: Color(0xFFDC3328),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            buttonlabel: 'Coba Lagi',
+                          ),
+                        );
                       }
                       print(context.read<RegisterBloc>().codeSubmit.text);
                     }

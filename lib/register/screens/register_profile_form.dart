@@ -63,9 +63,16 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                     onPressed: () {
                       showDialog(
                           context: context,
-                          builder: (context) => SuccessDialog(
+                          builder: (context) => DialogWidget(
                             image: Image.asset('assets/images/success.png'),
-                            status: 'Cek email anda untuk melakukan aktivasi akun',
+                            status: Text(
+                              'Cek email anda untuk melakukan aktivasi akun',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'DM Sans',
+                              ),
+                            ),
                             buttonlabel: 'Cek Email Sekarang',
                           )
                       );
@@ -100,77 +107,117 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                   margin: EdgeInsets.symmetric(horizontal: 24),
                   child: SingleChildScrollView(
                     child: Container(
-                      margin: EdgeInsets.only(top: 64),
+                      margin: EdgeInsets.only(top: 55),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           BlocBuilder<RegisterBloc, RegisterState>(
                             builder: (context, state) {
-                              print(state);
                               return Column(
                                 children: [
-                                  BlocBuilder<RegisterBloc, RegisterState>(
-                                    builder: (context, state) {
-                                      if (state is RegisterFormButton) {
-                                        return Container(
-                                          height: 60,
-                                          width: 60,
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(60),
-                                            child: context.read<RegisterBloc>().imageContain == null
-                                                ? Container(
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xFFF1F7FF),
-                                                  shape: BoxShape.circle
-                                              ),
-                                              height: 60,
-                                              width: 60,
-                                              child: Center(
-                                                child: Image.asset(
-                                                  'assets/images/user-plus.png',
-                                                  height: 28.8,
-                                                  width: 28.8,
-                                                ),
-                                              ),
-                                            )
-                                                : Image.file(context.read<RegisterBloc>().imageContain!, fit: BoxFit.fitWidth,),
-                                          ),
-                                        );
-                                      }
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                            color: Color(0xFFF1F7FF),
-                                            shape: BoxShape.circle
-                                        ),
-                                        height: 60,
-                                        width: 60,
-                                        child: Center(
-                                          child: Image.asset(
-                                            'assets/images/user-plus.png',
-                                            height: 28.8,
-                                            width: 28.8,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
                                   InkWell(
                                     onTap: () {
-                                      setState(() {
-                                        context.read<RegisterBloc>().add(ImageDisplayEvent());
-                                      });
+                                      context.read<RegisterBloc>().add(ImageDisplayEvent());
                                     },
-                                    child: Text(
-                                      'Tambah gambar',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: 'DM Sans',
-                                        color: Color(0xFF7A7A7A),
-                                        letterSpacing: 0.096,
-                                        height: 1.315,
-                                      ),
-                                      textAlign: TextAlign.center,
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: BlocBuilder<RegisterBloc, RegisterState>(
+                                      builder: (context, state) {
+                                        if(state is RegisterFormButton) {
+                                          return context.read<RegisterBloc>().imageContain == null
+                                              ? Column(
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    color: Color(0xFFF1F7FF),
+                                                    shape: BoxShape.circle
+                                                ),
+                                                height: 60,
+                                                width: 60,
+                                                child: Center(
+                                                  child: Image.asset(
+                                                    'assets/images/user-plus.png',
+                                                    height: 28.8,
+                                                    width: 28.8,
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                'Tambah gambar',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: 'DM Sans',
+                                                  color: Color(0xFF7A7A7A),
+                                                  letterSpacing: 0.096,
+                                                  height: 1.315,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          )
+                                              : Column(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius: BorderRadius.circular(60),
+                                                child: Image.file(
+                                                  context.read<RegisterBloc>().imageContain!,
+                                                  height: 60,
+                                                  width: 60,
+                                                  fit: BoxFit.fitWidth,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Tambah gambar',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: 'DM Sans',
+                                                  color: Color(0xFF7A7A7A),
+                                                  letterSpacing: 0.096,
+                                                  height: 1.315,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                        return Container(
+                                          margin: EdgeInsets.only(top: 10),
+                                          height: 80,
+                                          width: 100,
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    color: Color(0xFFF1F7FF),
+                                                    shape: BoxShape.circle
+                                                ),
+                                                height: 60,
+                                                width: 60,
+                                                child: Center(
+                                                  child: Image.asset(
+                                                    'assets/images/user-plus.png',
+                                                    height: 28.8,
+                                                    width: 28.8,
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                'Tambah gambar',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: 'DM Sans',
+                                                  color: Color(0xFF7A7A7A),
+                                                  letterSpacing: 0.096,
+                                                  height: 1.315,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
                                   SizedBox(height: 20),

@@ -4,7 +4,12 @@ abstract class RegisterEvent extends Equatable {
   const RegisterEvent();
 }
 
-class ChangeNumCode extends RegisterEvent {
+class PhoneNumValidateEvent extends RegisterEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class ImageRefresh extends RegisterEvent {
   @override
   List<Object> get props => [];
 }
