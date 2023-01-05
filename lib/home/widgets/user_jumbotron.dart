@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:transevilz/home/home.dart';
+import 'package:transevilz/transfer/transfer.dart';
 
 class UserJumbotron extends StatelessWidget {
   const UserJumbotron({super.key});
@@ -84,7 +85,14 @@ class Transaction extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TransferScreen(),
+                  ),
+                );
+              },
               child: const Text(
                 "Transfer lokal",
                 style: TextStyle(fontSize: 12),
