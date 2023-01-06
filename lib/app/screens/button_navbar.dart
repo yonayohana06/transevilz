@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:transevilz/history/history.dart';
 import 'package:transevilz/home/home.dart';
 
 class MainMenu extends StatefulWidget {
@@ -15,7 +16,7 @@ class _MainMenuState extends State<MainMenu> {
   final List<Widget> _mainMenu = [
     const HomeScreen(),
     const Center(child: Text("Layanan")),
-    const Center(child: Text("Riwayat")),
+    HistoryScreen(),
     const Center(child: Text("Akun")),
   ];
   @override
