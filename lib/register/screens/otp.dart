@@ -191,6 +191,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         ? InkWell(
                       onTap: () {
                         kirimUlang();
+                        context.read<RegisterBloc>().codeSubmit.clear();
                       },
                       child: Text(
                         'KIRIM ULANG KODE OTP',
