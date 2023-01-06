@@ -249,6 +249,15 @@ class _OtpScreenState extends State<OtpScreen> {
                               textAlign: TextAlign.center,
                             ),
                             buttonlabel: 'Coba Lagi',
+                            onpress: () {
+                              Navigator.pop(context);
+                              time = 0;
+                              timeLeft = time;
+                              setState(() {
+                                timerCount!.cancel();
+                              });
+                              time = 60;
+                            },
                           ),
                         );
                       }

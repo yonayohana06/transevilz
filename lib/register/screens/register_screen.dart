@@ -55,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }));
                     },
                     child: const Text(
-                      'Kirim',
+                      'Selanjutnya',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
@@ -74,7 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   onPressed: null,
                   child: Text(
-                    'Kirim',
+                    'Selanjutnya',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,

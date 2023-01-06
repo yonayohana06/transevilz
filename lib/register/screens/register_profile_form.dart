@@ -77,7 +77,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                           )
                       );
                     },
-                    child: const Text("Kirim"),
+                    child: const Text("Selanjutnya"),
                   );
                 }
                 return ElevatedButton(
@@ -89,7 +89,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                     ),
                   ),
                   onPressed: null,
-                  child: const Text("Kirim"),
+                  child: const Text("Selanjutnya"),
                 );
               },
             ),
@@ -271,7 +271,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                         color: Color(0xFFE5F2FF)
                                     ),
                                     decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.only(bottom: 10, left: 10, right: 10,),
+                                      contentPadding: EdgeInsets.only(bottom: 10, left: 5, right: 10,),
                                       border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(10),
                                           borderSide: BorderSide.none
@@ -285,41 +285,130 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                         .map((e) => DropdownMenuItem(
                                       value: e.toString(),
                                       child: Container(
-                                        child: Text(e),
+                                        child: Text(
+                                          e, 
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: Color(0xFF7A7A7A)
+                                          ),
+                                        ),
                                       ),
                                     )
                                     ).toList(),
                                     onChanged: (v) {
                                       setState(() {
                                         context.read<RegisterBloc>().type = v;
+                                        context.read<RegisterBloc>().noDokumen.clear();
                                       });
                                     },
                                   ),
                                   const SizedBox(height: 14),
-                                  TextFormField(
-                                    textInputAction: TextInputAction.next,
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      contentPadding: const EdgeInsets.all(10),
-                                      fillColor: const Color(0xFFE5F2FF),
-                                      filled: true,
-                                      hintStyle: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
+                                  if(context.read<RegisterBloc>().type==null)...{
+                                    TextFormField(
+                                      readOnly: true,
+                                      controller: context.read<RegisterBloc>().noDokumen,
+                                      textInputAction: TextInputAction.next,
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.all(10),
+                                        fillColor: const Color(0xFFE5F2FF),
+                                        filled: true,
+                                        hintStyle: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        hintText: 'Masukan no dokumen',
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
                                       ),
-                                      hintText: 'Masukan no dokumen',
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
+                                      validator: context.read<RegisterBloc>().validateNoDok,
                                     ),
-                                    validator: context.read<RegisterBloc>().validateNoDok,
-                                  ),
+                                  }
+                                  else if(context.read<RegisterBloc>().type=='KTP')...{
+                                    TextFormField(
+                                      controller: context.read<RegisterBloc>().noDokumen,
+                                      textInputAction: TextInputAction.next,
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(16)
+                                      ],
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.all(10),
+                                        fillColor: const Color(0xFFE5F2FF),
+                                        filled: true,
+                                        hintStyle: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        hintText: 'Masukan no dokumen',
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      validator: context.read<RegisterBloc>().validateNoDok,
+                                    ),
+                                  }
+                                  else if(context.read<RegisterBloc>().type=='SIM')...{
+                                      TextFormField(
+                                        controller: context.read<RegisterBloc>().noDokumen,
+                                        textInputAction: TextInputAction.next,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(12)
+                                        ],
+                                        decoration: InputDecoration(
+                                          contentPadding: const EdgeInsets.all(10),
+                                          fillColor: const Color(0xFFE5F2FF),
+                                          filled: true,
+                                          hintStyle: const TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                          hintText: 'Masukan no dokumen',
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        validator: context.read<RegisterBloc>().validateNoDok,
+                                      ),
+                                  }
+                                  else if(context.read<RegisterBloc>().type=='Passport')...{
+                                        TextFormField(
+                                          controller: context.read<RegisterBloc>().noDokumen,
+                                          textInputAction: TextInputAction.next,
+                                          inputFormatters: [
+                                            LengthLimitingTextInputFormatter(16)
+                                          ],
+                                          decoration: InputDecoration(
+                                            contentPadding: const EdgeInsets.all(10),
+                                            fillColor: const Color(0xFFE5F2FF),
+                                            filled: true,
+                                            hintStyle: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                            hintText: 'Masukan no dokumen',
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide.none,
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                          validator: context.read<RegisterBloc>().validateNoDok,
+                                        ),
+                                  },
                                   const SizedBox(height: 24),
                                   const TitleForm(title: 'Nama Depan'),
                                   TextFormField(
                                     textInputAction: TextInputAction.next,
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(15)
+                                    ],
                                     controller: context.read<RegisterBloc>().namaDepan,
                                     autovalidateMode: AutovalidateMode.onUserInteraction,
                                     decoration: InputDecoration(
@@ -345,6 +434,9 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                     textInputAction: TextInputAction.next,
                                     controller: context.read<RegisterBloc>().namaBelakang,
                                     autovalidateMode: AutovalidateMode.onUserInteraction,
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(15)
+                                    ],
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.all(10),
                                       fillColor: const Color(0xFFE5F2FF),
@@ -366,6 +458,9 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   const TitleForm(title: 'Tempat Lahir'),
                                   TextFormField(
                                     textInputAction: TextInputAction.next,
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(30)
+                                    ],
                                     controller: context.read<RegisterBloc>().tempatLahir,
                                     autovalidateMode: AutovalidateMode.onUserInteraction,
                                     decoration: InputDecoration(
@@ -420,7 +515,10 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                     textInputAction: TextInputAction.next,
                                     controller: context.read<RegisterBloc>().alamat,
                                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                                    maxLines: 6,
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(60)
+                                    ],
+                                    maxLines: 4,
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.all(10),
                                       fillColor: const Color(0xFFE5F2FF),

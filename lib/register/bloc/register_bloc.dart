@@ -82,7 +82,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       emit(RegisterFormButton(isActive==!isActive));
     });
     on<ImageRefresh>((event, emit) {
-      print('test');
       emit(RegisterFormButton(isActive==!isActive));
     });
   }
@@ -101,7 +100,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
-    if (!RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
+    if (!RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
         .hasMatch(v)) {
       return 'Format email salah';
     }
@@ -138,10 +137,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       return 'Anda harus memilih Tipe Dokumen';
     }
     if(type=='KTP') {
+      print(noDokumen.text);
       if(v!.isEmpty) {
         return 'Anda harus mengisi bagian ini';
       }
-      if(v.length < 16) {
+      if(!RegExp(r'^[0-9]{16}').hasMatch(v)) {
         return 'Format KTP tidak sesuai';
       }
     }
@@ -149,7 +149,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       if(v!.isEmpty) {
         return 'Anda harus mengisi bagian ini';
       }
-      if(v.length < 12) {
+      if(!RegExp(r'^[0-9]{12}').hasMatch(v)) {
         return 'Format SIM tidak sesuai';
       }
     }
@@ -157,7 +157,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       if(v!.isEmpty) {
         return 'Anda harus mengisi bagian ini';
       }
-      if(v.length < 16) {
+      if(!RegExp(r'^[0-9]{16}').hasMatch(v)) {
         return 'Format Passport tidak sesuai';
       }
     }
@@ -167,6 +167,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if(v==null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
+    if(!RegExp(r'^[a-zA-Z]+$').hasMatch(v)){
+      return 'Format nama depan salah';
+    }
     return null;
   }
 
@@ -174,15 +177,21 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if(v==null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
+    if(!RegExp(r'^[a-zA-Z]+$').hasMatch(v)){
+      return 'Format nama belakang salah';
+    }
     return null;
   }
 
   String? validateTempatLahir(String? v) {
-    final regTempatLahir = RegExp(r'^[a-zA-Z]+,');
+    final regTempatLahir = RegExp(r'^[a-zA-Z., 0-9]+$');
     if(v==null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
     if(!regTempatLahir.hasMatch(v)) {
+      return 'Format tempat lahir salah';
+    }
+    if(v.length < 10) {
       return 'Mohon tuliskan dangan spesifik (Contoh: Sleman, Yogyakarta)';
     }
     return null;
@@ -202,7 +211,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   String? validateTanggalLahir(String? v) {
     final tidakSesuai = RegExp(r'^[0-1][0-9]+/[0-2][0-9]+/[0-9][0-9][0-9][0-9]|[0-3][0-1]+/[0-9][0-9][0-9][0-9]');
-    final umurTidakCukup = RegExp(r'^[0-1][0-9]+/[0-2][0-9]+/[0-2][0][0][0-6]|[0-3][0-1]+/[0-2][0][0][0-6]|[0-2][0-9]+/[0-1][0-9][0-9][0-9]|[0-3][0-1]+/[0-1][0-9][0-9][0-9]');
+    final umurTidakCukup = RegExp(r'^[0-1][0-9]+/[0-2][0-9]+/[0-2][0][0][0-5]|[0-3][0-1]+/[0-2][0][0][0-5]|[0-2][0-9]+/[0-1][0-9][0-9][0-9]|[0-3][0-1]+/[0-1][0-9][0-9][0-9]');
     if(v==null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
@@ -218,6 +227,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   String? validateAlamat(String? v) {
     if(v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
+    }
+    if(!RegExp(r'^[a-zA-Z., 0-9]+$').hasMatch(v)){
+      return 'Format alamat salah';
     }
   }
 

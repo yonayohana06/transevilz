@@ -52,7 +52,7 @@ class DialogWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8)
                     )
                   ),
-                  onPressed: () {},
+                  onPressed: onpress,
                   child: Text(
                     buttonlabel,
                     style: TextStyle(
