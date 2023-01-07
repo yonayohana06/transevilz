@@ -38,12 +38,16 @@ class _OtpScreenState extends State<OtpScreen> {
     timeLeft = time;
     super.initState();
     timerCount = Timer.periodic(Duration(seconds: 1), (timer) {
+      if(!mounted) {
+        return ;
+      }
       setState(() {
         timeLeft--;
       });
       if(timeLeft==0){
         showDialog(
           context: context,
+          barrierDismissible: false,
           builder: (context) => DialogWidget(
             image: Image.asset('assets/images/runout.png'),
             status: Text(
@@ -70,12 +74,16 @@ class _OtpScreenState extends State<OtpScreen> {
   void kirimUlang() {
     timeLeft = time;
     timerCount = Timer.periodic(Duration(seconds: 1), (timer) {
+      if(!mounted) {
+        return ;
+      }
       setState(() {
         timeLeft--;
       });
       if(timeLeft==0){
         showDialog(
           context: context,
+          barrierDismissible: false,
           builder: (context) => DialogWidget(
             image: Image.asset('assets/images/runout.png'),
             status: Text(
@@ -175,36 +183,60 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
               SizedBox(height: 20),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Belum dapat kode otp?',
-                      style: TextStyle(
-                        color: Color(0xFF7A7A7A),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Belum dapat kode otp?',
+                        style: TextStyle(
+                            color: Color(0xFF7A7A7A),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400
+                        ),
                       ),
-                    ),
-                    timeLeft == 0 
-                        ? InkWell(
-                      onTap: () {
-                        kirimUlang();
-                        context.read<RegisterBloc>().codeSubmit.clear();
-                      },
-                      child: Text(
-                        'KIRIM ULANG KODE OTP',
-                          style: TextStyle(
-                              color: Color(0xFF2ACA10),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600
-                          )
-                      ),
-                    )
-                        : Text(''),
-                  ],
-                )
+                      timeLeft == 0
+                          ? GestureDetector(
+                        onTap: () {
+                          if(timeLeft==0) {
+                            kirimUlang();
+                            context.read<RegisterBloc>().codeSubmit.clear();
+                          }
+                        },
+                        onDoubleTap: () {},
+                        onTapUp: (v) {},
+                        onTapDown: (v) {},
+                        onTapCancel: () {},
+                        onLongPress: () {},
+                        onDoubleTapCancel: () {},
+                        onHorizontalDragCancel: () {},
+                        onLongPressCancel: () {},
+                        onLongPressStart: (v) {},
+                        onLongPressUp: () {},
+                        onPanCancel: () {},
+                        onSecondaryLongPress: () {},
+                        onSecondaryLongPressCancel: () {},
+                        onSecondaryLongPressStart: (v) {},
+                        onSecondaryLongPressUp: () {},
+                        onSecondaryTap: () {},
+                        onSecondaryTapCancel: () {},
+                        onTertiaryLongPress: () {},
+                        onTertiaryLongPressCancel: () {},
+                        onTertiaryLongPressUp: () {},
+                        onTertiaryTapCancel: () {},
+                        onVerticalDragCancel: () {},
+                        child: Text(
+                            'KIRIM ULANG KODE OTP',
+                            style: TextStyle(
+                                color: Color(0xFF2ACA10),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600
+                            )
+                        ),
+                      )
+                          : Text(''),
+                    ],
+                  )
               ),
               Expanded(
                 child: OtpKeyboard(
@@ -233,6 +265,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       if(context.read<RegisterBloc>().codeSubmit.text.length==6 && context.read<RegisterBloc>().codeSubmit.text!=context.read<RegisterBloc>().otpDummy) {
                         showDialog(
                           context: context,
+                          barrierDismissible: false,
                           builder: (context) => DialogWidget(
                             image: Icon(
                               Icons.cancel_rounded,

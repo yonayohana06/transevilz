@@ -55,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }));
                     },
                     child: const Text(
-                      'Selanjutnya',
+                      'Kirim',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
@@ -74,7 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   onPressed: null,
                   child: Text(
-                    'Selanjutnya',
+                    'Kirim',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -221,6 +221,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ],
                         ),
                       ),
+                      SizedBox(height: 12),
                       BlocBuilder<RegisterBloc, RegisterState>(
                         builder: (context, state) {
                           print(state);

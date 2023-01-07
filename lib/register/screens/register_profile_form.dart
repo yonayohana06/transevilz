@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:transevilz/register/bloc/register_bloc.dart';
+import 'package:transevilz/register/screens/syarat_dan_ketentuan.dart';
 import 'package:transevilz/register/widget/checkbox.dart';
 import 'package:transevilz/register/widget/dialog.dart';
 import 'package:transevilz/register/widget/dropdownform.dart';
@@ -72,8 +73,10 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                 fontWeight: FontWeight.w700,
                                 fontFamily: 'DM Sans',
                               ),
+                              textAlign: TextAlign.center,
                             ),
                             buttonlabel: 'Cek Email Sekarang',
+                            onpress: () {},
                           )
                       );
                     },
@@ -311,7 +314,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                       textInputAction: TextInputAction.next,
                                       decoration: InputDecoration(
                                         contentPadding: const EdgeInsets.all(10),
-                                        fillColor: const Color(0xFFE5F2FF),
+                                        fillColor: const Color(0xFFEFEFEF),
                                         filled: true,
                                         hintStyle: const TextStyle(
                                           color: Colors.grey,
@@ -663,26 +666,47 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   SizedBox(height: 24),
                                   FormField<bool>(
                                     builder: (state) {
-                                      return CheckboxListTile(
-                                        controlAffinity: ListTileControlAffinity.leading,
-                                        value: context.read<RegisterBloc>().checkBox,
-                                        title: Transform.translate(
-                                          offset: Offset(-10, 0),
-                                          child: Text(
-                                            'Saya setuju dengan Syarat & Ketentuan yang berlaku',
+                                      return Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Checkbox(
+                                            value: context.read<RegisterBloc>().checkBox,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                context.read<RegisterBloc>().checkBox = value!;
+                                                state.didChange(value);
+                                              });
+                                            },
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text(
+                                            'Saya setuju dengan ',
                                             style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: 'DM Sans'
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'DM Sans',
                                             ),
                                           ),
-                                        ),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            context.read<RegisterBloc>().checkBox = value!;
-                                            state.didChange(value);
-                                          });
-                                        },
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) {
+                                                  return SyaratPrep();
+                                                }),
+                                              );
+                                            },
+                                            child: Text(
+                                              'Syarat & Ketentuan yang berlaku',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'DM Sans',
+                                                color: Colors.blue,
+                                              ),
+                                            ),
+                                          )
+                                        ],
                                       );
                                     },
                                     validator: (value) {
