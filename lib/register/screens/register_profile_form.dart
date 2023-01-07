@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:transevilz/register/bloc/register_bloc.dart';
 import 'package:transevilz/register/screens/syarat_dan_ketentuan.dart';
-import 'package:transevilz/register/widget/checkbox.dart';
 import 'package:transevilz/register/widget/dialog.dart';
-import 'package:transevilz/register/widget/dropdownform.dart';
 import 'package:transevilz/register/widget/reuse_app_bar.dart';
 
 import '../widget/title_form.dart';
@@ -486,6 +484,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   const SizedBox(height: 24),
                                   const TitleForm(title: 'Tanggal Lahir'),
                                   TextFormField(
+                                    readOnly: true,
                                     textInputAction: TextInputAction.next,
                                     controller: context.read<RegisterBloc>().tanggalLahir,
                                     autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -687,22 +686,24 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                               fontFamily: 'DM Sans',
                                             ),
                                           ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(builder: (context) {
-                                                  return SyaratPrep();
-                                                }),
-                                              );
-                                            },
-                                            child: Text(
-                                              'Syarat & Ketentuan yang berlaku',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: 'DM Sans',
-                                                color: Colors.blue,
+                                          Expanded(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) {
+                                                    return SyaratPrep();
+                                                  }),
+                                                );
+                                              },
+                                              child: Text(
+                                                'Syarat & Ketentuan yang berlaku',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontFamily: 'DM Sans',
+                                                  color: Colors.blue,
+                                                ),
                                               ),
                                             ),
                                           )

@@ -45,27 +45,6 @@ class _OtpScreenState extends State<OtpScreen> {
         timeLeft--;
       });
       if(timeLeft==0){
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => DialogWidget(
-            image: Image.asset('assets/images/runout.png'),
-            status: Text(
-              'Oops! Waktu anda Habis',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'DM Sans',
-                color: Color(0xFFDC3328),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            buttonlabel: 'Coba Lagi',
-            onpress: () {
-              return Navigator.pop(context);
-            },
-          ),
-        );
         return timerCount!.cancel();
       }
     });
@@ -81,27 +60,6 @@ class _OtpScreenState extends State<OtpScreen> {
         timeLeft--;
       });
       if(timeLeft==0){
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => DialogWidget(
-            image: Image.asset('assets/images/runout.png'),
-            status: Text(
-              'Oops! Waktu anda Habis',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'DM Sans',
-                color: Color(0xFFDC3328),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            buttonlabel: 'Coba Lagi',
-            onpress: () {
-              return Navigator.pop(context);
-            },
-          ),
-        );
         return timerCount!.cancel();
       }
     });
@@ -188,7 +146,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Belum dapat kode otp?',
+                        'Belum dapat kode otp? ',
                         style: TextStyle(
                             color: Color(0xFF7A7A7A),
                             fontSize: 12,
@@ -254,13 +212,37 @@ class _OtpScreenState extends State<OtpScreen> {
                       if(context.read<RegisterBloc>().codeSubmit.text.length < 6) {
                         context.read<RegisterBloc>().codeSubmit.text += value;
                       }
-                      if(context.read<RegisterBloc>().codeSubmit.text==context.read<RegisterBloc>().otpDummy) {
+                      if(context.read<RegisterBloc>().codeSubmit.text==context.read<RegisterBloc>().otpDummy && timeLeft!=0) {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) {
                             return RegisterProfileReq();
                           }),
                         );
+                      }
+                      if(context.read<RegisterBloc>().codeSubmit.text==context.read<RegisterBloc>().otpDummy && timeLeft==0) {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => DialogWidget(
+                            image: Image.asset('assets/images/runout.png'),
+                            status: Text(
+                              'Oops! Waktu anda Habis',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'DM Sans',
+                                color: Color(0xFFDC3328),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            buttonlabel: 'Coba Lagi',
+                            onpress: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        );
+                        context.read<RegisterBloc>().codeSubmit.clear();
                       }
                       if(context.read<RegisterBloc>().codeSubmit.text.length==6 && context.read<RegisterBloc>().codeSubmit.text!=context.read<RegisterBloc>().otpDummy) {
                         showDialog(
@@ -294,6 +276,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             },
                           ),
                         );
+                        context.read<RegisterBloc>().codeSubmit.clear();
                       }
                       print(context.read<RegisterBloc>().codeSubmit.text);
                     }
