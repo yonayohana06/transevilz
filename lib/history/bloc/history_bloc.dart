@@ -92,13 +92,9 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     });
     on<DariEvent>((event, emit) {
       if(pickedFrom != null && pickedTill != null) {
-        dateRange = DateTimeRange(
-          start: pickedFrom!,
-          end: pickedTill!,
-        );
-        if(dateRange != null) {
-          print(dateRange);
-          emit(HistoryLoaded());
+        emit(HistoryLoaded());
+        if(pickedTill!.isBefore(pickedFrom!)) {
+          emit(InversedDate());
         }
       }
     });

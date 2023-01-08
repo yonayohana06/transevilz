@@ -18,3 +18,8 @@ class HistoryLoaded extends HistoryState {
   @override
   List<Object> get props => [];
 }
+
+class InversedDate extends HistoryState {
+  @override
+  List<Object> get props => [];
+}

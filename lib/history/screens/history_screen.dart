@@ -151,9 +151,15 @@ class HistoryScreen extends StatelessWidget {
             const SizedBox(height: 19),
             BlocBuilder<HistoryBloc, HistoryState>(
               builder: (context, state) {
+                print(state);
                 if(state is HistoryInitial) {
                   return Center(
                     child: Text('Silahkan Masukan tanggal berurutan'),
+                  );
+                }
+                if(state is InversedDate) {
+                  return Center(
+                    child: Text('Tanggal yang anda masukan tidak berurutan'),
                   );
                 }
                 if(state is HistoryLoaded) {
@@ -341,7 +347,7 @@ class HistoryScreen extends StatelessWidget {
                   );
                 }
                 return Center(
-                  child: Text('Tanggal yang anda masukan tidak berurutan'),
+                  child: Text('Anda belum memasukan tanggal'),
                 );
               },
             )
