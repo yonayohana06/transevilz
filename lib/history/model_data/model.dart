@@ -6,7 +6,7 @@ class History {
   final String name;
   final String bankType;
   final int noRek;
-  final String tanggal;
+  final DateTime tanggal;
   final int jumlah;
   final String currency;
   final String status;
@@ -24,6 +24,4 @@ class History {
     required this.currency,
     required this.status,
   });
-
-
 }

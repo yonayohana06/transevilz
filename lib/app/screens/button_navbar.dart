@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:transevilz/history/bloc/history_bloc.dart';
 import 'package:transevilz/history/history.dart';
 import 'package:transevilz/home/home.dart';
 
@@ -16,7 +18,10 @@ class _MainMenuState extends State<MainMenu> {
   final List<Widget> _mainMenu = [
     const HomeScreen(),
     const Center(child: Text("Layanan")),
-    HistoryScreen(),
+    BlocProvider(
+      create: (context) => HistoryBloc(),
+      child: HistoryScreen(),
+    ),
     const Center(child: Text("Akun")),
   ];
   @override
