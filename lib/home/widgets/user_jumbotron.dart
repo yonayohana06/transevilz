@@ -26,7 +26,7 @@ class _View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      margin: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.vertical(
           bottom: Radius.circular(30),
@@ -109,7 +109,14 @@ class Transaction extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TransferInter(),
+                  ),
+                );
+              },
               child: const Text(
                 "Transfer Internasional",
                 textAlign: TextAlign.center,

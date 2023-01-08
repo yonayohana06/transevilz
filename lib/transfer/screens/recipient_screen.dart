@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:transevilz/app/app.dart';
-import 'package:transevilz/transfer/screens/payment_method.dart';
 import 'package:transevilz/transfer/transfer.dart';
 
 class RecipientScreen extends StatelessWidget {
-  const RecipientScreen({super.key});
+  const RecipientScreen({super.key, required this.total});
+
+  final num total;
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +73,9 @@ class RecipientScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          const Text(
-                            "1.000.000 IDR",
-                            style: TextStyle(
+                          Text(
+                            "$total IDR",
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 24,
                               fontWeight: FontWeight.w700,
@@ -136,7 +137,7 @@ class RecipientScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => PaymentMethod(),
+                            builder: (_) => PaymentMethod(total: total),
                           ),
                         );
                       },

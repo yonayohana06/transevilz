@@ -13,7 +13,7 @@ class _MainMenuState extends State<MainMenu> {
   int _currentIndex = 0;
 
   final List<Widget> _mainMenu = [
-    const HomeScreen(),
+    const SecScreen(),
     const Center(child: Text("Layanan")),
     const Center(child: Text("Riwayat")),
     const Center(child: Text("Akun")),

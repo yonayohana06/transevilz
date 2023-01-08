@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:transevilz/app/app.dart';
+import 'package:transevilz/app/transaction/transaction.dart';
 import 'package:transevilz/login/login.dart';
 import 'package:transevilz/transfer/transfer.dart';
 
 class PaymentMethod extends StatelessWidget {
-  PaymentMethod({super.key});
+  PaymentMethod({super.key, required this.total});
 
   final _controller = TextEditingController();
   final List<String> items = [
@@ -15,6 +16,8 @@ class PaymentMethod extends StatelessWidget {
     'CIMB Niaga',
     'Mandiri',
   ];
+
+  final num total;
 
   @override
   Widget build(BuildContext context) {
@@ -84,9 +87,9 @@ class PaymentMethod extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            const Text(
-                              "1.000.000 IDR",
-                              style: TextStyle(
+                            Text(
+                              "$total IDR",
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 24,
                                 fontWeight: FontWeight.w700,
@@ -171,7 +174,14 @@ class PaymentMethod extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => PinTransaction(),
+                          ),
+                        );
+                      },
                       child: const Text("Selanjutnya"),
                     ),
                   ),
