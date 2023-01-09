@@ -165,8 +165,6 @@ class HistoryScreen extends StatelessWidget {
                       onPressed: () {
                         context.read<HistoryBloc>().add(SampaiEvent());
                         context.read<HistoryBloc>().add(DariEvent());
-                        context.read<HistoryBloc>().firstRange.clear();
-                        context.read<HistoryBloc>().lastRange.clear();
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
