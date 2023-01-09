@@ -210,7 +210,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   String? validateTanggalLahir(String? v) {
-    final tidakSesuai = RegExp(r'^[0-1][0-9]+/[0-2][0-9]+/[0-9][0-9][0-9][0-9]|[0-3][0-1]+/[0-9][0-9][0-9][0-9]');
+    final tidakSesuai = RegExp(r'^[0-1][0-9]+/[0-2][0-9]+/[0-9][0-9][0-9][0-9]$|[0-3][0-1]+/[0-9][0-9][0-9][0-9]$');
     final umurTidakCukup = RegExp(r'^[0-1][0-9]+/[0-2][0-9]+/[0-2][0][0][0-5]|[0-3][0-1]+/[0-2][0][0][0-5]|[0-2][0-9]+/[0-1][0-9][0-9][0-9]|[0-3][0-1]+/[0-1][0-9][0-9][0-9]');
     if(v==null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
