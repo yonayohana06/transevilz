@@ -484,6 +484,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   const SizedBox(height: 24),
                                   const TitleForm(title: 'Tanggal Lahir'),
                                   TextFormField(
+                                    readOnly: true,
                                     textInputAction: TextInputAction.next,
                                     controller: context.read<RegisterBloc>().tanggalLahir,
                                     autovalidateMode: AutovalidateMode.onUserInteraction,

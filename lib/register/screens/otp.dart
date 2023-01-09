@@ -244,6 +244,30 @@ class _OtpScreenState extends State<OtpScreen> {
                         );
                         context.read<RegisterBloc>().codeSubmit.clear();
                       }
+                      if(context.read<RegisterBloc>().codeSubmit.text.length==6 && context.read<RegisterBloc>().codeSubmit.text!=context.read<RegisterBloc>().otpDummy && timeLeft==0) {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => DialogWidget(
+                            image: Image.asset('assets/images/runout.png'),
+                            status: Text(
+                              'Oops! Waktu anda Habis',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'DM Sans',
+                                color: Color(0xFFDC3328),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            buttonlabel: 'Coba Lagi',
+                            onpress: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        );
+                        context.read<RegisterBloc>().codeSubmit.clear();
+                      }
                       if(context.read<RegisterBloc>().codeSubmit.text.length==6 && context.read<RegisterBloc>().codeSubmit.text!=context.read<RegisterBloc>().otpDummy) {
                         showDialog(
                           context: context,

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -200,9 +199,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   void datePicker(BuildContext context) async {
     pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime(2006),
+      initialDate: DateTime.now(),
       firstDate: DateTime(1900),
-      lastDate: DateTime(2006),
+      lastDate: DateTime.now(),
     );
     if(pickedDate != null) {
       tanggalLahir.text = DateFormat('MM/dd/yyyy').format(pickedDate!);
@@ -211,14 +210,19 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   String? validateTanggalLahir(String? v) {
     final tidakSesuai = RegExp(r'^[0-1][0-9]+/[0-2][0-9]+/[0-9][0-9][0-9][0-9]$|[0-3][0-1]+/[0-9][0-9][0-9][0-9]$');
-    final umurTidakCukup = RegExp(r'^[0-1][0-9]+/[0-2][0-9]+/[0-2][0][0][0-5]|[0-3][0-1]+/[0-2][0][0][0-5]|[0-2][0-9]+/[0-1][0-9][0-9][0-9]|[0-3][0-1]+/[0-1][0-9][0-9][0-9]');
+    // final umurTidakCukup = RegExp(r'^[0-1][0-9]+/[0-2][0-9]+/[0-2][0][0][0-5]|[0-3][0-1]+/[0-2][0][0][0-5]|[0-2][0-9]+/[0-1][0-9][0-9][0-9]|[0-3][0-1]+/[0-1][0-9][0-9][0-9]');
+    final dateNow = DateTime.now();
+    int yearValidation = dateNow.year - 17;
+    int monthValidation = dateNow.month;
+    int dayValidation = dateNow.day;
+    final underAgeValidation = DateTime(yearValidation, monthValidation, dayValidation);
     if(v==null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
     if(!tidakSesuai.hasMatch(v)) {
       return 'Format tidak sesuai';
     }
-    if(!umurTidakCukup.hasMatch(v)) {
+    if(pickedDate!.isAfter(underAgeValidation)) {
       return 'Umur tidak cukup';
     }
     return null;
@@ -228,7 +232,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if(v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
-    if(!RegExp(r'^[a-zA-Z., 0-9]+$').hasMatch(v)){
+    if(!RegExp(r'^[a-zA-Z., 0-9/:]+$').hasMatch(v)){
       return 'Format alamat salah';
     }
   }
