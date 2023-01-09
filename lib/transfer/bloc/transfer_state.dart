@@ -22,3 +22,11 @@ class StateTransferButton extends TransferState {
   @override
   List<Object> get props => [status];
 }
+
+class StateTotal extends TransferState {
+  final num total;
+
+  const StateTotal(this.total);
+  @override
+  List<Object> get props => [total];
+}

@@ -1,50 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transevilz/app/app.dart';
 import 'package:transevilz/transfer/transfer.dart';
 
-class TransferScreen extends StatefulWidget {
+class TransferScreen extends StatelessWidget {
   const TransferScreen({super.key});
 
   @override
-  State<TransferScreen> createState() => _TransferScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => TransferBloc(),
+      child: _View(),
+    );
+  }
 }
 
-class _TransferScreenState extends State<TransferScreen> {
-  final amount = TextEditingController();
-  final key = GlobalKey<FormState>();
-
-  String admin = '5000';
-  num total = 0;
-
-  void hitung() {
-    if (amount.text.isNotEmpty) {
-      num count = int.parse(amount.text) + int.parse(admin);
-      setState(() {
-        total = count;
-      });
-    }
-    if (amount.text.isEmpty) {
-      setState(() {
-        total = 0;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    amount.addListener(() {
-      hitung();
-    });
-    super.initState();
-  }
-
+class _View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Form(
-        key: key,
-        child: SafeArea(
+    return Form(
+      key: context.read<TransferBloc>().formKey,
+      onChanged: () => context.read<TransferBloc>().add(
+            EventTransferButton(),
+          ),
+      child: Scaffold(
+        body: SafeArea(
           child: Column(
             children: [
               const ButtonApp(
@@ -53,54 +34,50 @@ class _TransferScreenState extends State<TransferScreen> {
               ),
               const SizedBox(height: 55),
               Container(
-                height: 40,
                 margin: const EdgeInsets.symmetric(horizontal: 24),
-                child: Row(
-                  children: [
-                    Container(
-                      height: 40,
-                      width: 36,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFD8F0FF),
-                        borderRadius: BorderRadius.horizontal(
-                          left: Radius.circular(10),
-                        ),
-                        image: DecorationImage(
-                          image: AssetImage(
-                            "assets/icon/flag_indonesia.png",
-                          ),
-                          scale: 4,
-                        ),
+                child: TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  controller: context.read<TransferBloc>().amount,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    fillColor: const Color(0xFFE5F2FF),
+                    filled: true,
+                    hintStyle: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    border: const OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
                       ),
                     ),
-                    Expanded(
-                      child: TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          controller: amount,
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.all(10),
-                            fillColor: Color(0xFFE5F2FF),
-                            filled: true,
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.horizontal(
-                                right: Radius.circular(10.0),
-                              ),
-                            ),
-                            hintText: 'IDR',
-                          ),
-                          keyboardType: TextInputType.phone,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(10)
-                          ]),
+                    hintText: 'IDR',
+                    prefixIcon: Container(
+                      alignment: Alignment.centerLeft,
+                      margin: const EdgeInsets.only(right: 10),
+                      padding: const EdgeInsets.only(left: 10),
+                      width: 55,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                        ),
+                        color: Color(0xFFD8F0FF),
+                      ),
+                      child: Image.asset(
+                        "assets/icon/flag_indonesia.png",
+                        scale: 4,
+                      ),
                     ),
+                  ),
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
                   ],
+                  validator: context.read<TransferBloc>().validate,
                 ),
               ),
               const SizedBox(height: 20),
@@ -108,8 +85,8 @@ class _TransferScreenState extends State<TransferScreen> {
                 margin: const EdgeInsets.symmetric(horizontal: 24),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       "Biaya Admin",
                       style: TextStyle(
                         color: Color(0xFF98A5D3),
@@ -118,8 +95,8 @@ class _TransferScreenState extends State<TransferScreen> {
                       ),
                     ),
                     Text(
-                      "5.000 IDR",
-                      style: TextStyle(
+                      "${context.read<TransferBloc>().feeAdmin} IDR",
+                      style: const TextStyle(
                         color: Color(0xFF98A5D3),
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -128,72 +105,92 @@ class _TransferScreenState extends State<TransferScreen> {
                   ],
                 ),
               ),
-              Text(
-                "$total IDR",
-                style: const TextStyle(
-                  color: Colors.green,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-          height: 180,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Uang akan terkirim satu hari setelah "
-                "proses berhasil jika dibayar sebelum pukul 23:00",
-                style: TextStyle(
-                  color: Colors.grey[500],
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                "Total Transaksi",
-                style: TextStyle(
-                  color: Color(0xFF98A5D3),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                "$total IDR",
-                style: const TextStyle(
-                  color: Colors.green,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  fixedSize: Size(MediaQuery.of(context).size.width, 45),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+        bottomNavigationBar: BottomAppBar(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            height: 180,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Uang akan terkirim satu hari setelah "
+                  "proses berhasil jika dibayar sebelum pukul 23:00",
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RecipientScreen(total: total),
-                    ),
-                  );
-                },
-                child: const Text("Selanjutnya"),
-              ),
-            ],
+                const SizedBox(height: 10),
+                const Text(
+                  "Total Transaksi",
+                  style: TextStyle(
+                    color: Color(0xFF98A5D3),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                BlocBuilder<TransferBloc, TransferState>(
+                  builder: (context, state) {
+                    final total = context.read<TransferBloc>().total;
+                    if (state is StateTotal) {
+                      return Text(
+                        "$total IDR",
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      );
+                    }
+                    return Text(
+                      "IDR",
+                      style: const TextStyle(
+                        color: Colors.green,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+                BlocBuilder<TransferBloc, TransferState>(
+                  builder: (context, state) {
+                    if (context.read<TransferBloc>().isEnableButton) {
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          fixedSize:
+                              Size(MediaQuery.of(context).size.width, 45),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: () {
+                          context.read<TransferBloc>().add(SubmitTransfer());
+                        },
+                        child: const Text("Selanjutnya"),
+                      );
+                    }
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        fixedSize: Size(MediaQuery.of(context).size.width, 45),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: null,
+                      child: const Text("Selanjutnya"),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

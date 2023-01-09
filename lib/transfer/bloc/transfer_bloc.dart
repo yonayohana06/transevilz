@@ -12,15 +12,22 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     });
 
     on<EventTransferButton>((event, emit) {
-      final validate = amount.text.isNotEmpty &&
-          noRek.text.isNotEmpty &&
+      final validate =
+          amount.text.isNotEmpty && formKey.currentState!.validate();
+      final validateRecipient = noRek.text.isNotEmpty &&
           nameRecipient.text.isNotEmpty &&
           formKey.currentState!.validate();
       // final pinValidate = pin.text.isNotEmpty &&
       //     confirmPin.text.isNotEmpty &&
       //     formKey.currentState!.validate();
-      // final formValidate = loginValidate || pinValidate;
-      emit(StateTransferButton(isEnableButton = validate));
+      final formValidate = validateRecipient || validate;
+      emit(StateTransferButton(isEnableButton = formValidate));
+      amount.addListener(
+        () {
+          hitung();
+        },
+      );
+      emit(StateTotal(total = total));
     });
   }
 
