@@ -96,11 +96,12 @@ class _Form extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            Navigator.pushReplacement(
+                            Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const LoginScreen(),
                               ),
+                              (route) => false,
                             );
                           },
                           child: const Text("Masuk Sekarang"),

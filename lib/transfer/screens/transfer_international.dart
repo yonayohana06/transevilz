@@ -282,12 +282,12 @@ class _TransferInterState extends State<TransferInter> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RecipientScreen(total: total),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => RecipientScreen(),
+                  //   ),
+                  // );
                 },
                 child: const Text("Selanjutnya"),
               ),

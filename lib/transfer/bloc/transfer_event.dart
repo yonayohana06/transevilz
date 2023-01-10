@@ -9,4 +9,14 @@ abstract class TransferEvent extends Equatable {
 
 class SubmitTransfer extends TransferEvent {}
 
+class EventInit extends TransferEvent {
+  final num total;
+
+  const EventInit(this.total);
+  @override
+  List<Object> get props => [total];
+}
+
 class EventTransferButton extends TransferEvent {}
+
+class EventClearButton extends TransferEvent {}

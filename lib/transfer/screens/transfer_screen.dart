@@ -11,7 +11,21 @@ class TransferScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TransferBloc(),
-      child: _View(),
+      child: BlocListener<TransferBloc, TransferState>(
+        listener: (context, state) {
+          if (state is TransferSuccess) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => RecipientScreen(
+                  total: context.read<TransferBloc>().total,
+                ),
+              ),
+            );
+          }
+        },
+        child: _View(),
+      ),
     );
   }
 }
@@ -77,7 +91,7 @@ class _View extends StatelessWidget {
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(10),
                   ],
-                  validator: context.read<TransferBloc>().validate,
+                  validator: context.read<TransferBloc>().validateNominal,
                 ),
               ),
               const SizedBox(height: 20),
@@ -147,9 +161,9 @@ class _View extends StatelessWidget {
                         ),
                       );
                     }
-                    return Text(
+                    return const Text(
                       "IDR",
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.green,
                         fontSize: 18,
                         fontWeight: FontWeight.w700,

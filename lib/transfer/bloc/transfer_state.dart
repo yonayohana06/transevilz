@@ -11,7 +11,13 @@ class TransferInitial extends TransferState {}
 
 class TransferSuccess extends TransferState {}
 
-class TransferFailed extends TransferState {}
+class TransferFailed extends TransferState {
+  final String msg;
+
+  const TransferFailed(this.msg);
+  @override
+  List<Object> get props => [msg];
+}
 
 class TransferLoading extends TransferState {}
 

@@ -8,7 +8,20 @@ part 'transfer_state.dart';
 class TransferBloc extends Bloc<TransferEvent, TransferState> {
   TransferBloc() : super(TransferInitial()) {
     on<SubmitTransfer>((event, emit) {
-      // TODO: implement event handler
+      final isValid = formKey.currentState!.validate();
+      if (isValid) {
+        emit(TransferLoading());
+        if (amount.text.isNotEmpty) {
+          emit(TransferSuccess());
+        } else {
+          emit(TransferFailed('Gagal'));
+        }
+      }
+    });
+
+    on<EventInit>((event, emit) {
+      emit(TransferLoading());
+      total = event.total;
     });
 
     on<EventTransferButton>((event, emit) {
@@ -31,6 +44,11 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     });
   }
 
+  void clearForm() {
+    noRek.clear();
+    nameRecipient.clear();
+  }
+
   void hitung() {
     if (amount.text.isNotEmpty) {
       num count = int.parse(amount.text) + int.parse(feeAdmin);
@@ -41,10 +59,23 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     }
   }
 
-  String? validate(String? v) {
+  String? validateNominal(String? v) {
     if (v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
+    if (v.length < 5) {
+      return 'Minimal transfer 10.000';
+    }
+    return null;
+  }
+
+  String? validateNoRek(String? v) {
+    if (v == null || v.isEmpty) {
+      return 'Anda harus mengisi bagian ini';
+    }
+    // if (v.length < 5) {
+    //   return 'Minimal transfer 10.000';
+    // }
     return null;
   }
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:transevilz/app/app.dart';
 import 'package:transevilz/login/login.dart';
 
 class PinScreen extends StatelessWidget {
@@ -10,50 +9,93 @@ class PinScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 30, bottom: 40),
-            child: const ButtonApp(
-              title: 'Membuat PIN Evilz',
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(left: 24, right: 24, bottom: 40),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.info_outline,
-                  color: Colors.grey[600],
+    return WillPopScope(
+      onWillPop: () => _onBackPressed(context),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 30, bottom: 40),
+              child: const Text(
+                'Membuat Pin Evilz',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
                 ),
-                const SizedBox(width: 5),
-                Expanded(
-                  child: Text(
-                    'Pin Evilz ini digunakan untuk proses '
-                    'pembayaran/transfer pada TransEvilz. '
-                    'Gunakan kombinasi 6 angka tanpa huruf dan simbol',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          BlocProvider(
-            create: (context) => LoginBloc(),
-            child: Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(24),
-                child: _Form(),
               ),
             ),
-          ),
+            Container(
+              margin: const EdgeInsets.only(left: 24, right: 24, bottom: 40),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.info_outline,
+                    color: Colors.grey[600],
+                  ),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: Text(
+                      'Pin Evilz ini digunakan untuk proses '
+                      'pembayaran/transfer pada TransEvilz. '
+                      'Gunakan kombinasi 6 angka tanpa huruf dan simbol',
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            BlocProvider(
+              create: (context) => LoginBloc(),
+              child: Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(24),
+                  child: _Form(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<bool> _onBackPressed(context) async {
+    return await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          'Logout',
+          style: TextStyle(color: Colors.red),
+          // textAlign: TextAlign.center,
+        ),
+        content: const Text(
+          'Apakah anda yakin untuk logout?',
+          // textAlign: TextAlign.center,
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text("Tidak"),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text(
+                  "Ya",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );
@@ -96,11 +138,12 @@ class _Form extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            Navigator.pushReplacement(
+                            Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const LoginScreen(),
                               ),
+                              (route) => false,
                             );
                           },
                           child: const Text("OK"),

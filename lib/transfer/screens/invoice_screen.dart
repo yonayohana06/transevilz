@@ -20,11 +20,6 @@ class InvoiceScreen extends StatelessWidget {
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.SNACKBAR,
       );
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(
-      //     content: Text('Copied to clipboard'),
-      //   ),
-      // );
     }
 
     return Scaffold(
