@@ -4,6 +4,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:transevilz/history/bloc/history_bloc.dart';
 import 'package:transevilz/history/history.dart';
 import 'package:transevilz/layanan/layanan.dart';
+import 'package:transevilz/profile/profile.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({super.key});
@@ -22,7 +23,7 @@ class _MainMenuState extends State<MainMenu> {
       create: (context) => HistoryBloc(),
       child: HistoryScreen(),
     ),
-    const Center(child: Text("Akun")),
+    const ProfileScreen()
   ];
   @override
   Widget build(BuildContext context) {
