@@ -29,11 +29,12 @@ class _View extends StatelessWidget {
             builder: (context) {
               Future.delayed(
                 const Duration(seconds: 1),
-                () => Navigator.pushReplacement(
+                () => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const PinScreen(),
                   ),
+                  (route) => false,
                 ),
               );
               return AlertDialog(

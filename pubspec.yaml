@@ -45,6 +45,10 @@ dependencies:
   path_provider: ^2.0.11
   flutter_feather_icons: ^2.0.0+1
   intl: ^0.17.0
+  fluttertoast: ^8.1.2
+  fl_chart: ^0.55.2
+  dropdown_button2: ^1.9.2
+  url_launcher: ^6.1.7
 
 dev_dependencies:
   flutter_test:

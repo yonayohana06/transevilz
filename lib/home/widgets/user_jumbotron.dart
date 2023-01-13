@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:transevilz/home/home.dart';
+import 'package:transevilz/transfer/transfer.dart';
 
 class UserJumbotron extends StatelessWidget {
   const UserJumbotron({super.key});
@@ -25,7 +26,7 @@ class _View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      margin: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.vertical(
           bottom: Radius.circular(30),
@@ -84,7 +85,16 @@ class Transaction extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TransferScreen(
+                      type: TypeTransaction.local,
+                    ),
+                  ),
+                );
+              },
               child: const Text(
                 "Transfer lokal",
                 style: TextStyle(fontSize: 12),
@@ -101,7 +111,16 @@ class Transaction extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TransferInter(
+                      type: TypeTransaction.international,
+                    ),
+                  ),
+                );
+              },
               child: const Text(
                 "Transfer Internasional",
                 textAlign: TextAlign.center,
