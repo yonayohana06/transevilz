@@ -7,9 +7,11 @@ class RecipientScreen extends StatelessWidget {
   const RecipientScreen({
     super.key,
     required this.total,
+    required this.type,
   });
 
   final num total;
+  final TypeTransaction type;
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +21,39 @@ class RecipientScreen extends StatelessWidget {
           create: (context) => TransferBloc(),
         ),
         BlocProvider(
-          create: (context) => TransferBloc()..add(EventInit(total)),
+          create: (context) => TransferBloc()
+            ..add(EventInit(
+              total,
+            )),
         ),
       ],
-      child: _View(),
+      child: BlocListener<TransferBloc, TransferState>(
+        listener: (context, state) {
+          if (state is RecipientSuccess) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => PaymentMethod(
+                  type: type,
+                  total: context.read<TransferBloc>().total,
+                  desBank: context.read<TransferBloc>().recipientBank,
+                  noRekening: context.read<TransferBloc>().recipientRek,
+                  nama: context.read<TransferBloc>().recipientName,
+                ),
+              ),
+            );
+          }
+        },
+        child: _View(type: type),
+      ),
     );
   }
 }
 
 class _View extends StatelessWidget {
+  final TypeTransaction type;
+
+  const _View({required this.type});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +71,7 @@ class _View extends StatelessWidget {
                   children: [
                     const SizedBox(height: 55),
                     _total(context),
-                    FormTransfer(),
+                    FormTransfer(type: type),
                   ],
                 ),
               ),
@@ -99,7 +125,11 @@ class _View extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              context
+                                  .read<TransferBloc>()
+                                  .add(SubmitRecipient());
+                            },
                             child: const Text("Selanjutnya"),
                           ),
                         );
@@ -159,14 +189,22 @@ class _View extends StatelessWidget {
                 fit: BoxFit.fill,
               ),
               const SizedBox(width: 5),
-              const Text(
-                "IDR",
-                style: TextStyle(
+              Text(
+                type == TypeTransaction.international ? "IDR to USD" : "IDR",
+                style: const TextStyle(
                   color: Color(0xFF3A3A3A),
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                 ),
               ),
+              const SizedBox(width: 5),
+              type == TypeTransaction.international
+                  ? Image.asset(
+                      "assets/icon/flag_usa.png",
+                      height: 16.0,
+                      fit: BoxFit.fill,
+                    )
+                  : const SizedBox(),
             ],
           ),
           const SizedBox(height: 10),

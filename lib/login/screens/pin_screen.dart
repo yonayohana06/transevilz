@@ -88,7 +88,12 @@ class PinScreen extends StatelessWidget {
                 child: const Text("Tidak"),
               ),
               TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
+                onPressed: () => Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (_) => LoginScreen(),
+                  ),
+                  (route) => false,
+                ),
                 child: const Text(
                   "Ya",
                   style: TextStyle(color: Colors.red),

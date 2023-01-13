@@ -11,6 +11,10 @@ class TransferInitial extends TransferState {}
 
 class TransferSuccess extends TransferState {}
 
+class RecipientSuccess extends TransferState {}
+
+class PaymentSuccess extends TransferState {}
+
 class TransferFailed extends TransferState {
   final String msg;
 

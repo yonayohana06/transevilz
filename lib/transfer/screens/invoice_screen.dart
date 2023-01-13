@@ -1,27 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:transevilz/app/app.dart';
+import 'package:transevilz/transfer/transfer.dart';
 
 class InvoiceScreen extends StatelessWidget {
-  const InvoiceScreen({super.key});
+  const InvoiceScreen({
+    super.key,
+    required this.total,
+    required this.desBank,
+    required this.noRekening,
+    required this.nama,
+  });
+
+  final num total;
+  final String desBank;
+  final String noRekening;
+  final String nama;
 
   @override
   Widget build(BuildContext context) {
-    String va = '9999-5678-0033-1121-314';
-    // This function is triggered when the copy icon is pressed
-    void copyToClipboard() {
-      Clipboard.setData(ClipboardData(text: va));
-      Fluttertoast.showToast(
-        msg: 'Copied to clipboard',
-        backgroundColor: Colors.white,
-        textColor: Colors.grey[800],
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.SNACKBAR,
-      );
-    }
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => TransferBloc(),
+        ),
+        BlocProvider(
+          create: (context) => TransferBloc()
+            ..add(EventInitRecipient(
+              total,
+              desBank,
+              noRekening,
+              nama,
+            )),
+        ),
+      ],
+      child: _View(),
+    );
+  }
+}
 
+class _View extends StatelessWidget {
+  final String va = '9999-5678-0033-1121-314';
+  // This function is triggered when the copy icon is pressed
+  void copyToClipboard() {
+    Clipboard.setData(ClipboardData(text: va));
+    Fluttertoast.showToast(
+      msg: 'Copied to clipboard',
+      backgroundColor: Colors.white,
+      textColor: Colors.grey[800],
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.SNACKBAR,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -88,9 +124,9 @@ class InvoiceScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     _titleInvoice('Nama Penerima'),
-                    _descInvoice('Aurora Nugroho'),
+                    _descInvoice('Monalisa'),
                     _titleInvoice('Jenis Bank'),
-                    _descInvoice('BCC Bank'),
+                    _descInvoice("BCC Bank"),
                     _titleInvoice('Tipe Transaksi'),
                     _descInvoice('IDR ke IDR'),
                     _titleInvoice('No. Rekening'),
@@ -128,13 +164,18 @@ class InvoiceScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 15),
-                    const Text(
-                      "1.000.000 IDR",
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w700,
-                      ),
+                    BlocBuilder<TransferBloc, TransferState>(
+                      builder: (context, state) {
+                        final total = context.read<TransferBloc>().total;
+                        return Text(
+                          "$total IDR",
+                          style: const TextStyle(
+                            color: Colors.green,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

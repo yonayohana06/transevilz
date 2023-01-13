@@ -5,7 +5,9 @@ import 'package:transevilz/app/app.dart';
 import 'package:transevilz/transfer/transfer.dart';
 
 class TransferScreen extends StatelessWidget {
-  const TransferScreen({super.key});
+  const TransferScreen({super.key, required this.type});
+
+  final TypeTransaction type;
 
   @override
   Widget build(BuildContext context) {
@@ -18,25 +20,31 @@ class TransferScreen extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (_) => RecipientScreen(
+                  type: TypeTransaction.local,
                   total: context.read<TransferBloc>().total,
                 ),
               ),
             );
           }
         },
-        child: _View(),
+        child: _View(
+          type: type,
+        ),
       ),
     );
   }
 }
 
 class _View extends StatelessWidget {
+  final TypeTransaction type;
+
+  const _View({super.key, required this.type});
   @override
   Widget build(BuildContext context) {
     return Form(
       key: context.read<TransferBloc>().formKey,
       onChanged: () => context.read<TransferBloc>().add(
-            EventTransferButton(),
+            EventTransferButton(type),
           ),
       child: Scaffold(
         body: SafeArea(

@@ -89,7 +89,9 @@ class Transaction extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TransferScreen(),
+                    builder: (context) => const TransferScreen(
+                      type: TypeTransaction.local,
+                    ),
                   ),
                 );
               },
@@ -113,7 +115,9 @@ class Transaction extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TransferInter(),
+                    builder: (context) => const TransferInter(
+                      type: TypeTransaction.international,
+                    ),
                   ),
                 );
               },

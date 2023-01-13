@@ -1,8 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transevilz/app/app.dart';
 import 'package:transevilz/app/transaction/transaction.dart';
 import 'package:transevilz/forgot/forgot.dart';
 import 'package:transevilz/transfer/transfer.dart';
+
+class PinConfirm extends StatelessWidget {
+  const PinConfirm({
+    super.key,
+    required this.total,
+    required this.desBank,
+    required this.noRekening,
+    required this.nama,
+  });
+
+  final num total;
+  final String desBank;
+  final String noRekening;
+  final String nama;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => TransferBloc(),
+      child: PinTransaction(),
+    );
+  }
+}
 
 class PinTransaction extends StatefulWidget {
   const PinTransaction({super.key});
@@ -98,10 +122,16 @@ class _PinTransactionState extends State<PinTransaction> {
                     });
                   }
                   if (pin.text == pinDummy) {
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => InvoiceScreen()),
-                      (route) => false,
+                      MaterialPageRoute(
+                        builder: (_) => InvoiceScreen(
+                          total: context.read<TransferBloc>().total,
+                          desBank: context.read<TransferBloc>().recipientBank,
+                          noRekening: context.read<TransferBloc>().recipientRek,
+                          nama: context.read<TransferBloc>().recipientName,
+                        ),
+                      ),
                     );
                   }
                   if (pin.text.length == pinLength && pin.text != pinDummy) {

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:transevilz/app/app.dart';
-import 'package:transevilz/login/login.dart';
 import 'package:transevilz/onboarding/onboarding.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -20,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => const LoginScreen(),
+          builder: (_) => const MainMenu(),
         ),
       );
     });
