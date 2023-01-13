@@ -16,7 +16,7 @@ class _MainMenuState extends State<MainMenu> {
   int _currentIndex = 0;
 
   final List<Widget> _mainMenu = [
-    const HomeScreen(),
+    const Center(child: Text('Home sedang dalam tahap developing...'),),
     const Center(child: Text("Layanan")),
     BlocProvider(
       create: (context) => HistoryBloc(),

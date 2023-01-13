@@ -80,6 +80,58 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       currency: 'IDR',
       status: 'Dalam Proses',
     ),
+    History(
+      id: 1,
+      images: 'assets/history/Ellipse.png',
+      flags: 'assets/icon/flag_australia.png',
+      transferType: 'IDR ke AUD',
+      name: 'Aura Nugroho',
+      bankType: 'BCC',
+      noRek: 123412341234,
+      tanggal: DateTime(2022, 09, 28),
+      jumlah: 1000000,
+      currency: 'IDR',
+      status: 'Dalam Proses',
+    ),
+    History(
+      id: 1,
+      images: 'assets/history/Ellipse.png',
+      flags: 'assets/icon/flag_australia.png',
+      transferType: 'IDR ke AUD',
+      name: 'Aura Nugroho',
+      bankType: 'BCC',
+      noRek: 123412341234,
+      tanggal: DateTime(2022, 09, 15),
+      jumlah: 1000000,
+      currency: 'IDR',
+      status: 'Dalam Proses',
+    ),
+    History(
+      id: 1,
+      images: 'assets/history/Ellipse.png',
+      flags: 'assets/icon/flag_australia.png',
+      transferType: 'IDR ke AUD',
+      name: 'Aura Nugroho',
+      bankType: 'BCC',
+      noRek: 123412341234,
+      tanggal: DateTime(2022, 10, 20),
+      jumlah: 1000000,
+      currency: 'IDR',
+      status: 'Dalam Proses',
+    ),
+    History(
+      id: 1,
+      images: 'assets/history/Ellipse.png',
+      flags: 'assets/icon/flag_australia.png',
+      transferType: 'IDR ke AUD',
+      name: 'Aura Nugroho',
+      bankType: 'BCC',
+      noRek: 123412341234,
+      tanggal: DateTime(2022, 10, 09),
+      jumlah: 1000000,
+      currency: 'IDR',
+      status: 'Dalam Proses',
+    ),
   ];
 
   DateTime? pickedFrom;
@@ -104,21 +156,27 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     pickedFrom = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
+      firstDate: DateTime(2010),
       lastDate: DateTime.now(),
     );
+    if(pickedFrom==null) {
+      return null;
+    }
     final dateFormatedFrom = DateFormat('dd/MM/yyyy').format(pickedFrom!);
     firstRange.text = dateFormatedFrom.toString();
   }
 
-  void pickedTillData(BuildContext context) async {
+  Future<void> pickedTillData(BuildContext context) async {
     pickedTill = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
+      firstDate: DateTime(2010),
       lastDate: DateTime.now(),
     );
-    final dateFormattedTill = DateFormat('dd//MM/yyyy').format(pickedTill!);
+    if(pickedTill==null) {
+      return null;
+    }
+    final dateFormattedTill = DateFormat('dd/MM/yyyy').format(pickedTill!);
     lastRange.text = dateFormattedTill.toString();
   }
 }
