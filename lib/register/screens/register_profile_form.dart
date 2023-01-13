@@ -245,6 +245,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                         borderSide: BorderSide.none,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                     ),
                                     keyboardType: TextInputType.emailAddress,
                                     validator: context.read<RegisterBloc>().validateEmail,
@@ -324,6 +332,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                           borderSide: BorderSide.none,
                                           borderRadius: BorderRadius.circular(10),
                                         ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.red),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.red),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
                                       ),
                                       validator: context.read<RegisterBloc>().validateNoDok,
                                     ),
@@ -347,6 +363,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                         hintText: 'Masukan no dokumen',
                                         border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.red),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.red),
                                           borderRadius: BorderRadius.circular(10),
                                         ),
                                       ),
@@ -374,6 +398,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                             borderSide: BorderSide.none,
                                             borderRadius: BorderRadius.circular(10),
                                           ),
+                                          focusedErrorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: Colors.red),
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: Colors.red),
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
                                         ),
                                         validator: context.read<RegisterBloc>().validateNoDok,
                                       ),
@@ -397,6 +429,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                             hintText: 'Masukan no dokumen',
                                             border: OutlineInputBorder(
                                               borderSide: BorderSide.none,
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            focusedErrorBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: Colors.red),
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            errorBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: Colors.red),
                                               borderRadius: BorderRadius.circular(10),
                                             ),
                                           ),
@@ -426,6 +466,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                         borderSide: BorderSide.none,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                     ),
                                     validator: context.read<RegisterBloc>().validateNamaDepan,
                                   ),
@@ -450,6 +498,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                       hintText: 'Nama Belakang',
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide.none,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
@@ -478,6 +534,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                         borderSide: BorderSide.none,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                     ),
                                     validator: context.read<RegisterBloc>().validateTempatLahir,
                                   ),
@@ -500,6 +564,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                         hintText: 'mm/dd/yyyy',
                                         border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.red),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.red),
                                           borderRadius: BorderRadius.circular(10),
                                         ),
                                         suffixIcon: GestureDetector(
@@ -533,6 +605,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                       hintText: 'Alamat',
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide.none,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
@@ -611,6 +691,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                         borderSide: BorderSide.none,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                       suffixIcon: GestureDetector(
                                         onTap: () {
                                           context.read<RegisterBloc>().add(ShowPassEvent());
@@ -644,6 +732,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                       hintText: 'Konfirmasi kata sandi',
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide.none,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       suffixIcon: GestureDetector(

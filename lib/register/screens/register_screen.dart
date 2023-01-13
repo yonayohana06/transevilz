@@ -1,11 +1,8 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:transevilz/register/bloc/register_bloc.dart';
 import 'package:transevilz/register/screens/otp.dart';
-import 'package:transevilz/register/widget/dropdownform.dart';
 import 'package:transevilz/register/widget/reuse_app_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -157,69 +154,63 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ],
                       ),
                       const SizedBox(height: 3),
-                      Form(
-                        key: context.read<RegisterBloc>().formkey,
-                        onChanged: () {
-
-                        },
-                        child: Stack(
-                          children: [
-                            TextField(
-                              onChanged: (_) {
-                                context.read<RegisterBloc>().add(PhoneNumValidateEvent());
-                              },
-                              onTap: () {
-                                context.read<RegisterBloc>().add(PhoneNumValidateEvent());
-                              },
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(20),
-                              ],
-                              keyboardType: TextInputType.number,
-                              textInputAction: TextInputAction.go,
-                              controller: context.read<RegisterBloc>().phoneNumber,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                filled: true,
-                                fillColor: const Color(0xFFF1F7FF),
-                                hintText: 'Masukkan no.hp',
-                                hintStyle: const TextStyle(
-                                  letterSpacing: -0.06,
-                                  height: 1.315,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                  fontFamily: 'DM Sans',
-                                  color: Color(0xFF929292),
-                                ),
-                                contentPadding: EdgeInsets.only(left: 60),
+                      Stack(
+                        children: [
+                          TextField(
+                            onChanged: (_) {
+                              context.read<RegisterBloc>().add(PhoneNumValidateEvent());
+                            },
+                            onTap: () {
+                              context.read<RegisterBloc>().add(PhoneNumValidateEvent());
+                            },
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(20),
+                            ],
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.go,
+                            controller: context.read<RegisterBloc>().phoneNumber,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(10)
                               ),
+                              filled: true,
+                              fillColor: const Color(0xFFF1F7FF),
+                              hintText: 'Masukkan no.hp',
+                              hintStyle: const TextStyle(
+                                letterSpacing: -0.06,
+                                height: 1.315,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12,
+                                fontFamily: 'DM Sans',
+                                color: Color(0xFF929292),
+                              ),
+                              contentPadding: EdgeInsets.only(left: 60),
                             ),
-                            Container(
-                              height: 48,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(10),
-                                  topLeft: Radius.circular(10),
-                                ),
-                                color: Color(0xFFEAF3FF)
+                          ),
+                          Container(
+                            height: 48,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                topLeft: Radius.circular(10),
                               ),
-                              width: 50,
-                              child: Center(
-                                child: Text(
-                                  '+62',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      fontFamily: 'DM Sans',
-                                      color: Color(0xFF2075F3)
-                                  ),
+                              color: Color(0xFFEAF3FF)
+                            ),
+                            width: 50,
+                            child: Center(
+                              child: Text(
+                                '+62',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'DM Sans',
+                                    color: Color(0xFF2075F3)
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 12),
                       BlocBuilder<RegisterBloc, RegisterState>(
