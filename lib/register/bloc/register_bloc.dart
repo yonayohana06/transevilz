@@ -183,11 +183,15 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   String? validateTempatLahir(String? v) {
-    final regTempatLahir = RegExp(r'^[a-zA-Z., 0-9]+$');
+    final regTempatLahir = RegExp(r'^[a-zA-Z-.,/#& ()*:0-9]+$');
+    final wholeNumberTempatLahir = RegExp(r'^[0-9]+$');
     if(v==null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
     if(!regTempatLahir.hasMatch(v)) {
+      return 'Format tempat lahir salah';
+    }
+    if(wholeNumberTempatLahir.hasMatch(v)) {
       return 'Format tempat lahir salah';
     }
     if(v.length < 10) {
@@ -229,10 +233,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   String? validateAlamat(String? v) {
+    final wholeNumberTempatLahir = RegExp(r'^[0-9]+$');
     if(v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
-    if(!RegExp(r'^[a-zA-Z., 0-9/:]+$').hasMatch(v)){
+    if(!RegExp(r'^[a-zA-Z0-9-.,/#& ()*:]+$').hasMatch(v)){
+      return 'Format alamat salah';
+    }
+    if(wholeNumberTempatLahir.hasMatch(v)) {
       return 'Format alamat salah';
     }
   }

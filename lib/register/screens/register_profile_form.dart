@@ -60,6 +60,9 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                       ),
                     ),
                     onPressed: () {
+                      if(context.read<RegisterBloc>().formkey.currentState!.validate()) {
+
+                      }
                       showDialog(
                           context: context,
                           builder: (context) => DialogWidget(
