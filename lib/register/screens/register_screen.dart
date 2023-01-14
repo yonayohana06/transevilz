@@ -32,64 +32,60 @@ class _RegisterScreenState extends State<RegisterScreen> {
         bottomNavigationBar: BottomAppBar(
             elevation: 0,
             child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                child: BlocListener<RegisterBloc, RegisterState>(
-                  listener: (context, state) {
-                    if (state is NextState) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => OtpPrep(
-                          noHP: context.read<RegisterBloc>().phoneNumber.text,
-                        ),
-                      ));
-                    }
-                  },
-                  child: BlocBuilder<RegisterBloc, RegisterState>(
-                    builder: (context, state) {
-                      print(state);
-                      if (context.read<RegisterBloc>().submitValidator) {
-                        return ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              fixedSize:
-                                  Size(MediaQuery.of(context).size.width, 48),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              )),
-                          onPressed: () {
-                            context.read<RegisterBloc>().add(NextEvent());
-                          },
-                          child: const Text(
-                            'Kirim',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+              margin: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              child: BlocBuilder<RegisterBloc, RegisterState>(
+                builder: (context, state) {
+                  print(state);
+                  if (context.read<RegisterBloc>().submitValidator) {
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          fixedSize:
+                          Size(MediaQuery.of(context).size.width, 48),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          )),
+                      onPressed: () {
+                        context.read<RegisterBloc>().postMethod();
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => OtpPrep(
+                            noHP: context.read<RegisterBloc>().phoneNumber.text,
                           ),
-                        );
-                      }
-                      return ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            fixedSize:
-                                Size(MediaQuery.of(context).size.width, 48),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            )),
-                        onPressed: null,
-                        child: Text(
-                          'Kirim',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF3A3A3A),
-                          ),
+                        ));
+                      },
+                      child: const Text(
+                        'Kirim',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
-                      );
-                    },
-                  ),
-                ))),
+                      ),
+                    );
+                  }
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        fixedSize:
+                        Size(MediaQuery.of(context).size.width, 48),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        )),
+                    onPressed: null,
+                    child: Text(
+                      'Kirim',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF3A3A3A),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            )
+        ),
         body: SafeArea(
           child: Stack(
             children: [

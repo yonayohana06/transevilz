@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +8,7 @@ import 'package:transevilz/register/bloc/register_bloc.dart';
 import 'package:transevilz/register/screens/register_profile_form.dart';
 import 'package:transevilz/register/widget/dialog.dart';
 import 'package:transevilz/register/widget/reuse_app_bar.dart';
+import 'package:http/http.dart' as http;
 
 class OtpPrep extends StatelessWidget {
    const OtpPrep({Key? key, required this.noHP}) : super(key: key);
@@ -201,7 +203,7 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
               Expanded(
                 child: OtpKeyboard(
-                  changed: (String value) {
+                  changed: (String value) async {
                     if(value == 'del') {
                       if(context.read<RegisterBloc>().codeSubmit.text.isEmpty) {
                         return null;
@@ -216,6 +218,17 @@ class _OtpScreenState extends State<OtpScreen> {
                         context.read<RegisterBloc>().codeSubmit.text += value;
                       }
                       if(context.read<RegisterBloc>().codeSubmit.text==context.read<RegisterBloc>().otpDummy && timeLeft!=0) {
+                        // final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/otp_verification');
+                        // Map<String, String> headerSet = {
+                        //   "Accept": "application/json",
+                        //   "Content-Type": "application/json;charset=UTF-8",
+                        // };
+                        // Map<String, dynamic> otpMatching = {
+                        //   "otp_code": int.parse(context.read<RegisterBloc>().codeSubmit.text)
+                        // };
+                        // http.Response response = await context.read<RegisterBloc>().httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(otpMatching));
+                        // print(response.body);
+                        // print(response.statusCode);
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (_) {
