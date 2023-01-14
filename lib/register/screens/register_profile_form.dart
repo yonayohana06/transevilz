@@ -568,7 +568,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400,
                                         ),
-                                        hintText: 'mm/dd/yyyy',
+                                        hintText: 'dd/mm/yyyy',
                                         border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
                                           borderRadius: BorderRadius.circular(10),

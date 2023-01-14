@@ -218,17 +218,17 @@ class _OtpScreenState extends State<OtpScreen> {
                         context.read<RegisterBloc>().codeSubmit.text += value;
                       }
                       if(context.read<RegisterBloc>().codeSubmit.text==context.read<RegisterBloc>().otpDummy && timeLeft!=0) {
-                        // final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/otp_verification');
-                        // Map<String, String> headerSet = {
-                        //   "Accept": "application/json",
-                        //   "Content-Type": "application/json;charset=UTF-8",
-                        // };
-                        // Map<String, dynamic> otpMatching = {
-                        //   "otp_code": int.parse(context.read<RegisterBloc>().codeSubmit.text)
-                        // };
-                        // http.Response response = await context.read<RegisterBloc>().httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(otpMatching));
-                        // print(response.body);
-                        // print(response.statusCode);
+                        final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/otp_verification');
+                        Map<String, String> headerSet = {
+                          "Accept": "application/json",
+                          "Content-Type": "application/json;charset=UTF-8",
+                        };
+                        Map<String, dynamic> otpMatching = {
+                          "otp_code": int.parse(context.read<RegisterBloc>().codeSubmit.text)
+                        };
+                        http.Response response = await context.read<RegisterBloc>().httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(otpMatching));
+                        print(response.body);
+                        print(response.statusCode);
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (_) {

@@ -269,29 +269,29 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   //postdata
   Future postMethod() async {
-    // final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/register');
-    // Map<String, dynamic> dataMap = {
-    //   "email":"${email.text}",
-    //   "doc_type":"${type}",
-    //   "doc_number":"${int.parse(noDokumen.text)}",
-    //   "firstname":"${namaDepan.text}",
-    //   "lastname":"${namaBelakang.text}",
-    //   "birth_place":"${tempatLahir.text}",
-    //   "birth_date":"${tanggalLahir.text}",
-    //   "address":"${alamat.text}",
-    //   "phone_number":"${int.parse(phoneNumber.text)}",
-    //   "password":"${kataSandi.text}",
-    //   "sex":"${chosen}",
-    // };
-    // print(dataMap);
-    //
-    // Map<String, String> headerSet = {
-    //   "Accept": "application/json",
-    //   "Content-Type": "application/json;charset=UTF-8",
-    // };
-    //
-    // http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
-    // print(response.body);
-    // print(response.statusCode);
+    final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/register');
+    Map<String, dynamic> dataMap = {
+      "email":"${email.text}",
+      "doc_type":"${type}",
+      "doc_number":"${int.parse(noDokumen.text)}",
+      "firstname":"${namaDepan.text}",
+      "lastname":"${namaBelakang.text}",
+      "birth_place":"${tempatLahir.text}",
+      "birth_date":"${tanggalLahir.text}",
+      "address":"${alamat.text}",
+      "phone_number":"${int.parse(phoneNumber.text)}",
+      "password":"${kataSandi.text}",
+      "sex":"${chosen}",
+    };
+    print(dataMap);
+
+    Map<String, String> headerSet = {
+      "Accept": "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    };
+
+    http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
+    print(response.body);
+    print(response.statusCode);
   }
 }
