@@ -9,20 +9,22 @@ import 'package:transevilz/register/widget/dialog.dart';
 import 'package:transevilz/register/widget/reuse_app_bar.dart';
 
 class OtpPrep extends StatelessWidget {
-  const OtpPrep({Key? key}) : super(key: key);
+   const OtpPrep({Key? key, required this.noHP}) : super(key: key);
 
+  final String noHP;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RegisterBloc(),
-      child: OtpScreen(),
+      create: (_) => RegisterBloc(),
+      child: OtpScreen(noHP: noHP),
     );
   }
 }
 
 
 class OtpScreen extends StatefulWidget {
-  OtpScreen({Key? key}) : super(key: key);
+  OtpScreen({Key? key, required this.noHP}) : super(key: key);
+  final String noHP;
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -35,6 +37,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   void initState() {
+    print('no hp: ${widget.noHP}');
     timeLeft = time;
     super.initState();
     timerCount = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -215,8 +218,8 @@ class _OtpScreenState extends State<OtpScreen> {
                       if(context.read<RegisterBloc>().codeSubmit.text==context.read<RegisterBloc>().otpDummy && timeLeft!=0) {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) {
-                            return RegisterProfileReq();
+                          MaterialPageRoute(builder: (_) {
+                            return RegisterProfileReq(numberPhone: widget.noHP);
                           }),
                         );
                       }

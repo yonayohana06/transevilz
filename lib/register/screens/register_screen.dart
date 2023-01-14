@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:transevilz/register/bloc/register_bloc.dart';
@@ -18,7 +17,6 @@ class RegisterRequire extends StatelessWidget {
   }
 }
 
-
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
 
@@ -32,58 +30,66 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: BottomAppBar(
-          elevation: 0,
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-            child: BlocBuilder<RegisterBloc, RegisterState>(
-              builder: (context, state) {
-                if (context.read<RegisterBloc>().submitValidator) {
-                  return ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        fixedSize: Size(MediaQuery.of(context).size.width, 48),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        )
-                    ),
-                    onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return OtpPrep();
-                      }));
+            elevation: 0,
+            child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                child: BlocListener<RegisterBloc, RegisterState>(
+                  listener: (context, state) {
+                    if (state is NextState) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => OtpPrep(
+                          noHP: context.read<RegisterBloc>().phoneNumber.text,
+                        ),
+                      ));
+                    }
+                  },
+                  child: BlocBuilder<RegisterBloc, RegisterState>(
+                    builder: (context, state) {
+                      print(state);
+                      if (context.read<RegisterBloc>().submitValidator) {
+                        return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              fixedSize:
+                                  Size(MediaQuery.of(context).size.width, 48),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              )),
+                          onPressed: () {
+                            context.read<RegisterBloc>().add(NextEvent());
+                          },
+                          child: const Text(
+                            'Kirim',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      }
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            fixedSize:
+                                Size(MediaQuery.of(context).size.width, 48),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            )),
+                        onPressed: null,
+                        child: Text(
+                          'Kirim',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF3A3A3A),
+                          ),
+                        ),
+                      );
                     },
-                    child: const Text(
-                      'Kirim',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
-                }
-                return ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      fixedSize: Size(MediaQuery.of(context).size.width, 48),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      )
                   ),
-                  onPressed: null,
-                  child: Text(
-                    'Kirim',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF3A3A3A),
-                    ),
-                  ),
-                );
-              },
-            ),
-          )
-        ),
+                ))),
         body: SafeArea(
           child: Stack(
             children: [
@@ -136,8 +142,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 fontWeight: FontWeight.w400,
                                 fontSize: 16,
                                 fontFamily: 'DM Sans',
-                                color: Colors.black
-                            ),
+                                color: Colors.black),
                           ),
                           SizedBox(width: 2),
                           Text(
@@ -158,22 +163,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         children: [
                           TextField(
                             onChanged: (_) {
-                              context.read<RegisterBloc>().add(PhoneNumValidateEvent());
+                              context
+                                  .read<RegisterBloc>()
+                                  .add(PhoneNumValidateEvent());
                             },
                             onTap: () {
-                              context.read<RegisterBloc>().add(PhoneNumValidateEvent());
+                              context
+                                  .read<RegisterBloc>()
+                                  .add(PhoneNumValidateEvent());
                             },
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(20),
                             ],
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.go,
-                            controller: context.read<RegisterBloc>().phoneNumber,
+                            controller:
+                                context.read<RegisterBloc>().phoneNumber,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
+                                  borderRadius: BorderRadius.circular(10)),
                               filled: true,
                               fillColor: const Color(0xFFF1F7FF),
                               hintText: 'Masukkan no.hp',
@@ -191,12 +200,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Container(
                             height: 48,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(10),
-                                topLeft: Radius.circular(10),
-                              ),
-                              color: Color(0xFFEAF3FF)
-                            ),
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                ),
+                                color: Color(0xFFEAF3FF)),
                             width: 50,
                             child: Center(
                               child: Text(
@@ -205,8 +213,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     fontSize: 16,
                                     fontWeight: FontWeight.w700,
                                     fontFamily: 'DM Sans',
-                                    color: Color(0xFF2075F3)
-                                ),
+                                    color: Color(0xFF2075F3)),
                               ),
                             ),
                           ),
@@ -216,24 +223,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       BlocBuilder<RegisterBloc, RegisterState>(
                         builder: (context, state) {
                           print(state);
-                          if(state is PhoneNumEmptyState) {
+                          if (state is PhoneNumEmptyState) {
                             return Text(
                               'Anda harus mengisi bagian ini',
                               style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFFDC3328)
-                              ),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xFFDC3328)),
                             );
                           }
-                          if(state is PhoneNumFormatState) {
+                          if (state is PhoneNumFormatState) {
                             return Text(
                               'Format no.HP salah',
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
-                                  color: Color(0xFFDC3328)
-                              ),
+                                  color: Color(0xFFDC3328)),
                             );
                           }
                           return Text('');
@@ -246,7 +251,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }

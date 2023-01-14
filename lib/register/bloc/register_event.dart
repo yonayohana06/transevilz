@@ -9,6 +9,11 @@ class PhoneNumValidateEvent extends RegisterEvent {
   List<Object> get props => [];
 }
 
+class NextEvent extends RegisterEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class ImageRefresh extends RegisterEvent {
   @override
   List<Object> get props => [];

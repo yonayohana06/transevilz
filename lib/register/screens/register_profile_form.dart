@@ -11,21 +11,21 @@ import 'package:transevilz/register/widget/reuse_app_bar.dart';
 import '../widget/title_form.dart';
 
 class RegisterProfileReq extends StatelessWidget {
-  const RegisterProfileReq({Key? key}) : super(key: key);
-
+  const RegisterProfileReq({Key? key, required this.numberPhone}) : super(key: key);
+  final String numberPhone;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => RegisterBloc(),
-      child: RegisterProfileForm(),
+      child: RegisterProfileForm(phoneNum: numberPhone),
     );
   }
 }
 
 
 class RegisterProfileForm extends StatefulWidget {
-  RegisterProfileForm({Key? key}) : super(key: key);
-
+  RegisterProfileForm({Key? key, required this.phoneNum}) : super(key: key);
+  final String phoneNum;
   @override
   State<RegisterProfileForm> createState() => _RegisterProfileFormState();
 }
@@ -61,7 +61,8 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                     ),
                     onPressed: () {
                       if(context.read<RegisterBloc>().formkey.currentState!.validate()) {
-
+                        context.read<RegisterBloc>().phoneNumber.text = widget.phoneNum;
+                        context.read<RegisterBloc>().postMethod();
                       }
                       showDialog(
                           context: context,
@@ -354,6 +355,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                       inputFormatters: [
                                         LengthLimitingTextInputFormatter(16)
                                       ],
+                                      keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
                                         contentPadding: const EdgeInsets.all(10),
                                         fillColor: const Color(0xFFE5F2FF),
@@ -387,6 +389,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                         inputFormatters: [
                                           LengthLimitingTextInputFormatter(12)
                                         ],
+                                        keyboardType: TextInputType.number,
                                         decoration: InputDecoration(
                                           contentPadding: const EdgeInsets.all(10),
                                           fillColor: const Color(0xFFE5F2FF),
@@ -420,6 +423,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                           inputFormatters: [
                                             LengthLimitingTextInputFormatter(16)
                                           ],
+                                          keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                             contentPadding: const EdgeInsets.all(10),
                                             fillColor: const Color(0xFFE5F2FF),

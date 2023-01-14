@@ -46,6 +46,7 @@ dependencies:
   dropdown_button2: ^1.9.2
   flutter_feather_icons: ^2.0.0+1
   image_picker: ^0.8.6
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

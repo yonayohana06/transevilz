@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -5,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 part 'register_event.dart';
 
@@ -33,8 +35,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   String? type;
   DateTime? pickedDate;
   File? imageContain;
-  bool? ambigous;
   bool checkBox = false;
+  final httpClient = http.Client();
   //
   bool submitValidator = false;
   final phoneNumber = TextEditingController();
@@ -43,6 +45,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   bool isActive = false;
 
   RegisterBloc() : super(RegisterInitial()) {
+    on<NextEvent>((event, emit) {
+      print(phoneNumber.text);
+      emit(NextState(phoneNumber.text));
+    });
     on<PhoneNumValidateEvent>((event, emit) {
       RegExp phonerex = RegExp(r'^[8][0-9]{10}');
       final match = phonerex.hasMatch(phoneNumber.text);
@@ -208,7 +214,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       lastDate: DateTime.now(),
     );
     if(pickedDate != null) {
-      tanggalLahir.text = DateFormat('MM/dd/yyyy').format(pickedDate!);
+      tanggalLahir.text = DateFormat('dd/MM/yyyy').format(pickedDate!);
     }
   }
 
@@ -259,5 +265,33 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       }
       final deleting = codeSubmit.text.split('');
     }
+  }
+
+  //postdata
+  Future postMethod() async {
+    final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/register');
+    Map<String, dynamic> dataMap = {
+      "email":"${email.text}",
+      "doc_type":"${type}",
+      "doc_number":"${int.parse(noDokumen.text)}",
+      "firstname":"${namaDepan.text}",
+      "lastname":"${namaBelakang.text}",
+      "birth_place":"${tempatLahir.text}",
+      "birth_date":"${tanggalLahir.text}",
+      "address":"${alamat.text}",
+      "phone_number":"${int.parse(phoneNumber.text)}",
+      "password":"${kataSandi.text}",
+      "sex":"${chosen}",
+    };
+    print(dataMap);
+
+    Map<String, String> headerSet = {
+      "Accept": "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    };
+
+    http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
+    print(response.body);
+    print(response.statusCode);
   }
 }

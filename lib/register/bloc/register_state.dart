@@ -44,6 +44,13 @@ class PhoneNumberValidateState extends RegisterState {
   List<Object> get props => [isEnable];
 }
 
+class NextState extends RegisterState {
+  final String number;
+  NextState(this.number);
+  @override
+  List<Object> get props => [];
+}
+
 //RegisterForm
 class RegisterFormButton extends RegisterState {
   final bool isEnable;
