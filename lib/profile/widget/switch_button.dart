@@ -1,4 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:transevilz/profile/bloc/profile_bloc.dart';
+
+class LanguagePrep extends StatelessWidget {
+  const LanguagePrep({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ProfileBloc(),
+      child: LanguageSwitch(
+        nilai: context.read<ProfileBloc>().isLanguageID,
+        onchanged: (v) {
+
+        }
+      ),
+    );
+  }
+}
+
 
 class LanguageSwitch extends StatefulWidget {
   LanguageSwitch({Key? key, required this.nilai, required this.onchanged}) : super(key: key);
@@ -21,6 +41,7 @@ class _LanguageSwitchState extends State<LanguageSwitch>
   @override
   void initState() {
     super.initState();
+    context.read<ProfileBloc>().getLanguage();
     languageAnimationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: languageAnimationDuration)
@@ -46,9 +67,10 @@ class _LanguageSwitchState extends State<LanguageSwitch>
             Text('Bahasa'),
             GestureDetector(
               onTap: () {
-                print(widget.nilai);
+                // print(widget.nilai);
                 widget.nilai = !widget.nilai;
-                print(widget.nilai);
+                // print(widget.nilai);
+                widget.onchanged(widget.nilai);
                 if(widget.nilai==true) {
                   languageAnimationController.reverse();
                 } else {

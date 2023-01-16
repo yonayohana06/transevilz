@@ -10,7 +10,7 @@ class AppScreen extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Trans Evilz',
-      home: ProfileScreen(),
+      home: ProfilePrep(),
     );
   }
 }
