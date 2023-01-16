@@ -11,8 +11,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   bool isLanguageID = true;
   final prefs = SharedPreferences.getInstance();
   ProfileBloc() : super(ProfileInitial()) {
-    on<ProfileEvent>((event, emit) {
-      // TODO: implement event handler
+    on<ButtonEvent>((event, emit) {
+      getLanguage(isLanguageID);
     });
   }
   
@@ -21,10 +21,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     return lang.setBool('language', isLanguageID=value);
   }
 
-  Future<bool> getLanguage() async {
+  Future<bool> getLanguage(bool val) async {
     final lang = await prefs;
     isLanguageID = lang.getBool('language') ?? true;
-    print(isLanguageID);
+    val = isLanguageID;
     return isLanguageID;
   }
 }

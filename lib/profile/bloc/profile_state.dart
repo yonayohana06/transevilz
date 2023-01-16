@@ -8,3 +8,8 @@ class ProfileInitial extends ProfileState {
   @override
   List<Object> get props => [];
 }
+
+class ProfileLang extends ProfileState {
+  @override
+  List<Object> get props => [];
+}

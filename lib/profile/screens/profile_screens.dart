@@ -10,7 +10,7 @@ class ProfilePrep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProfileBloc(),
+      create: (context) => ProfileBloc()..add(ButtonEvent()),
       child: ProfileScreen(),
     );
   }
@@ -28,8 +28,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<ProfileBloc>().getLanguage();
-    print(context.read<ProfileBloc>().isLanguageID);
   }
   @override
   Widget build(BuildContext context) {
@@ -92,12 +90,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         SizedBox(height: 45),
-                        LanguageSwitch(
-                          nilai: context.read<ProfileBloc>().isLanguageID,
-                          onchanged: (v) {
-                            context.read<ProfileBloc>().setLanguage(v);
+                        FutureBuilder<bool>(
+                          future: context.read<ProfileBloc>().getLanguage(context.read<ProfileBloc>().isLanguageID),
+                          builder: (context, snap) {
+                            if(snap.connectionState==ConnectionState.done) {
+                              if(snap.hasData) {
+                                return LanguageSwitch(
+                                  nilai: (snap.data) ?? context.read<ProfileBloc>().isLanguageID,
+                                  onchanged: (v) {
+                                    context.read<ProfileBloc>().setLanguage(context.read<ProfileBloc>().isLanguageID=v);
+                                  },
+                                );
+                              }
+                            } return Container();
                           },
-                        ),
+                        )
                       ],
                     ),
                   ),
