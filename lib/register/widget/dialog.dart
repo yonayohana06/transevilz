@@ -28,14 +28,14 @@ class DialogWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 54),
+                  margin: const EdgeInsets.only(top: 54),
                   height: 100,
                   width: 87,
                   child: image,
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 21),
+                  padding: const EdgeInsets.symmetric(horizontal: 21),
                   child: status,
                 ),
               ],
@@ -43,11 +43,11 @@ class DialogWidget extends StatelessWidget {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                margin: EdgeInsets.only(bottom: 41, left: 24, right: 24),
+                margin: const EdgeInsets.only(bottom: 41, left: 24, right: 24),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF2075F3),
-                    fixedSize: Size(294, 48),
+                    backgroundColor: const Color(0xFF2075F3),
+                    fixedSize: const Size(294, 48),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)
                     )
@@ -55,7 +55,7 @@ class DialogWidget extends StatelessWidget {
                   onPressed: onpress,
                   child: Text(
                     buttonlabel,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         fontFamily: 'Poppins',

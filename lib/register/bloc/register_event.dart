@@ -38,3 +38,13 @@ class ImageDisplayEvent extends RegisterEvent {
   @override
   List<Object> get props => [];
 }
+
+class PostData extends RegisterEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class PhoneApiCheck extends RegisterEvent {
+  @override
+  List<Object> get props => [];
+}

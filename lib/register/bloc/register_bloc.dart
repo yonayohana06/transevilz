@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+
 
 part 'register_event.dart';
 
@@ -37,6 +39,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   File? imageContain;
   bool checkBox = false;
   final httpClient = http.Client();
+  FToast fToast = FToast();
   //
   bool submitValidator = false;
   final phoneNumber = TextEditingController();
@@ -46,7 +49,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   RegisterBloc() : super(RegisterInitial()) {
     on<NextEvent>((event, emit) {
-      print(phoneNumber.text);
       emit(NextState(phoneNumber.text));
     });
     on<PhoneNumValidateEvent>((event, emit) {
@@ -89,6 +91,57 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<ImageRefresh>((event, emit) {
       emit(RegisterFormButton(isActive==!isActive));
     });
+    on<PostData>((event, emit) async {
+      emit(RegisterInitial());
+      final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/register');
+      Map<String, dynamic> dataMap = {
+        "email":email.text,
+        "doc_type":"${type}",
+        "doc_number":"${int.parse(noDokumen.text)}",
+        "firstname":namaDepan.text,
+        "lastname":namaBelakang.text,
+        "birth_place":tempatLahir.text,
+        "birth_date":tanggalLahir.text,
+        "address":alamat.text,
+        "phone_number":"${int.parse(phoneNumber.text)}",
+        "password":kataSandi.text,
+        "sex":chosen,
+      };
+
+      Map<String, String> headerSet = {
+        "Accept": "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      };
+
+      print(dataMap);
+      http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
+      if(response.body== '{"message":"user created!"}') {
+        emit(RegisterSuccess());
+      }
+      if(response.body=='{"message":"email already registered!"}') {
+        emit(RegisterFormButton(isActive));
+        emit(RegisterFailed());
+      }
+    });
+    on<PhoneApiCheck>((event, emit) async {
+      final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/register');
+      Map<String, dynamic> dataMap = {
+        "phone_number":"${int.parse(phoneNumber.text)}",
+      };
+
+      Map<String, String> headerSet = {
+        "Accept": "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      };
+      http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
+      if(response.body== '{"message": "user created!"}') {
+        emit(RegisterSuccess());
+      }
+      if(response.body=='{"message":"email already registered!"}') {
+        emit(RegisterFormButton(isActive));
+        emit(RegisterFailed());
+      }
+    });
   }
 
 
@@ -108,6 +161,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (!RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
         .hasMatch(v)) {
       return 'Format email salah';
+    }
+    if (state is RegisterFailed) {
+      return 'Email sudah terdaftar';
     }
     return null;
   }
@@ -142,7 +198,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       return 'Anda harus memilih Tipe Dokumen';
     }
     if(type=='KTP') {
-      print(noDokumen.text);
       if(v!.isEmpty) {
         return 'Anda harus mengisi bagian ini';
       }
@@ -258,40 +313,17 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   //OtpLogic
-  String? otpManualKeyboard(String value) {
-    if(value == 'del') {
-      if(codeSubmit.text.isEmpty) {
-        return null;
-      }
-      final deleting = codeSubmit.text.split('');
-    }
-  }
+  // String? otpManualKeyboard(String value) {
+  //   if(value == 'del') {
+  //     if(codeSubmit.text.isEmpty) {
+  //       return null;
+  //     }
+  //     final deleting = codeSubmit.text.split('');
+  //   }
+  // }
 
   //postdata
-  Future postMethod() async {
-    final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/register');
-    Map<String, dynamic> dataMap = {
-      "email":"${email.text}",
-      "doc_type":"${type}",
-      "doc_number":"${int.parse(noDokumen.text)}",
-      "firstname":"${namaDepan.text}",
-      "lastname":"${namaBelakang.text}",
-      "birth_place":"${tempatLahir.text}",
-      "birth_date":"${tanggalLahir.text}",
-      "address":"${alamat.text}",
-      "phone_number":"${int.parse(phoneNumber.text)}",
-      "password":"${kataSandi.text}",
-      "sex":"${chosen}",
-    };
-    print(dataMap);
-
-    Map<String, String> headerSet = {
-      "Accept": "application/json",
-      "Content-Type": "application/json;charset=UTF-8",
-    };
-
-    http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
-    print(response.body);
-    print(response.statusCode);
-  }
+  // Future postMethod() async {
+  //
+  // }
 }

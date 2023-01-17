@@ -42,7 +42,7 @@ class _OtpScreenState extends State<OtpScreen> {
     print('no hp: ${widget.noHP}');
     timeLeft = time;
     super.initState();
-    timerCount = Timer.periodic(Duration(seconds: 1), (timer) {
+    timerCount = Timer.periodic(const Duration(seconds: 1), (timer) {
       if(!mounted) {
         return ;
       }
@@ -57,7 +57,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   void kirimUlang() {
     timeLeft = time;
-    timerCount = Timer.periodic(Duration(seconds: 1), (timer) {
+    timerCount = Timer.periodic(const Duration(seconds: 1), (timer) {
       if(!mounted) {
         return ;
       }
@@ -115,7 +115,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 alignment: Alignment.center,
                 child: Text(
                   otpTimer(timeLeft),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
                     color: Color(0xFF2ACA10),
                     fontWeight: FontWeight.w700,
@@ -144,13 +144,13 @@ class _OtpScreenState extends State<OtpScreen> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Belum dapat kode otp? ',
                         style: TextStyle(
                             color: Color(0xFF7A7A7A),
@@ -188,7 +188,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         onTertiaryLongPressUp: () {},
                         onTertiaryTapCancel: () {},
                         onVerticalDragCancel: () {},
-                        child: Text(
+                        child: const Text(
                             'KIRIM ULANG KODE OTP',
                             style: TextStyle(
                                 color: Color(0xFF2ACA10),
@@ -197,7 +197,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             )
                         ),
                       )
-                          : Text(''),
+                          : const Text(''),
                     ],
                   )
               ),
@@ -218,23 +218,48 @@ class _OtpScreenState extends State<OtpScreen> {
                         context.read<RegisterBloc>().codeSubmit.text += value;
                       }
                       if(context.read<RegisterBloc>().codeSubmit.text==context.read<RegisterBloc>().otpDummy && timeLeft!=0) {
-                        final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/otp_verification');
-                        Map<String, String> headerSet = {
-                          "Accept": "application/json",
-                          "Content-Type": "application/json;charset=UTF-8",
-                        };
-                        Map<String, dynamic> otpMatching = {
-                          "otp_code": int.parse(context.read<RegisterBloc>().codeSubmit.text)
-                        };
-                        http.Response response = await context.read<RegisterBloc>().httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(otpMatching));
-                        print(response.body);
-                        print(response.statusCode);
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (_) {
-                            return RegisterProfileReq(numberPhone: widget.noHP);
-                          }),
-                        );
+                        try {
+                          final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/otp_verification');
+                          Map<String, String> headerSet = {
+                            "Accept": "application/json",
+                            "Content-Type": "application/json;charset=UTF-8",
+                          };
+                          Map<String, dynamic> otpMatching = {
+                            "otp_code": int.parse(context.read<RegisterBloc>().codeSubmit.text)
+                          };
+                          http.Response response = await context.read<RegisterBloc>().httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(otpMatching));
+                          // print(response.body);
+                          // print(response.statusCode);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (_) {
+                              return RegisterProfileReq(numberPhone: widget.noHP);
+                            }),
+                          );
+                        } catch (e) {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) => DialogWidget(
+                              image: Image.asset('assets/images/disconnect.png'),
+                              status: const Text(
+                                'Oops! Koneksi internet anda tidak stabil, muat ulang halaman',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'DM Sans',
+                                  color: Color(0xFFDC3328),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              buttonlabel: 'Coba Lagi',
+                              onpress: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          );
+                        }
+                        context.read<RegisterBloc>().codeSubmit.clear();
                       }
                       if(context.read<RegisterBloc>().codeSubmit.text==context.read<RegisterBloc>().otpDummy && timeLeft==0) {
                         showDialog(
@@ -242,7 +267,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           barrierDismissible: false,
                           builder: (context) => DialogWidget(
                             image: Image.asset('assets/images/runout.png'),
-                            status: Text(
+                            status: const Text(
                               'Oops! Waktu anda Habis',
                               style: TextStyle(
                                 fontSize: 18,
@@ -266,7 +291,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           barrierDismissible: false,
                           builder: (context) => DialogWidget(
                             image: Image.asset('assets/images/runout.png'),
-                            status: Text(
+                            status: const Text(
                               'Oops! Waktu anda Habis',
                               style: TextStyle(
                                 fontSize: 18,
@@ -289,12 +314,12 @@ class _OtpScreenState extends State<OtpScreen> {
                           context: context,
                           barrierDismissible: false,
                           builder: (context) => DialogWidget(
-                            image: Icon(
+                            image: const Icon(
                               Icons.cancel_rounded,
                               color: Colors.red,
                               size: 80,
                             ),
-                            status: Text(
+                            status: const Text(
                               'Oops! Kode OTP yang anda masukan salah',
                               style: TextStyle(
                                 fontSize: 18,
@@ -347,10 +372,10 @@ class OtpKeyboard extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: EdgeInsets.only(top: 40, left: 37, right: 37),
+          margin: const EdgeInsets.only(top: 40, left: 37, right: 37),
           child: GridView(
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 mainAxisSpacing: 10,
                 mainAxisExtent: 75,
@@ -361,7 +386,7 @@ class OtpKeyboard extends StatelessWidget {
                 onPressing: () {
                   changed('1');
                 },
-                widget: Text(
+                widget: const Text(
                   '1',
                   style: TextStyle(
                     fontSize: 16,
@@ -375,7 +400,7 @@ class OtpKeyboard extends StatelessWidget {
                 onPressing: () {
                   changed('2');
                 },
-                widget: Text(
+                widget: const Text(
                   '2',
                   style: TextStyle(
                       fontSize: 16,
@@ -389,7 +414,7 @@ class OtpKeyboard extends StatelessWidget {
                 onPressing: () {
                   changed('3');
                 },
-                widget: Text(
+                widget: const Text(
                   '3',
                   style: TextStyle(
                       fontSize: 16,
@@ -403,7 +428,7 @@ class OtpKeyboard extends StatelessWidget {
                 onPressing: () {
                   changed('4');
                 },
-                widget: Text(
+                widget: const Text(
                   '4',
                   style: TextStyle(
                       fontSize: 16,
@@ -417,7 +442,7 @@ class OtpKeyboard extends StatelessWidget {
                 onPressing: () {
                   changed('5');
                 },
-                widget: Text(
+                widget: const Text(
                   '5',
                   style: TextStyle(
                       fontSize: 16,
@@ -431,7 +456,7 @@ class OtpKeyboard extends StatelessWidget {
                 onPressing: () {
                   changed('6');
                 },
-                widget: Text(
+                widget: const Text(
                   '6',
                   style: TextStyle(
                       fontSize: 16,
@@ -445,7 +470,7 @@ class OtpKeyboard extends StatelessWidget {
                 onPressing: () {
                   changed('7');
                 },
-                widget: Text(
+                widget: const Text(
                   '7',
                   style: TextStyle(
                       fontSize: 16,
@@ -459,7 +484,7 @@ class OtpKeyboard extends StatelessWidget {
                 onPressing: () {
                   changed('8');
                 },
-                widget: Text(
+                widget: const Text(
                   '8',
                   style: TextStyle(
                       fontSize: 16,
@@ -473,7 +498,7 @@ class OtpKeyboard extends StatelessWidget {
                 onPressing: () {
                   changed('9');
                 },
-                widget: Text(
+                widget: const Text(
                   '9',
                   style: TextStyle(
                       fontSize: 16,
@@ -483,12 +508,12 @@ class OtpKeyboard extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(),
+              const SizedBox(),
               OtpButton(
                 onPressing: () {
                   changed('0');
                 },
-                widget: Text(
+                widget: const Text(
                   '0',
                   style: TextStyle(
                       fontSize: 16,
@@ -502,7 +527,7 @@ class OtpKeyboard extends StatelessWidget {
                 onPressing: () {
                   changed('del');
                 },
-                widget: Icon(
+                widget: const Icon(
                   Icons.backspace_outlined, color: Color(0xFF2075F3),
                 ),
               ),
@@ -529,7 +554,7 @@ class OtpButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(55),
         onTap: onPressing,
         child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             height: 55,
             width: 55,
             decoration: const BoxDecoration(

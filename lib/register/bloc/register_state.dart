@@ -20,10 +20,9 @@ class RegisterSuccess extends RegisterState {
 }
 
 class RegisterFailed extends RegisterState {
-  final String message;
-  const RegisterFailed(this.message);
+  const RegisterFailed();
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [];
 }
 
 //Validate
@@ -74,6 +73,11 @@ class ShowConfirmPass extends RegisterState {
 }
 
 class ImageDisp extends RegisterState {
+  @override
+  List<Object> get props => [];
+}
+
+class PhoneRegistered extends RegisterState {
   @override
   List<Object> get props => [];
 }

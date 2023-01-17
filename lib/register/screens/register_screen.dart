@@ -32,7 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         bottomNavigationBar: BottomAppBar(
             elevation: 0,
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
               child: BlocBuilder<RegisterBloc, RegisterState>(
                 builder: (context, state) {
                   print(state);
@@ -46,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             borderRadius: BorderRadius.circular(8),
                           )),
                       onPressed: () {
-                        context.read<RegisterBloc>().postMethod();
+                        // context.read<RegisterBloc>().add(PhoneApiCheck());
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (_) => OtpPrep(
                             noHP: context.read<RegisterBloc>().phoneNumber.text,
@@ -72,7 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           borderRadius: BorderRadius.circular(8),
                         )),
                     onPressed: null,
-                    child: Text(
+                    child: const Text(
                       'Kirim',
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -91,13 +91,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               ReuseAppBar(title: ''),
               Container(
-                margin: EdgeInsets.only(top: 36, left: 24, right: 24),
+                margin: const EdgeInsets.only(top: 36, left: 24, right: 24),
                 height: MediaQuery.of(context).size.height,
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
+                      const Text(
                         'Selamat Datang di\nTransEvilz',
                         style: TextStyle(
                           letterSpacing: 0.44,
@@ -109,8 +109,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: 3.5),
-                      Text(
+                      const SizedBox(height: 3.5),
+                      const Text(
                         'Jika Anda ingin bergabung, lakukan register\nterlebih dahulu',
                         style: TextStyle(
                           letterSpacing: 0.24,
@@ -127,7 +127,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           'assets/images/firstscreenpic.png',
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Row(
                         children: const [
                           Text(
@@ -190,19 +190,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 fontFamily: 'DM Sans',
                                 color: Color(0xFF929292),
                               ),
-                              contentPadding: EdgeInsets.only(left: 60),
+                              contentPadding: const EdgeInsets.only(left: 60),
                             ),
                           ),
                           Container(
                             height: 48,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(10),
                                   topLeft: Radius.circular(10),
                                 ),
                                 color: Color(0xFFEAF3FF)),
                             width: 50,
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 '+62',
                                 style: TextStyle(
@@ -215,12 +215,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       BlocBuilder<RegisterBloc, RegisterState>(
                         builder: (context, state) {
                           print(state);
                           if (state is PhoneNumEmptyState) {
-                            return Text(
+                            return const Text(
                               'Anda harus mengisi bagian ini',
                               style: TextStyle(
                                   fontSize: 14,
@@ -229,7 +229,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             );
                           }
                           if (state is PhoneNumFormatState) {
-                            return Text(
+                            return const Text(
                               'Format no.HP salah',
                               style: TextStyle(
                                   fontSize: 14,
@@ -237,10 +237,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   color: Color(0xFFDC3328)),
                             );
                           }
-                          return Text('');
+                          return const Text('');
                         },
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                     ],
                   ),
                 ),

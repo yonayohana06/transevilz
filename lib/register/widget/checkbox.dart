@@ -29,7 +29,7 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
                   width: 0.5,
                 ),
               ),
-              child: Center(
+              child: const Center(
                 child: Icon(Icons.check, size: 13, color: Colors.white,),
               ),
             )
@@ -44,8 +44,8 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
                 ),
               ),
             ),
-            SizedBox(width: 5),
-            Expanded(
+            const SizedBox(width: 5),
+            const Expanded(
               child: Text(
                 'Saya setuju dengan Syarat & Ketentuan yang berlaku',
                 style: TextStyle(

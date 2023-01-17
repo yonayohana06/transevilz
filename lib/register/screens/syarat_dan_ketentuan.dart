@@ -12,7 +12,7 @@ class SyaratPrep extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => RegisterBloc(),
-      child: Syarat(),
+      child: const Syarat(),
     );
   }
 }
@@ -32,22 +32,22 @@ class _SyaratState extends State<Syarat> {
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomAppBar(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 41),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 41),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              fixedSize: Size(
+              fixedSize: const Size(
                 double.infinity,
                 48,
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8)
               ),
-              backgroundColor: Color(0xFF2075F3)
+              backgroundColor: const Color(0xFF2075F3)
             ),
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Ya, Saya Mengerti'),
+            child: const Text('Ya, Saya Mengerti'),
           ),
         )
       ),
@@ -56,15 +56,15 @@ class _SyaratState extends State<Syarat> {
           children: [
             SingleChildScrollView(
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Color(0xFFF1F7FF),
                 ),
                 margin: const EdgeInsets.symmetric(vertical: 64, horizontal: 24),
-                padding: EdgeInsets.only(bottom: 20),
+                padding: const EdgeInsets.only(bottom: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(height: 30,),
+                    const SizedBox(height: 30,),
                     const Text(
                       'A.Syarat',
                       style: TextStyle(
@@ -336,7 +336,7 @@ class _SyaratState extends State<Syarat> {
                         )
                       ],
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     const Text(
                       'B.Ketentuan',
                       style: TextStyle(

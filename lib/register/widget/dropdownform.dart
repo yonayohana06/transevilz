@@ -71,7 +71,7 @@ class EvilDropDown extends StatelessWidget {
             hint,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
-            style: TextStyle(
+            style: const TextStyle(
               letterSpacing: -0.06,
               height: 1.315,
               fontWeight: FontWeight.w400,
@@ -86,24 +86,24 @@ class EvilDropDown extends StatelessWidget {
             .map((item) => DropdownMenuItem<String>(
           value: item.toString(),
           child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 7),
-              margin: EdgeInsets.symmetric(vertical: 2),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 7),
+              margin: const EdgeInsets.symmetric(vertical: 2),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
-                  color: Color(0xFFF1F7FF),
+                  color: const Color(0xFFF1F7FF),
                   borderRadius: BorderRadius.circular(12)
               ),
               alignment: valueAlignment,
               child: Row(
                 children: [
                   Image.asset(item['image']),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       item['name'],
                       maxLines: 1,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 10,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400
@@ -113,7 +113,7 @@ class EvilDropDown extends StatelessWidget {
                   Expanded(
                     child: Text(
                       item['numcode'],
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 10,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
@@ -148,7 +148,7 @@ class EvilDropDown extends StatelessWidget {
         buttonDecoration: buttonDecoration ??
             BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Color(0xFFF1F7FF)
+              color: const Color(0xFFF1F7FF)
             ),
         buttonElevation: buttonElevation,
         itemHeight: itemHeight ?? 40,
