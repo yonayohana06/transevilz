@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:transevilz/history/screens/bukti_transfer.dart';
 import 'package:transevilz/history/widget/dialog.dart';
 
 import '../bloc/history_bloc.dart';
@@ -18,7 +19,7 @@ class HistoryScreen extends StatelessWidget {
             if(state is InversedDate) {
               showDialog(
                 context: (context),
-                barrierDismissible: true,
+                barrierDismissible: false,
                 builder: (_) => DialogWidget(
                   image: Icon(
                     Icons.cancel_rounded,
@@ -285,7 +286,7 @@ class HistoryScreen extends StatelessWidget {
                                           children: [
                                             if(dataCapture.status=='Dalam Proses')...{
                                               Container(
-                                                margin: const EdgeInsets.only(right: 17, top: 7),
+                                                margin: const EdgeInsets.only(right: 17),
                                                 padding: const EdgeInsets.symmetric(
                                                   horizontal: 8,
                                                   vertical: 2,
@@ -308,7 +309,7 @@ class HistoryScreen extends StatelessWidget {
                                             }
                                             else if(dataCapture.status=='Berhasil')...{
                                               Container(
-                                                margin: const EdgeInsets.only(right: 17, top: 7),
+                                                margin: const EdgeInsets.only(right: 17),
                                                 padding: const EdgeInsets.symmetric(
                                                   horizontal: 8,
                                                   vertical: 2,
@@ -331,7 +332,7 @@ class HistoryScreen extends StatelessWidget {
                                             }
                                             else if(dataCapture.status=='Gagal')...{
                                                 Container(
-                                                  margin: const EdgeInsets.only(right: 17, top: 7),
+                                                  margin: const EdgeInsets.only(right: 17),
                                                   padding: const EdgeInsets.symmetric(
                                                     horizontal: 10,
                                                     vertical: 2,
@@ -354,7 +355,6 @@ class HistoryScreen extends StatelessWidget {
                                               },
                                             Container(
                                               margin: const EdgeInsets.only(
-                                                bottom: 9,
                                                 right: 17,
                                               ),
                                               child: Text(
@@ -367,6 +367,19 @@ class HistoryScreen extends StatelessWidget {
                                             )
                                           ],
                                         ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) {
+                                                  return BuktiTransfer();
+                                                },
+                                              ),
+                                            );
+                                          },
+                                          child: Icon(Icons.arrow_forward_ios_rounded, color: Colors.blue,),
+                                        )
                                       ],
                                     ),
                                   ),

@@ -52,7 +52,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       tanggal: DateTime(2023, 01, 02),
       jumlah: 1000000,
       currency: 'IDR',
-      status: 'Dalam Proses',
+      status: 'Gagal',
     ),
     History(
       id: 1,
@@ -78,7 +78,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       tanggal: DateTime(2023, 01, 03),
       jumlah: 1000000,
       currency: 'IDR',
-      status: 'Dalam Proses',
+      status: 'Berhasil',
     ),
     History(
       id: 1,
@@ -104,7 +104,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       tanggal: DateTime(2022, 09, 15),
       jumlah: 1000000,
       currency: 'IDR',
-      status: 'Dalam Proses',
+      status: 'Berhasil',
     ),
     History(
       id: 1,
@@ -130,7 +130,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       tanggal: DateTime(2022, 10, 09),
       jumlah: 1000000,
       currency: 'IDR',
-      status: 'Dalam Proses',
+      status: 'Gagal',
     ),
   ];
 
