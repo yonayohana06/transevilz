@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:http/http.dart' as http;
 
 part 'forgot_event.dart';
 part 'forgot_state.dart';
@@ -13,24 +16,46 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState> {
         emit(ForgotLoading());
         print('Form Validated Succesfully');
         if (email.text.isNotEmpty) {
+          emailToSend = email.text;
           emit(EmailSuccess());
+          print("ini emailnya : ${email.text}");
         } else {
           emit(EmailFailed('Email belum terdaftar'));
         }
       }
     });
 
-    on<SubmitNewPassword>((event, emit) {
+    on<SubmitNewPassword>((event, emit) async {
       final isValid = formKey.currentState!.validate();
       if (isValid) {
         emit(ForgotLoading());
-        print('Form Validated Succesfully');
-        if (newPass.text.isNotEmpty && newPassAgain.text.isNotEmpty) {
+        print("email new: $emailToSend");
+        const baseUrlJava = "http://103.152.119.157:5555/api/v1/new_password";
+        const baseUrlExpress =
+            "https://red-gifted-squid.cyclic.app/api/v1/new_password";
+        final response = await http.put(Uri.parse(baseUrlExpress),
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode({
+              "password": newPass.text,
+              "email": emailToSend,
+            }));
+        final output = jsonDecode(response.body);
+        print(response.statusCode);
+        if (response.statusCode == 200) {
+          print(output);
           emit(NewPassSuccess());
         } else {
-          emit(NewPassFailed('Password gagal disimpan'));
+          emit(const NewPassFailed('Email tidak terdaftar'));
         }
       }
+    });
+
+    on<InitEmail>((event, emit) {
+      print('email event : ${event.email}');
+      emailToSend = event.email;
     });
 
     on<StatusButton>((event, emit) {
@@ -89,6 +114,8 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState> {
     }
     return null;
   }
+
+  String emailToSend = '';
 
   //filter emoji
   RegExp emoji = RegExp("[A-Za-z0-9@*#&]*");

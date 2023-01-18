@@ -2,10 +2,74 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:transevilz/app/app.dart';
 import 'package:transevilz/login/login.dart';
 
 class PinScreen extends StatelessWidget {
   const PinScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => LoginBloc(),
+      child: _View(),
+    );
+  }
+}
+
+class _View extends StatelessWidget {
+  Future<bool> _onBackPressed(BuildContext context) async {
+    return await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          'Logout',
+          style: TextStyle(color: Colors.red),
+          // textAlign: TextAlign.center,
+        ),
+        content: const Text(
+          'Apakah anda yakin untuk logout?',
+          // textAlign: TextAlign.center,
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text("Tidak"),
+              ),
+              TextButton(
+                onPressed: () {
+                  logout().then(
+                    (value) => Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) => const AppScreen(),
+                      ),
+                      (route) => false,
+                    ),
+                  );
+                },
+                child: const Text(
+                  "Ya",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Future logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+    prefs.remove('pin');
+    prefs.remove('userData');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,58 +114,14 @@ class PinScreen extends StatelessWidget {
                 ],
               ),
             ),
-            BlocProvider(
-              create: (context) => LoginBloc(),
-              child: Expanded(
-                child: Container(
-                  margin: const EdgeInsets.all(24),
-                  child: _Form(),
-                ),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(24),
+                child: _Form(),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Future<bool> _onBackPressed(context) async {
-    return await showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(
-          'Logout',
-          style: TextStyle(color: Colors.red),
-          // textAlign: TextAlign.center,
-        ),
-        content: const Text(
-          'Apakah anda yakin untuk logout?',
-          // textAlign: TextAlign.center,
-        ),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text("Tidak"),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (_) => LoginScreen(),
-                  ),
-                  (route) => false,
-                ),
-                child: const Text(
-                  "Ya",
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-            ],
-          )
-        ],
       ),
     );
   }
@@ -146,7 +166,7 @@ class _Form extends StatelessWidget {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
+                                builder: (context) => const MainMenu(),
                               ),
                               (route) => false,
                             );
@@ -211,6 +231,22 @@ class _Form extends StatelessWidget {
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(10),
                         ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 1,
+                            color: Colors.red,
+                            style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 1,
+                            color: Colors.red,
+                            style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         suffixIcon: GestureDetector(
                           child: Icon(
                             context.read<LoginBloc>().showPass
@@ -248,6 +284,22 @@ class _Form extends StatelessWidget {
                         hintText: 'Masukkan 6 digit Pin yang telah dibuat',
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 1,
+                            color: Colors.red,
+                            style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 1,
+                            color: Colors.red,
+                            style: BorderStyle.solid,
+                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         suffixIcon: GestureDetector(
@@ -288,7 +340,15 @@ class _Form extends StatelessWidget {
                     onPressed: () {
                       context.read<LoginBloc>().add(SubmitPin());
                     },
-                    child: const Text("Kirim"),
+                    child: (state is LoginLoading)
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text("Kirim"),
                   );
                 }
                 return ElevatedButton(

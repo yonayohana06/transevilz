@@ -26,7 +26,7 @@ class _View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.vertical(
           bottom: Radius.circular(30),
@@ -46,7 +46,7 @@ class _View extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const UserInfo(),
-          const SizedBox(height: 50),
+          const SizedBox(height: 35),
           Container(
             margin: const EdgeInsets.only(bottom: 10),
             padding: const EdgeInsets.symmetric(horizontal: 25),

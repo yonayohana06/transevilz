@@ -1,33 +1,77 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:transevilz/app/helpers/helpers_prefs.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial()) {
-    on<SubmitLogin>((event, emit) {
+    on<SubmitLogin>((event, emit) async {
       final isValid = formKey.currentState!.validate();
       if (isValid) {
         emit(LoginLoading());
-        print('Form Validated Succesfully');
-        if (email.text == 'user@gmail.com' && password.text == "User1234#") {
+        // print('Form Validated Succesfully');
+        const baseUrlJava = "http://103.152.119.157:5555/api/v1/login";
+        const baseUrlExpress =
+            "https://red-gifted-squid.cyclic.app/api/v1/login";
+        final response = await http.post(Uri.parse(baseUrlExpress),
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode({
+              "email": email.text,
+              "password": password.text,
+            }));
+        final output = jsonDecode(response.body);
+        final users = output["user"];
+        final token = output["accessToken"];
+        if (response.statusCode == 200) {
+          final pinUsr = users["userPin"];
+          print(output);
+          print(token);
+          print(pinUsr);
+          Helpers.setUserData(users['fullname']);
+          Helpers.setToken(token);
+          Helpers.setUsrPin(pinUsr);
           emit(LoginSucces());
         } else {
-          emit(LoginFailed('Login gagal, email atau password salah'));
+          emit(const LoginFailed('Email tidak terdaftar'));
         }
       }
     });
-    on<SubmitPin>((event, emit) {
+    on<SubmitPin>((event, emit) async {
       final isValid = formKey.currentState!.validate();
       if (isValid) {
         emit(LoginLoading());
-        print('Form Validated Succesfully');
-        if (pin.text.isNotEmpty && confirmPin.text.isNotEmpty) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        final token = prefs.getString('token');
+        int noPin = int.parse(pin.text);
+        const baseUrlJava = "http://103.152.119.157:5555/api/v1/login";
+        const baseUrlExpress = "https://red-gifted-squid.cyclic.app/api/v1/pin";
+        final response = await http.post(Uri.parse(baseUrlExpress),
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+            body: jsonEncode({
+              "pin": noPin,
+            }));
+        final output = jsonDecode(response.body);
+        if (response.statusCode == 201) {
+          print(output);
+          print(response);
+          Helpers.setUsrPin(true);
           emit(PinSucces());
         } else {
-          emit(PinFailed('Harap isi form'));
+          emit(const PinFailed('Pin sudah dibuat'));
         }
       }
     });
@@ -42,14 +86,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(LoginButton(isEnableButton = formValidate));
     });
     on<ShowPassword>((event, emit) {
-      print('pass : $showPass');
+      // print('pass : $showPass');
       emit(ShowPass(showPass = !showPass));
     });
     on<ShowPin>((event, emit) {
-      print('pin : $showPin');
+      // print('pin : $showPin');
       emit(ShowPassAgain(showPin = !showPin));
     });
+
+    on<EventLogOut>((event, emit) async {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.remove('token');
+      prefs.remove('pin');
+      emit(LogOutSucces());
+    });
   }
+
+  // Future logout() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   prefs.remove('token');
+  //   prefs.remove('pin');
+  // }
 
   String? validateEmail(String? v) {
     if (v == null || v.isEmpty) {

@@ -48,7 +48,7 @@ class _OnBoardCarouselState extends State<OnBoardCarousel> {
     return Container(
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width,
-      height: 400,
+      height: 450,
       child: PageView(
         controller: _pageController,
         onPageChanged: (currentPage) {
@@ -70,7 +70,7 @@ class _OnBoardCarouselState extends State<OnBoardCarousel> {
               ),
               const SizedBox(height: 40),
               const OnBoardDesc(
-                headline: 'Teknologi terkini\n yang memberikan kemudahan\n'
+                headline: 'Teknologi terkini yang memberikan kemudahan\n'
                     'bagi Anda',
                 desc: 'Lorem Ipsum is simply dummy text of the printing\n'
                     'and typesetting industry.',

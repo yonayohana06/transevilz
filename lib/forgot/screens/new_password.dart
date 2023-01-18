@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:transevilz/app/app.dart';
 import 'package:transevilz/forgot/forgot.dart';
 import 'package:transevilz/login/login.dart';
 
 class NewPassword extends StatelessWidget {
-  const NewPassword({super.key});
+  const NewPassword({super.key, required this.email});
+
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +59,7 @@ class NewPassword extends StatelessWidget {
                     create: (context) => ForgotBloc(),
                     child: Container(
                       margin: const EdgeInsets.all(24),
-                      child: _Form(),
+                      child: _Form(email: email),
                     ),
                   ),
                 ],
@@ -70,6 +73,9 @@ class NewPassword extends StatelessWidget {
 }
 
 class _Form extends StatelessWidget {
+  final String email;
+
+  const _Form({required this.email});
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ForgotBloc, ForgotState>(
@@ -99,7 +105,7 @@ class _Form extends StatelessWidget {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
+                                builder: (context) => const AppScreen(),
                               ),
                               (route) => false,
                             );
@@ -171,6 +177,22 @@ class _Form extends StatelessWidget {
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      width: 1,
+                      color: Colors.red,
+                      style: BorderStyle.solid,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      width: 1,
+                      color: Colors.red,
+                      style: BorderStyle.solid,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   suffixIcon: GestureDetector(
                     child: Icon(
                       context.read<ForgotBloc>().showPass
@@ -210,6 +232,22 @@ class _Form extends StatelessWidget {
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      width: 1,
+                      color: Colors.red,
+                      style: BorderStyle.solid,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      width: 1,
+                      color: Colors.red,
+                      style: BorderStyle.solid,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   suffixIcon: GestureDetector(
                     child: Icon(
                       context.read<ForgotBloc>().showPassAgain
@@ -238,9 +276,18 @@ class _Form extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
+                        context.read<ForgotBloc>().emailToSend = email;
                         context.read<ForgotBloc>().add(SubmitNewPassword());
                       },
-                      child: const Text("Kirim"),
+                      child: (state is ForgotLoading)
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text("Masuk"),
                     );
                   }
                   return ElevatedButton(

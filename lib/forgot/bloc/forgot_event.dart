@@ -28,3 +28,11 @@ class ShowNewPassAgain extends ForgotEvent {
   @override
   List<Object> get props => [];
 }
+
+class InitEmail extends ForgotEvent {
+  final String email;
+
+  InitEmail(this.email);
+  @override
+  List<Object> get props => [email];
+}

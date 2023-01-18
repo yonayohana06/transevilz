@@ -49,7 +49,7 @@ class ForgotScreen extends StatelessWidget {
                     ),
                   ),
                   BlocProvider(
-                    create: (context) => ForgotBloc(),
+                    create: (_) => ForgotBloc(),
                     child: Container(
                       margin: const EdgeInsets.all(24),
                       child: _Form(),
@@ -71,60 +71,71 @@ class _Form extends StatelessWidget {
     return BlocListener<ForgotBloc, ForgotState>(
       listener: (context, state) {
         if (state is EmailSuccess) {
-          showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                actions: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            fixedSize:
-                                Size(MediaQuery.of(context).size.width, 45),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const NewPassword(),
-                              ),
-                              (route) => false,
-                            );
-                          },
-                          child: const Text("Cek Email Sekarang"),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-                content: const Text(
-                  "Permohonan Perubahan kata sandi telah dikirim ke email anda",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                title: Container(
-                  height: 50,
-                  width: 50,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/forgot/email-verification.png"),
-                    ),
-                  ),
-                ),
-              );
-            },
+          // showDialog(
+          //   barrierDismissible: false,
+          //   context: context,
+          //   builder: (context) {
+          //     return AlertDialog(
+          //       actions: [
+          //         Column(
+          //           crossAxisAlignment: CrossAxisAlignment.stretch,
+          //           children: [
+          //             Padding(
+          //               padding: const EdgeInsets.all(10.0),
+          //               child: ElevatedButton(
+          //                 style: ElevatedButton.styleFrom(
+          //                   backgroundColor: Colors.blue,
+          //                   fixedSize:
+          //                       Size(MediaQuery.of(context).size.width, 45),
+          //                   shape: RoundedRectangleBorder(
+          //                     borderRadius: BorderRadius.circular(10),
+          //                   ),
+          //                 ),
+          //                 onPressed: () {
+          //                   Navigator.pushAndRemoveUntil(
+          //                     context,
+          //                     MaterialPageRoute(
+          //                       builder: (_) => NewPassword(
+          //                         email: context.read<ForgotBloc>().emailToSend,
+          //                       ),
+          //                     ),
+          //                     (route) => false,
+          //                   );
+          //                 },
+          //                 child: const Text("Cek Email Sekarang"),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ],
+          //       content: const Text(
+          //         "Permohonan Perubahan kata sandi telah dikirim ke email anda",
+          //         textAlign: TextAlign.center,
+          //         style: TextStyle(
+          //           fontSize: 12,
+          //           fontWeight: FontWeight.w400,
+          //         ),
+          //       ),
+          //       title: Container(
+          //         height: 50,
+          //         width: 50,
+          //         decoration: const BoxDecoration(
+          //           image: DecorationImage(
+          //             image: AssetImage("assets/forgot/email-verification.png"),
+          //           ),
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // );
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (_) => NewPassword(
+                email: context.read<ForgotBloc>().emailToSend,
+              ),
+            ),
+            (route) => false,
           );
         }
         if (state is EmailFailed) {
@@ -162,6 +173,22 @@ class _Form extends StatelessWidget {
                 hintText: 'Email',
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    width: 1,
+                    color: Colors.red,
+                    style: BorderStyle.solid,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    width: 1,
+                    color: Colors.red,
+                    style: BorderStyle.solid,
+                  ),
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),

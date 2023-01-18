@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:transevilz/history/bloc/history_bloc.dart';
 import 'package:transevilz/history/history.dart';
+import 'package:transevilz/home/home.dart';
 import 'package:transevilz/layanan/layanan.dart';
 
 class MainMenu extends StatefulWidget {
@@ -16,7 +17,7 @@ class _MainMenuState extends State<MainMenu> {
   int _currentIndex = 0;
 
   final List<Widget> _mainMenu = [
-    const Center(child: Text('Home sedang dalam tahap developing...'),),
+    const HomeScreen(),
     const LayananScreen(),
     BlocProvider(
       create: (context) => HistoryBloc(),

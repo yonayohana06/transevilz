@@ -28,3 +28,8 @@ class ShowPin extends LoginEvent {
   @override
   List<Object> get props => [];
 }
+
+class EventLogOut extends LoginEvent {
+  @override
+  List<Object> get props => [];
+}

@@ -1,29 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:transevilz/app/helpers/helpers_prefs.dart';
 
-class UserInfo extends StatelessWidget {
+class UserInfo extends StatefulWidget {
   const UserInfo({super.key});
+
+  @override
+  State<UserInfo> createState() => _UserInfoState();
+}
+
+class _UserInfoState extends State<UserInfo> {
+  String fullname = '';
+
+  @override
+  void initState() {
+    Helpers.getUserData().then((value) {
+      print(value);
+      setState(() {
+        fullname = value;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 60,
       margin: const EdgeInsets.only(top: 30),
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
                 Text(
-                  'Hai, Dinda Salsabila',
-                  style: TextStyle(
+                  'Hai, $fullname',
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Text(
+                const Text(
                   'Selamat Datang di TransEvilz',
                   style: TextStyle(
                     color: Colors.white,

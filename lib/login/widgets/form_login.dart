@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:transevilz/app/app.dart';
 import 'package:transevilz/forgot/forgot.dart';
 import 'package:transevilz/login/login.dart';
 
@@ -31,25 +32,20 @@ class _View extends StatelessWidget {
                 const Duration(seconds: 1),
                 () => Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const PinScreen(),
-                  ),
+                  MaterialPageRoute(builder: (context) {
+                    return const AppScreen();
+                  }),
                   (route) => false,
                 ),
               );
-              return AlertDialog(
-                content: Container(
-                  alignment: Alignment.center,
-                  height: 40,
-                  width: 20,
-                  child: const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+              return Container(
+                alignment: Alignment.center,
+                height: 40,
+                width: 20,
+                child: const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    Colors.blue,
                   ),
-                ),
-                title: const Text(
-                  "Login Berhasil",
-                  style: TextStyle(color: Colors.green, fontSize: 16),
-                  textAlign: TextAlign.center,
                 ),
               );
             },
@@ -60,7 +56,7 @@ class _View extends StatelessWidget {
             SnackBar(
               content: Text(state.message),
               backgroundColor: Colors.red,
-              duration: const Duration(seconds: 2),
+              duration: const Duration(seconds: 1),
             ),
           );
         }
@@ -94,6 +90,22 @@ class _View extends StatelessWidget {
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(10),
                     ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        width: 1,
+                        color: Colors.red,
+                        style: BorderStyle.solid,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        width: 1,
+                        color: Colors.red,
+                        style: BorderStyle.solid,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: context.read<LoginBloc>().validateEmail,
@@ -120,6 +132,22 @@ class _View extends StatelessWidget {
                     hintText: 'Kata Sandi',
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        width: 1,
+                        color: Colors.red,
+                        style: BorderStyle.solid,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        width: 1,
+                        color: Colors.red,
+                        style: BorderStyle.solid,
+                      ),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     suffixIcon: GestureDetector(
@@ -162,7 +190,9 @@ class _View extends StatelessWidget {
                 const SizedBox(height: 30),
                 BlocBuilder<LoginBloc, LoginState>(
                   builder: (context, state) {
-                    if (context.read<LoginBloc>().isEnableButton) {
+                    print(state.toString());
+                    final isActived = context.read<LoginBloc>().isEnableButton;
+                    if (isActived) {
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           fixedSize:
@@ -174,7 +204,15 @@ class _View extends StatelessWidget {
                         ),
                         onPressed: () =>
                             context.read<LoginBloc>().add(SubmitLogin()),
-                        child: const Text("Masuk"),
+                        child: (state is LoginLoading)
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Text("Masuk"),
                       );
                     }
                     return ElevatedButton(
