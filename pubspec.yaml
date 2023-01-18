@@ -47,12 +47,13 @@ dependencies:
   intl: ^0.17.0
   fluttertoast: ^8.1.2
   fl_chart: ^0.55.2
-  dropdown_button2: ^1.9.2
   url_launcher: ^6.1.7
   font_awesome_flutter: ^10.3.0
   http: ^0.13.5
   shared_preferences: ^2.0.16
   flutter_secure_storage: ^7.0.1
+  dropdown_button2: ^1.9.2
+  image_picker: ^0.8.6
 
 dev_dependencies:
   flutter_test:
@@ -86,6 +87,9 @@ flutter:
     - assets/history/
   #   - images/a_dot_ham.jpeg
 
+  assets:
+    - assets/images/
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
@@ -108,6 +112,21 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+
+  fonts:
+    - family: DM Sans
+      fonts:
+        - asset: assets/fonts/DMSans-Bold.ttf
+        - asset: assets/fonts/DMSans-Medium.ttf
+        - asset: assets/fonts/DMSans-Regular.ttf
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Medium.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Bold.ttf
+        - asset: assets/fonts/Montserrat-Medium.ttf
+        - asset: assets/fonts/Montserrat-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
