@@ -1,0 +1,12 @@
+export 'bloc/register_bloc.dart';
+export 'model_data/model.dart';
+export 'screens/otp.dart';
+export 'screens/register_profile_form.dart';
+export 'screens/register_screen.dart';
+export 'screens/syarat_dan_ketentuan.dart';
+export 'widget/checkbox.dart';
+export 'widget/dialog.dart';
+export 'widget/dropdownform.dart';
+export 'widget/radio_button.dart';
+export 'widget/reuse_app_bar.dart';
+export 'widget/title_form.dart';

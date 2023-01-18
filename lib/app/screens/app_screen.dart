@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:transevilz/app/app.dart';
-import 'package:transevilz/app/helpers/helpers_prefs.dart';
 import 'package:transevilz/login/login.dart';
 
 class AppScreen extends StatefulWidget {
@@ -47,17 +46,5 @@ class _AppScreenState extends State<AppScreen> {
             ? const MainMenu()
             : const PinScreen()
         : const LoginScreen();
-    // if (_isAuth) {
-    //   if (_pinUsr) {
-    //     print("main menu : $_pinUsr");
-    //     return MainMenu();
-    //   } else {
-    //     print("pin : $_pinUsr");
-    //     return PinScreen();
-    //   }
-    // } else {
-    //   print("Login  : $_isAuth");
-    //   return LoginScreen();
-    // }
   }
 }

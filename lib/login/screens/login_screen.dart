@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transevilz/login/login.dart';
+import 'package:transevilz/register/register.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -48,6 +49,12 @@ class _View extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const RegisterRequire(),
+                          ),
+                        ),
                         child: const Text(
                           "Lakukan Registrasi",
                           style: TextStyle(

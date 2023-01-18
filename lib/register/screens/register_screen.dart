@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:transevilz/register/bloc/register_bloc.dart';
-import 'package:transevilz/register/screens/otp.dart';
-import 'package:transevilz/register/widget/reuse_app_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:transevilz/register/register.dart';
 
 class RegisterRequire extends StatelessWidget {
   const RegisterRequire({Key? key}) : super(key: key);
@@ -12,13 +10,13 @@ class RegisterRequire extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => RegisterBloc(),
-      child: RegisterScreen(),
+      child: const RegisterScreen(),
     );
   }
 }
 
 class RegisterScreen extends StatefulWidget {
-  RegisterScreen({super.key});
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -41,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
                           fixedSize:
-                          Size(MediaQuery.of(context).size.width, 48),
+                              Size(MediaQuery.of(context).size.width, 48),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           )),
@@ -66,8 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }
                   return ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        fixedSize:
-                        Size(MediaQuery.of(context).size.width, 48),
+                        fixedSize: Size(MediaQuery.of(context).size.width, 48),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         )),
@@ -84,12 +81,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   );
                 },
               ),
-            )
-        ),
+            )),
         body: SafeArea(
           child: Stack(
             children: [
-              ReuseAppBar(title: ''),
+              ReuseAppBar(
+                title: '',
+                onpress: () => Navigator.pop(context),
+              ),
               Container(
                 margin: const EdgeInsets.only(top: 36, left: 24, right: 24),
                 height: MediaQuery.of(context).size.height,
@@ -122,10 +121,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      Container(
-                        child: Image.asset(
-                          'assets/images/firstscreenpic.png',
-                        ),
+                      Image.asset(
+                        'assets/images/firstscreenpic.png',
                       ),
                       const SizedBox(height: 20),
                       Row(

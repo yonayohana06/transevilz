@@ -4,12 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:transevilz/register/bloc/register_bloc.dart';
-import 'package:transevilz/register/screens/syarat_dan_ketentuan.dart';
-import 'package:transevilz/register/widget/dialog.dart';
-import 'package:transevilz/register/widget/reuse_app_bar.dart';
-
-import '../widget/title_form.dart';
+import 'package:transevilz/register/register.dart';
 
 class RegisterProfileReq extends StatelessWidget {
   const RegisterProfileReq({Key? key, required this.numberPhone})
@@ -26,7 +21,8 @@ class RegisterProfileReq extends StatelessWidget {
 }
 
 class RegisterProfileForm extends StatefulWidget {
-  const RegisterProfileForm({Key? key, required this.phoneNum}) : super(key: key);
+  const RegisterProfileForm({Key? key, required this.phoneNum})
+      : super(key: key);
   final String phoneNum;
 
   @override
@@ -34,7 +30,6 @@ class RegisterProfileForm extends StatefulWidget {
 }
 
 class _RegisterProfileFormState extends State<RegisterProfileForm> {
-
   FToast fToast = FToast();
 
   @override
@@ -70,16 +65,15 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
     );
 
     fToast.showToast(
-      child: toast,
-      toastDuration: const Duration(seconds: 2),
-      positionedToastBuilder: (context, child) {
-        return Positioned(
-          width: MediaQuery.of(context).size.width,
-          bottom: 95,
-          child: child,
-        );
-      }
-    );
+        child: toast,
+        toastDuration: const Duration(seconds: 2),
+        positionedToastBuilder: (context, child) {
+          return Positioned(
+            width: MediaQuery.of(context).size.width,
+            bottom: 95,
+            child: child,
+          );
+        });
   }
 
   @override
@@ -97,27 +91,26 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
           elevation: 0,
           child: BlocListener<RegisterBloc, RegisterState>(
             listener: (context, state) {
-              if(state is RegisterFailed) {
+              if (state is RegisterFailed) {
                 _showToast();
               }
-              if(state is RegisterSuccess) {
+              if (state is RegisterSuccess) {
                 showDialog(
                     context: context,
                     builder: (context) => DialogWidget(
-                      image: Image.asset('assets/images/success.png'),
-                      status: const Text(
-                        'Cek email anda untuk melakukan aktivasi akun',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'DM Sans',
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      buttonlabel: 'Cek Email Sekarang',
-                      onpress: () {},
-                    )
-                );
+                          image: Image.asset('assets/images/success.png'),
+                          status: const Text(
+                            'Cek email anda untuk melakukan aktivasi akun',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'DM Sans',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          buttonlabel: 'Cek Email Sekarang',
+                          onpress: () {},
+                        ));
               }
             },
             child: Container(
@@ -220,7 +213,9 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                     child: BlocBuilder<RegisterBloc,
                                         RegisterState>(
                                       builder: (context, state) {
-                                        if (state is RegisterFormButton || state is RegisterFailed || state is RegisterSuccess) {
+                                        if (state is RegisterFormButton ||
+                                            state is RegisterFailed ||
+                                            state is RegisterSuccess) {
                                           return context
                                                       .read<RegisterBloc>()
                                                       .imageContain ==
@@ -228,11 +223,12 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                               ? Column(
                                                   children: [
                                                     Container(
-                                                      decoration: const BoxDecoration(
-                                                          color:
-                                                              Color(0xFFF1F7FF),
-                                                          shape:
-                                                              BoxShape.circle),
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                              color: Color(
+                                                                  0xFFF1F7FF),
+                                                              shape: BoxShape
+                                                                  .circle),
                                                       height: 60,
                                                       width: 60,
                                                       child: Center(
@@ -295,7 +291,8 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                                 );
                                         }
                                         return Container(
-                                          margin: const EdgeInsets.only(top: 10),
+                                          margin:
+                                              const EdgeInsets.only(top: 10),
                                           height: 80,
                                           width: 100,
                                           child: Column(
@@ -379,12 +376,13 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   const TitleForm(title: 'Tipe Dokumen'),
                                   DropdownButtonFormField2(
                                     icon: const Icon(FeatherIcons.chevronDown),
-                                    iconOnClick: const Icon(FeatherIcons.chevronUp),
+                                    iconOnClick:
+                                        const Icon(FeatherIcons.chevronUp),
                                     dropdownDecoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(12),
                                         color: const Color(0xFFF1F7FF)),
-                                    itemPadding:
-                                        const EdgeInsets.symmetric(horizontal: 10),
+                                    itemPadding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
                                     buttonHeight: 40,
                                     hint: const Text(
                                       'Pilih Tipe Dokumen',
@@ -394,8 +392,8 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    buttonDecoration:
-                                        const BoxDecoration(color: Color(0xFFE5F2FF)),
+                                    buttonDecoration: const BoxDecoration(
+                                        color: Color(0xFFE5F2FF)),
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.only(
                                         bottom: 10,
@@ -419,8 +417,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                                 e,
                                                 style: const TextStyle(
                                                     fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w400,
+                                                    fontWeight: FontWeight.w400,
                                                     color: Color(0xFF7A7A7A)),
                                               ),
                                             ))
@@ -461,14 +458,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                               BorderRadius.circular(10),
                                         ),
                                         focusedErrorBorder: OutlineInputBorder(
-                                          borderSide:
-                                              const BorderSide(color: Colors.red),
+                                          borderSide: const BorderSide(
+                                              color: Colors.red),
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
                                         errorBorder: OutlineInputBorder(
-                                          borderSide:
-                                              const BorderSide(color: Colors.red),
+                                          borderSide: const BorderSide(
+                                              color: Colors.red),
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
@@ -507,14 +504,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                               BorderRadius.circular(10),
                                         ),
                                         focusedErrorBorder: OutlineInputBorder(
-                                          borderSide:
-                                              const BorderSide(color: Colors.red),
+                                          borderSide: const BorderSide(
+                                              color: Colors.red),
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
                                         errorBorder: OutlineInputBorder(
-                                          borderSide:
-                                              const BorderSide(color: Colors.red),
+                                          borderSide: const BorderSide(
+                                              color: Colors.red),
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
@@ -553,14 +550,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                               BorderRadius.circular(10),
                                         ),
                                         focusedErrorBorder: OutlineInputBorder(
-                                          borderSide:
-                                              const BorderSide(color: Colors.red),
+                                          borderSide: const BorderSide(
+                                              color: Colors.red),
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
                                         errorBorder: OutlineInputBorder(
-                                          borderSide:
-                                              const BorderSide(color: Colors.red),
+                                          borderSide: const BorderSide(
+                                              color: Colors.red),
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
@@ -599,14 +596,14 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                               BorderRadius.circular(10),
                                         ),
                                         focusedErrorBorder: OutlineInputBorder(
-                                          borderSide:
-                                              const BorderSide(color: Colors.red),
+                                          borderSide: const BorderSide(
+                                              color: Colors.red),
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
                                         errorBorder: OutlineInputBorder(
-                                          borderSide:
-                                              const BorderSide(color: Colors.red),
+                                          borderSide: const BorderSide(
+                                              color: Colors.red),
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
@@ -742,7 +739,10 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                   const TitleForm(title: 'Tanggal Lahir'),
                                   TextFormField(
                                     onTap: () {
-                                      context.read<RegisterBloc>().tanggalLahir.clear();
+                                      context
+                                          .read<RegisterBloc>()
+                                          .tanggalLahir
+                                          .clear();
                                       context
                                           .read<RegisterBloc>()
                                           .datePicker(context);
@@ -752,10 +752,10 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                     controller: context
                                         .read<RegisterBloc>()
                                         .tanggalLahir,
-                                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
                                     decoration: InputDecoration(
-                                      contentPadding:
-                                      const EdgeInsets.all(10),
+                                      contentPadding: const EdgeInsets.all(10),
                                       fillColor: const Color(0xFFE5F2FF),
                                       filled: true,
                                       hintStyle: const TextStyle(
@@ -766,22 +766,20 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                       hintText: 'dd/mm/yyyy',
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide.none,
-                                        borderRadius:
-                                        BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                       focusedErrorBorder: OutlineInputBorder(
                                         borderSide:
-                                        const BorderSide(color: Colors.red),
-                                        borderRadius:
-                                        BorderRadius.circular(10),
+                                            const BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                       errorBorder: OutlineInputBorder(
                                         borderSide:
-                                        const BorderSide(color: Colors.red),
-                                        borderRadius:
-                                        BorderRadius.circular(10),
+                                            const BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
-                                      suffixIcon: const Icon(Icons.calendar_today_outlined),
+                                      suffixIcon: const Icon(
+                                          Icons.calendar_today_outlined),
                                     ),
                                     validator: context
                                         .read<RegisterBloc>()
@@ -1084,9 +1082,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
               ),
               ReuseAppBar(
                 title: 'Registrasi',
-                onpress: () {
-                  Navigator.popUntil(context, (route) => route.isFirst);
-                },
+                onpress: () => Navigator.pop(context),
               ),
             ],
           ),

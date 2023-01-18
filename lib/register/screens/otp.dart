@@ -2,30 +2,25 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:transevilz/register/bloc/register_bloc.dart';
-import 'package:transevilz/register/screens/register_profile_form.dart';
-import 'package:transevilz/register/widget/dialog.dart';
-import 'package:transevilz/register/widget/reuse_app_bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:transevilz/register/register.dart';
 
 class OtpPrep extends StatelessWidget {
-   const OtpPrep({Key? key, required this.noHP}) : super(key: key);
+  const OtpPrep({Key? key, required this.noHP}) : super(key: key);
 
   final String noHP;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => RegisterBloc(),
+      create: (context) => RegisterBloc(),
       child: OtpScreen(noHP: noHP),
     );
   }
 }
 
-
 class OtpScreen extends StatefulWidget {
-  OtpScreen({Key? key, required this.noHP}) : super(key: key);
+  const OtpScreen({Key? key, required this.noHP}) : super(key: key);
   final String noHP;
 
   @override
@@ -43,13 +38,13 @@ class _OtpScreenState extends State<OtpScreen> {
     timeLeft = time;
     super.initState();
     timerCount = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if(!mounted) {
-        return ;
+      if (!mounted) {
+        return;
       }
       setState(() {
         timeLeft--;
       });
-      if(timeLeft==0){
+      if (timeLeft == 0) {
         return timerCount!.cancel();
       }
     });
@@ -58,23 +53,24 @@ class _OtpScreenState extends State<OtpScreen> {
   void kirimUlang() {
     timeLeft = time;
     timerCount = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if(!mounted) {
-        return ;
+      if (!mounted) {
+        return;
       }
       setState(() {
         timeLeft--;
       });
-      if(timeLeft==0){
+      if (timeLeft == 0) {
         return timerCount!.cancel();
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Container(
+        child: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(
@@ -82,9 +78,7 @@ class _OtpScreenState extends State<OtpScreen> {
             children: [
               ReuseAppBar(
                 title: '',
-                onpress: () {
-                  Navigator.popUntil(context, (route) => route.isFirst);
-                },
+                onpress: () => Navigator.pop(context),
               ),
               const SizedBox(height: 10),
               const Text(
@@ -99,9 +93,9 @@ class _OtpScreenState extends State<OtpScreen> {
               const SizedBox(height: 5),
               const Text(
                 'Masukkan kode verifikasi '
-                    'yang telah dikirim pada No.Hp '
-                    'yang telah anda\ndaftarkan '
-                    'sebelumnya',
+                'yang telah dikirim pada No.Hp '
+                'yang telah anda\ndaftarkan '
+                'sebelumnya',
                 style: TextStyle(
                   fontSize: 9,
                   color: Color(0xFF7A7A7A),
@@ -155,85 +149,103 @@ class _OtpScreenState extends State<OtpScreen> {
                         style: TextStyle(
                             color: Color(0xFF7A7A7A),
                             fontSize: 12,
-                            fontWeight: FontWeight.w400
-                        ),
+                            fontWeight: FontWeight.w400),
                       ),
                       timeLeft == 0
                           ? GestureDetector(
-                        onTap: () {
-                          if(timeLeft==0) {
-                            kirimUlang();
-                            context.read<RegisterBloc>().codeSubmit.clear();
-                          }
-                        },
-                        onDoubleTap: () {},
-                        onTapUp: (v) {},
-                        onTapDown: (v) {},
-                        onTapCancel: () {},
-                        onLongPress: () {},
-                        onDoubleTapCancel: () {},
-                        onHorizontalDragCancel: () {},
-                        onLongPressCancel: () {},
-                        onLongPressStart: (v) {},
-                        onLongPressUp: () {},
-                        onPanCancel: () {},
-                        onSecondaryLongPress: () {},
-                        onSecondaryLongPressCancel: () {},
-                        onSecondaryLongPressStart: (v) {},
-                        onSecondaryLongPressUp: () {},
-                        onSecondaryTap: () {},
-                        onSecondaryTapCancel: () {},
-                        onTertiaryLongPress: () {},
-                        onTertiaryLongPressCancel: () {},
-                        onTertiaryLongPressUp: () {},
-                        onTertiaryTapCancel: () {},
-                        onVerticalDragCancel: () {},
-                        child: const Text(
-                            'KIRIM ULANG KODE OTP',
-                            style: TextStyle(
-                                color: Color(0xFF2ACA10),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600
+                              onTap: () {
+                                if (timeLeft == 0) {
+                                  kirimUlang();
+                                  context
+                                      .read<RegisterBloc>()
+                                      .codeSubmit
+                                      .clear();
+                                }
+                              },
+                              onDoubleTap: () {},
+                              onTapUp: (v) {},
+                              onTapDown: (v) {},
+                              onTapCancel: () {},
+                              onLongPress: () {},
+                              onDoubleTapCancel: () {},
+                              onHorizontalDragCancel: () {},
+                              onLongPressCancel: () {},
+                              onLongPressStart: (v) {},
+                              onLongPressUp: () {},
+                              onPanCancel: () {},
+                              onSecondaryLongPress: () {},
+                              onSecondaryLongPressCancel: () {},
+                              onSecondaryLongPressStart: (v) {},
+                              onSecondaryLongPressUp: () {},
+                              onSecondaryTap: () {},
+                              onSecondaryTapCancel: () {},
+                              onTertiaryLongPress: () {},
+                              onTertiaryLongPressCancel: () {},
+                              onTertiaryLongPressUp: () {},
+                              onTertiaryTapCancel: () {},
+                              onVerticalDragCancel: () {},
+                              child: const Text('KIRIM ULANG KODE OTP',
+                                  style: TextStyle(
+                                      color: Color(0xFF2ACA10),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600)),
                             )
-                        ),
-                      )
                           : const Text(''),
                     ],
-                  )
-              ),
+                  )),
               Expanded(
                 child: OtpKeyboard(
                   changed: (String value) async {
-                    if(value == 'del') {
-                      if(context.read<RegisterBloc>().codeSubmit.text.isEmpty) {
-                        return null;
+                    if (value == 'del') {
+                      if (context
+                          .read<RegisterBloc>()
+                          .codeSubmit
+                          .text
+                          .isEmpty) {
+                        return;
                       }
-                      final deleting = context.read<RegisterBloc>().codeSubmit.text.split('');
+                      final deleting = context
+                          .read<RegisterBloc>()
+                          .codeSubmit
+                          .text
+                          .split('');
                       deleting.removeLast();
                       final join = deleting.join('');
                       context.read<RegisterBloc>().codeSubmit.text = join;
-                    }
-                    else {
-                      if(context.read<RegisterBloc>().codeSubmit.text.length < 6) {
+                    } else {
+                      if (context.read<RegisterBloc>().codeSubmit.text.length <
+                          6) {
                         context.read<RegisterBloc>().codeSubmit.text += value;
                       }
-                      if(context.read<RegisterBloc>().codeSubmit.text==context.read<RegisterBloc>().otpDummy && timeLeft!=0) {
+                      if (context.read<RegisterBloc>().codeSubmit.text ==
+                              context.read<RegisterBloc>().otpDummy &&
+                          timeLeft != 0) {
                         try {
-                          final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/otp_verification');
+                          final Uri backOfficeUrl = Uri.parse(
+                              'https://red-gifted-squid.cyclic.app/api/v1/otp_verification');
                           Map<String, String> headerSet = {
                             "Accept": "application/json",
                             "Content-Type": "application/json;charset=UTF-8",
                           };
                           Map<String, dynamic> otpMatching = {
-                            "otp_code": int.parse(context.read<RegisterBloc>().codeSubmit.text)
+                            "otp_code": int.parse(
+                                context.read<RegisterBloc>().codeSubmit.text)
                           };
-                          http.Response response = await context.read<RegisterBloc>().httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(otpMatching));
+                          http.Response response = await context
+                              .read<RegisterBloc>()
+                              .httpClient
+                              .post(
+                                backOfficeUrl,
+                                headers: headerSet,
+                                body: jsonEncode(otpMatching),
+                              );
                           // print(response.body);
                           // print(response.statusCode);
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (_) {
-                              return RegisterProfileReq(numberPhone: widget.noHP);
+                              return RegisterProfileReq(
+                                  numberPhone: widget.noHP);
                             }),
                           );
                         } catch (e) {
@@ -241,7 +253,8 @@ class _OtpScreenState extends State<OtpScreen> {
                             barrierDismissible: false,
                             context: context,
                             builder: (context) => DialogWidget(
-                              image: Image.asset('assets/images/disconnect.png'),
+                              image:
+                                  Image.asset('assets/images/disconnect.png'),
                               status: const Text(
                                 'Oops! Koneksi internet anda tidak stabil, muat ulang halaman',
                                 style: TextStyle(
@@ -261,7 +274,9 @@ class _OtpScreenState extends State<OtpScreen> {
                         }
                         context.read<RegisterBloc>().codeSubmit.clear();
                       }
-                      if(context.read<RegisterBloc>().codeSubmit.text==context.read<RegisterBloc>().otpDummy && timeLeft==0) {
+                      if (context.read<RegisterBloc>().codeSubmit.text ==
+                              context.read<RegisterBloc>().otpDummy &&
+                          timeLeft == 0) {
                         showDialog(
                           context: context,
                           barrierDismissible: false,
@@ -285,7 +300,11 @@ class _OtpScreenState extends State<OtpScreen> {
                         );
                         context.read<RegisterBloc>().codeSubmit.clear();
                       }
-                      if(context.read<RegisterBloc>().codeSubmit.text.length==6 && context.read<RegisterBloc>().codeSubmit.text!=context.read<RegisterBloc>().otpDummy && timeLeft==0) {
+                      if (context.read<RegisterBloc>().codeSubmit.text.length ==
+                              6 &&
+                          context.read<RegisterBloc>().codeSubmit.text !=
+                              context.read<RegisterBloc>().otpDummy &&
+                          timeLeft == 0) {
                         showDialog(
                           context: context,
                           barrierDismissible: false,
@@ -309,7 +328,10 @@ class _OtpScreenState extends State<OtpScreen> {
                         );
                         context.read<RegisterBloc>().codeSubmit.clear();
                       }
-                      if(context.read<RegisterBloc>().codeSubmit.text.length==6 && context.read<RegisterBloc>().codeSubmit.text!=context.read<RegisterBloc>().otpDummy) {
+                      if (context.read<RegisterBloc>().codeSubmit.text.length ==
+                              6 &&
+                          context.read<RegisterBloc>().codeSubmit.text !=
+                              context.read<RegisterBloc>().otpDummy) {
                         showDialog(
                           context: context,
                           barrierDismissible: false,
@@ -354,6 +376,7 @@ class _OtpScreenState extends State<OtpScreen> {
       ),
     );
   }
+
   String otpTimer(int seconds) {
     final duration = Duration(seconds: timeLeft).toString();
     final split = duration.split('.').first;
@@ -379,8 +402,7 @@ class OtpKeyboard extends StatelessWidget {
                 crossAxisCount: 3,
                 mainAxisSpacing: 10,
                 mainAxisExtent: 75,
-                childAspectRatio: 2/1
-            ),
+                childAspectRatio: 2 / 1),
             children: [
               OtpButton(
                 onPressing: () {
@@ -406,8 +428,7 @@ class OtpKeyboard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF2075F3),
-                      fontFamily: 'Montserrat'
-                  ),
+                      fontFamily: 'Montserrat'),
                 ),
               ),
               OtpButton(
@@ -420,8 +441,7 @@ class OtpKeyboard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF2075F3),
-                      fontFamily: 'Montserrat'
-                  ),
+                      fontFamily: 'Montserrat'),
                 ),
               ),
               OtpButton(
@@ -434,8 +454,7 @@ class OtpKeyboard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF2075F3),
-                      fontFamily: 'Montserrat'
-                  ),
+                      fontFamily: 'Montserrat'),
                 ),
               ),
               OtpButton(
@@ -448,8 +467,7 @@ class OtpKeyboard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF2075F3),
-                      fontFamily: 'Montserrat'
-                  ),
+                      fontFamily: 'Montserrat'),
                 ),
               ),
               OtpButton(
@@ -462,8 +480,7 @@ class OtpKeyboard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF2075F3),
-                      fontFamily: 'Montserrat'
-                  ),
+                      fontFamily: 'Montserrat'),
                 ),
               ),
               OtpButton(
@@ -476,8 +493,7 @@ class OtpKeyboard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF2075F3),
-                      fontFamily: 'Montserrat'
-                  ),
+                      fontFamily: 'Montserrat'),
                 ),
               ),
               OtpButton(
@@ -490,8 +506,7 @@ class OtpKeyboard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF2075F3),
-                      fontFamily: 'Montserrat'
-                  ),
+                      fontFamily: 'Montserrat'),
                 ),
               ),
               OtpButton(
@@ -504,8 +519,7 @@ class OtpKeyboard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF2075F3),
-                      fontFamily: 'Montserrat'
-                  ),
+                      fontFamily: 'Montserrat'),
                 ),
               ),
               const SizedBox(),
@@ -519,8 +533,7 @@ class OtpKeyboard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF2075F3),
-                      fontFamily: 'Montserrat'
-                  ),
+                      fontFamily: 'Montserrat'),
                 ),
               ),
               OtpButton(
@@ -528,7 +541,8 @@ class OtpKeyboard extends StatelessWidget {
                   changed('del');
                 },
                 widget: const Icon(
-                  Icons.backspace_outlined, color: Color(0xFF2075F3),
+                  Icons.backspace_outlined,
+                  color: Color(0xFF2075F3),
                 ),
               ),
             ],
@@ -538,7 +552,6 @@ class OtpKeyboard extends StatelessWidget {
     );
   }
 }
-
 
 class OtpButton extends StatelessWidget {
   const OtpButton({Key? key, required this.widget, this.onPressing})
@@ -564,14 +577,11 @@ class OtpButton extends StatelessWidget {
                 BoxShadow(
                     color: Color.fromRGBO(32, 117, 243, 0.15),
                     blurRadius: 10.0,
-                    spreadRadius: 0
-                ),
+                    spreadRadius: 0),
               ],
             ),
             child: Center(
               child: widget,
-            )
-        )
-    );
+            )));
   }
 }
