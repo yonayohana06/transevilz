@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:transevilz/app/app.dart';
 import 'package:transevilz/register/register.dart';
 
 class RegisterProfileReq extends StatelessWidget {
@@ -96,21 +97,29 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
               }
               if (state is RegisterSuccess) {
                 showDialog(
-                    context: context,
-                    builder: (context) => DialogWidget(
-                          image: Image.asset('assets/images/success.png'),
-                          status: const Text(
-                            'Cek email anda untuk melakukan aktivasi akun',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'DM Sans',
-                            ),
-                            textAlign: TextAlign.center,
+                  context: context,
+                  builder: (context) => DialogWidget(
+                    image: Image.asset('assets/images/success.png'),
+                    status: const Text(
+                      'Cek email anda untuk melakukan aktivasi akun',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'DM Sans',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    buttonlabel: 'Cek Email Sekarang',
+                    onpress: () {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AppScreen(),
                           ),
-                          buttonlabel: 'Cek Email Sekarang',
-                          onpress: () {},
-                        ));
+                          (route) => false);
+                    },
+                  ),
+                );
               }
             },
             child: Container(
