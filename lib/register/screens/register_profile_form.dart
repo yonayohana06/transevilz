@@ -220,7 +220,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                     child: BlocBuilder<RegisterBloc,
                                         RegisterState>(
                                       builder: (context, state) {
-                                        if (state is RegisterFormButton) {
+                                        if (state is RegisterFormButton || state is RegisterFailed || state is RegisterSuccess) {
                                           return context
                                                       .read<RegisterBloc>()
                                                       .imageContain ==
