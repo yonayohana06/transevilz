@@ -19,7 +19,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   String otpDummy = '102030';
   final codeSubmit = TextEditingController();
   //RegistrationForm
-  String chosen = 'pria';
+  String chosen = 'male';
   final email = TextEditingController();
   final noDokumen = TextEditingController();
   final namaDepan = TextEditingController();
@@ -115,6 +115,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
       print(dataMap);
       http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
+      print(response.body);
       if(response.body== '{"message":"user created!"}') {
         emit(RegisterSuccess());
       }
@@ -134,13 +135,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         "Content-Type": "application/json;charset=UTF-8",
       };
       http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
-      if(response.body== '{"message": "user created!"}') {
-        emit(RegisterSuccess());
-      }
-      if(response.body=='{"message":"email already registered!"}') {
-        emit(RegisterFormButton(isActive));
-        emit(RegisterFailed());
-      }
+      print(response.body);
+      // if(response.body== '{"message": "user created!"}') {
+      //   emit(RegisterSuccess());
+      // }
+      // if(response.body=='{"message":"email already registered!"}') {
+      //   emit(RegisterFormButton(isActive));
+      //   emit(RegisterFailed());
+      // }
     });
   }
 
@@ -255,9 +257,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if(wholeNumberTempatLahir.hasMatch(v)) {
       return 'Format tempat lahir salah';
     }
-    if(v.length < 10) {
-      return 'Mohon tuliskan dangan spesifik (Contoh: Sleman, Yogyakarta)';
-    }
+    // if(v.length < 10) {
+    //   return 'Mohon tuliskan dangan spesifik (Contoh: Sleman, Yogyakarta)';
+    // }
     return null;
   }
 

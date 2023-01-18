@@ -834,7 +834,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                     children: [
                                       Expanded(
                                         child: RadioListTile(
-                                          value: 'pria',
+                                          value: 'male',
                                           groupValue: context
                                               .read<RegisterBloc>()
                                               .chosen,
@@ -858,7 +858,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                       ),
                                       Expanded(
                                         child: RadioListTile(
-                                          value: 'perempuan',
+                                          value: 'female',
                                           groupValue: context
                                               .read<RegisterBloc>()
                                               .chosen,
