@@ -40,6 +40,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   bool checkBox = false;
   final httpClient = http.Client();
   FToast fToast = FToast();
+  int formatNumber = 62;
   //
   bool submitValidator = false;
   final phoneNumber = TextEditingController();
@@ -103,7 +104,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         "birth_place":tempatLahir.text,
         "birth_date":tanggalLahir.text,
         "address":alamat.text,
-        "phone_number":"${int.parse(phoneNumber.text)}",
+        "phone_number":"${formatNumber}${int.parse(phoneNumber.text)}",
         "password":kataSandi.text,
         "sex":chosen,
       };
@@ -114,15 +115,15 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       };
 
       print(dataMap);
-      http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
-      print(response.body);
-      if(response.body== '{"message":"user created!"}') {
-        emit(RegisterSuccess());
-      }
-      if(response.body=='{"message":"email already registered!"}') {
-        emit(RegisterFormButton(isActive));
-        emit(RegisterFailed());
-      }
+      // http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
+      // print(response.body);
+      // if(response.body== '{"message":"user created!"}') {
+      //   emit(RegisterSuccess());
+      // }
+      // if(response.body=='{"message":"email already registered!"}') {
+      //   emit(RegisterFormButton(isActive));
+      //   emit(RegisterFailed());
+      // }
     });
     on<PhoneApiCheck>((event, emit) async {
       final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/register');
