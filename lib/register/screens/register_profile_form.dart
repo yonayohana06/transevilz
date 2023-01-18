@@ -450,6 +450,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                           .read<RegisterBloc>()
                                           .noDokumen,
                                       textInputAction: TextInputAction.next,
+                                      autovalidateMode: AutovalidateMode.always,
                                       decoration: InputDecoration(
                                         contentPadding:
                                             const EdgeInsets.all(10),
@@ -495,6 +496,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                       inputFormatters: [
                                         LengthLimitingTextInputFormatter(16)
                                       ],
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
                                         contentPadding:
@@ -541,6 +543,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                       inputFormatters: [
                                         LengthLimitingTextInputFormatter(12)
                                       ],
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
                                         contentPadding:
@@ -587,6 +590,7 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                                       inputFormatters: [
                                         LengthLimitingTextInputFormatter(16)
                                       ],
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
                                         contentPadding:

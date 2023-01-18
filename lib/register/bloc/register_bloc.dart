@@ -53,19 +53,20 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       emit(NextState(phoneNumber.text));
     });
     on<PhoneNumValidateEvent>((event, emit) {
-      RegExp phonerex = RegExp(r'^[8][0-9]{10}');
-      final match = phonerex.hasMatch(phoneNumber.text);
+      RegExp phonerex = RegExp(r'^[8]+[0-9]{9}');
+      RegExp phonerexZero = RegExp(r'^[08]+[0-9]{10}');
+      final match = phonerex.hasMatch(phoneNumber.text) || phonerexZero.hasMatch(phoneNumber.text);
       if(match) {
         emit(PhoneNumberValidateState(submitValidator = match));
       }
-      if(phoneNumber.text.length < 1) {
+      if(phoneNumber.text.isEmpty) {
         emit(PhoneNumEmptyState());
       }
-      if(phoneNumber.text.length > 11) {
+      if(phoneNumber.text.length > 12) {
         emit(PhoneNumberValidateState(submitValidator = false));
         emit(PhoneNumFormatState());
       }
-      if(phoneNumber.text.length < 11
+      if(phoneNumber.text.length < 10
           && phoneNumber.text.length >= 1
           && !match) {
         emit(PhoneNumberValidateState(submitValidator = false));
@@ -73,7 +74,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       }
     });
     on<RegisterFormButtonEvent>((event, emit) {
-      final registerValidate = formkey.currentState!.validate();
+      final registerValidate = email.text.isNotEmpty
+          && noDokumen.text.isNotEmpty
+          && namaDepan.text.isNotEmpty
+          && namaBelakang.text.isNotEmpty
+          && tempatLahir.text.isNotEmpty
+          && tanggalLahir.text.isNotEmpty
+          && alamat.text.isNotEmpty
+          && kataSandi.text.isNotEmpty
+          && confirmKataSandi.text.isNotEmpty
+          && formkey.currentState!.validate();
       emit(RegisterFormButton(isActive = registerValidate));
     });
     on<ShowPassEvent>((event, emit) {
@@ -115,15 +125,15 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       };
 
       print(dataMap);
-      // http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
-      // print(response.body);
-      // if(response.body== '{"message":"user created!"}') {
-      //   emit(RegisterSuccess());
-      // }
-      // if(response.body=='{"message":"email already registered!"}') {
-      //   emit(RegisterFormButton(isActive));
-      //   emit(RegisterFailed());
-      // }
+      http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
+      print(response.body);
+      if(response.body== '{"message":"user created!"}') {
+        emit(RegisterSuccess());
+      }
+      if(response.body=='{"message":"email already registered!"}') {
+        emit(RegisterFormButton(isActive));
+        emit(RegisterFailed());
+      }
     });
     on<PhoneApiCheck>((event, emit) async {
       final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/register');
