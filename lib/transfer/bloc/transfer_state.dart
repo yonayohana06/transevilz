@@ -49,10 +49,10 @@ class StateTotal extends TransferState {
   List<Object> get props => [total];
 }
 
-class StateInvoiceTrx extends TransferState {
+class InvoiceTrxLoaded extends TransferState {
   final InvoiceTrx invoices;
 
-  const StateInvoiceTrx(this.invoices);
+  const InvoiceTrxLoaded(this.invoices);
   @override
   List<Object> get props => [invoices];
 }

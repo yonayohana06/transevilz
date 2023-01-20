@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'package:transevilz/app/app.dart';
-import 'package:transevilz/transfer/models/model_get_trx.dart';
 import 'package:transevilz/transfer/transfer.dart';
 
 class InvoiceScreen extends StatelessWidget {
@@ -26,16 +22,46 @@ class InvoiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _View(
-      desBank: desBank,
-      nama: nama,
-      noRekening: noRekening,
-      total: total,
+    return BlocProvider(
+      create: (context) => TransferBloc()..add(SubmitInvoiceTrx()),
+      child: BlocListener<TransferBloc, TransferState>(
+        listener: (context, state) {
+          if (state is TransferLoading) {
+            showDialog(
+              barrierDismissible: false,
+              barrierColor: Colors.white,
+              context: context,
+              builder: (context) {
+                Future.delayed(
+                  const Duration(seconds: 1),
+                  () => Navigator.pop(context),
+                );
+                return Container(
+                  alignment: Alignment.center,
+                  height: 40,
+                  width: 20,
+                  child: const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Colors.green,
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+        },
+        child: _View(
+          desBank: desBank,
+          nama: nama,
+          noRekening: noRekening,
+          total: total,
+        ),
+      ),
     );
   }
 }
 
-class _View extends StatefulWidget {
+class _View extends StatelessWidget {
   const _View({
     required this.total,
     required this.desBank,
@@ -47,55 +73,19 @@ class _View extends StatefulWidget {
   final String noRekening;
   final String nama;
 
-  @override
-  State<_View> createState() => _ViewState();
-}
+  // final String va = '9999-5678-0033-1121-314';
 
-class _ViewState extends State<_View> {
-  final String va = '9999-5678-0033-1121-314';
-
-  // This function is triggered when the copy icon is pressed
-  void copyToClipboard() {
-    Clipboard.setData(ClipboardData(text: va));
-    Fluttertoast.showToast(
-      msg: 'Copied to clipboard',
-      backgroundColor: Colors.white,
-      textColor: Colors.grey[800],
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.SNACKBAR,
-    );
-  }
-
-  final url = Constan.baseUrl;
-  final repo = ApiRepository();
-
-  InvoiceTrx _invoice = InvoiceTrx(
-    recipient: '',
-    senderName: '',
-    bank: '',
-    typeCurrency: '',
-    recipientRek: '',
-    virtualAccount: '',
-    total: 0,
-  );
-  List<Bank> _bank = [];
-
-  _getInvoice() async {
-    await repo.getTrx().then((value) => _invoice = value);
-    print(_invoice.bank);
-  }
-
-  _getBank() async {
-    await repo.getBank().then((bank) => _bank = bank);
-    print(_bank.first.name);
-  }
-
-  @override
-  void initState() {
-    _getInvoice();
-    _getBank();
-    super.initState();
-  }
+  // // This function is triggered when the copy icon is pressed
+  // void copyToClipboard() {
+  //   Clipboard.setData(ClipboardData(text: va));
+  //   Fluttertoast.showToast(
+  //     msg: 'Copied to clipboard',
+  //     backgroundColor: Colors.white,
+  //     textColor: Colors.grey[800],
+  //     toastLength: Toast.LENGTH_LONG,
+  //     gravity: ToastGravity.SNACKBAR,
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -118,13 +108,29 @@ class _ViewState extends State<_View> {
                 margin: const EdgeInsets.only(bottom: 30),
                 child: Column(
                   children: [
-                    const Text(
-                      "Selamat Dinda Salsabila,\n Proses anda berhasil",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      textAlign: TextAlign.center,
+                    BlocBuilder<TransferBloc, TransferState>(
+                      builder: (context, state) {
+                        if (state is InvoiceTrxLoaded) {
+                          final invoice = state.invoices;
+                          return Text(
+                            "Selamat ${invoice.senderName},\n "
+                            "Proses anda berhasil",
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            textAlign: TextAlign.center,
+                          );
+                        }
+                        return const Text(
+                          "Data tidak ada ,\n Proses anda berhasil",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          textAlign: TextAlign.center,
+                        );
+                      },
                     ),
                     const SizedBox(height: 20),
                     Text(
@@ -162,130 +168,92 @@ class _ViewState extends State<_View> {
                     Radius.circular(12.0),
                   ),
                 ),
-                child: Column(
-                  children: [
-                    _titleInvoice('Nama Penerima'),
-                    _descInvoice(_invoice.recipient),
-                    _titleInvoice('Jenis Bank'),
-                    _descInvoice(_invoice.bank),
-                    _titleInvoice('Tipe Transaksi'),
-                    _descInvoice(_invoice.typeCurrency),
-                    _titleInvoice('No. Rekening'),
-                    _descInvoice(_invoice.recipientRek),
-                    _titleInvoice('Virtual Akun'),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          _invoice.virtualAccount,
-                          style: TextStyle(
-                            color: Colors.grey[800],
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                child: BlocBuilder<TransferBloc, TransferState>(
+                  builder: (context, state) {
+                    if (state is GetInvoiceFailed) {
+                      return Center(
+                        child: Text(state.msg),
+                      );
+                    }
+                    if (state is InvoiceTrxLoaded) {
+                      final invoice = state.invoices;
+                      return Column(
+                        children: [
+                          _titleInvoice('Nama Penerima'),
+                          _descInvoice(invoice.recipient),
+                          _titleInvoice('Jenis Bank'),
+                          _descInvoice(invoice.bank),
+                          _titleInvoice('Tipe Transaksi'),
+                          _descInvoice(invoice.typeCurrency),
+                          _titleInvoice('No. Rekening'),
+                          _descInvoice(invoice.recipientRek),
+                          _titleInvoice('Virtual Akun'),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                invoice.virtualAccount,
+                                style: TextStyle(
+                                  color: Colors.grey[800],
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              GestureDetector(
+                                child: const Icon(
+                                  FeatherIcons.copy,
+                                  size: 20.0,
+                                ),
+                                onTap: () {
+                                  Clipboard.setData(
+                                    ClipboardData(text: invoice.virtualAccount),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'No VA disalin',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      backgroundColor: Colors.green,
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                  // Fluttertoast.showToast(
+                                  //   msg: 'Copied to clipboard',
+                                  //   backgroundColor: Colors.white,
+                                  //   textColor: Colors.grey[800],
+                                  // );
+                                },
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        GestureDetector(
-                          child: const Icon(
-                            FeatherIcons.copy,
-                            size: 20.0,
+                          const SizedBox(height: 15),
+                          Text(
+                            "Total",
+                            style: TextStyle(
+                              color: Colors.grey[800],
+                              fontSize: 10.0,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                          onTap: () => copyToClipboard(),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    Text(
-                      "Total",
-                      style: TextStyle(
-                        color: Colors.grey[800],
-                        fontSize: 10.0,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    Text(
-                      "${_invoice.total} IDR",
-                      style: const TextStyle(
-                        color: Colors.green,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
+                          const SizedBox(height: 15),
+                          Text(
+                            "${invoice.total} IDR",
+                            style: const TextStyle(
+                              color: Colors.green,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                    return const SizedBox();
+                  },
                 ),
               ),
-              // child: BlocBuilder<TransferBloc, TransferState>(
-              //   builder: (context, state) {
-              //     print(state);
-              //     if (state is GetInvoiceFailed) {
-              //       return Center(
-              //         child: Text(state.msg),
-              //       );
-              //     }
-              //     if (state is StateInvoiceTrx) {
-              //       return Column(
-              //         children: state.invoices.map((e) {
-              //           return Column(
-              //             children: [
-              //               _titleInvoice('Nama Penerima'),
-              //               _descInvoice(e.recipient),
-              //               _titleInvoice('Jenis Bank'),
-              //               _descInvoice(e.bank),
-              //               _titleInvoice('Tipe Transaksi'),
-              //               _descInvoice(e.typeCurrency),
-              //               _titleInvoice('No. Rekening'),
-              //               _descInvoice(e.recipientRek),
-              //               _titleInvoice('Virtual Akun'),
-              //               Row(
-              //                 crossAxisAlignment: CrossAxisAlignment.center,
-              //                 mainAxisAlignment: MainAxisAlignment.center,
-              //                 children: [
-              //                   Text(
-              //                     e.virtualAccount,
-              //                     style: TextStyle(
-              //                       color: Colors.grey[800],
-              //                       fontSize: 16,
-              //                       fontWeight: FontWeight.w700,
-              //                     ),
-              //                   ),
-              //                   const SizedBox(width: 10),
-              //                   GestureDetector(
-              //                     child: const Icon(
-              //                       FeatherIcons.copy,
-              //                       size: 20.0,
-              //                     ),
-              //                     onTap: () => copyToClipboard(),
-              //                   ),
-              //                 ],
-              //               ),
-              //               const SizedBox(height: 15),
-              //               Text(
-              //                 "Total",
-              //                 style: TextStyle(
-              //                   color: Colors.grey[800],
-              //                   fontSize: 10.0,
-              //                   fontWeight: FontWeight.w700,
-              //                 ),
-              //               ),
-              //               const SizedBox(height: 15),
-              //               Text(
-              //                 "${e.total} IDR",
-              //                 style: const TextStyle(
-              //                   color: Colors.green,
-              //                   fontSize: 20.0,
-              //                   fontWeight: FontWeight.w700,
-              //                 ),
-              //               ),
-              //             ],
-              //           );
-              //         }).toList(),
-              //       );
-              //     }
-              //     return const SizedBox();
-              //   },
-              // ),
             ],
           ),
         ),

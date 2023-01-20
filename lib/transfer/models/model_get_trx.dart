@@ -14,12 +14,12 @@ class InvoiceTrx {
   final String expired;
 
   InvoiceTrx({
-    this.id = '',
-    this.senderEmail = '',
-    this.typeTransaction = '',
-    this.status = '',
-    this.trxDate = '',
-    this.expired = '',
+    required this.id,
+    required this.senderEmail,
+    required this.typeTransaction,
+    required this.status,
+    required this.trxDate,
+    required this.expired,
     required this.recipient,
     required this.senderName,
     required this.bank,
@@ -33,6 +33,7 @@ class InvoiceTrx {
     return InvoiceTrx(
       id: json['id'] as String,
       senderEmail: json['sender_email'] as String,
+      typeTransaction: json['type_transaction'],
       status: json['status'] as String,
       trxDate: json['transaction_date'] as String,
       expired: json['expired_at'] as String,

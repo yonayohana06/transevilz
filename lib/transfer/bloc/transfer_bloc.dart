@@ -74,8 +74,11 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     on<SubmitInvoiceTrx>((event, emit) async {
       emit(TransferLoading());
       await repo.getTrx().then((invoices) {
-        print(invoices);
-        emit(StateInvoiceTrx(invoices));
+        emit(InvoiceTrxLoaded(invoices));
+      }).onError((error, stackTrace) {
+        emit(
+          const GetInvoiceFailed('Data tidak tersedia'),
+        );
       });
     });
 
@@ -239,6 +242,8 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     // }
     return null;
   }
+
+  bool loading = true;
 
   //response status code
   final repo = ApiRepository();
