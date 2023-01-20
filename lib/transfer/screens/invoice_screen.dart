@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:transevilz/app/app.dart';
+import 'package:transevilz/transfer/models/model_get_trx.dart';
 import 'package:transevilz/transfer/transfer.dart';
 
 class InvoiceScreen extends StatelessWidget {
@@ -22,28 +26,34 @@ class InvoiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => TransferBloc(),
-        ),
-        BlocProvider(
-          create: (context) => TransferBloc()
-            ..add(EventInitRecipient(
-              total,
-              desBank,
-              noRekening,
-              nama,
-            )),
-        ),
-      ],
-      child: _View(),
+    return _View(
+      desBank: desBank,
+      nama: nama,
+      noRekening: noRekening,
+      total: total,
     );
   }
 }
 
-class _View extends StatelessWidget {
+class _View extends StatefulWidget {
+  const _View({
+    required this.total,
+    required this.desBank,
+    required this.noRekening,
+    required this.nama,
+  });
+  final num total;
+  final String desBank;
+  final String noRekening;
+  final String nama;
+
+  @override
+  State<_View> createState() => _ViewState();
+}
+
+class _ViewState extends State<_View> {
   final String va = '9999-5678-0033-1121-314';
+
   // This function is triggered when the copy icon is pressed
   void copyToClipboard() {
     Clipboard.setData(ClipboardData(text: va));
@@ -54,6 +64,37 @@ class _View extends StatelessWidget {
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.SNACKBAR,
     );
+  }
+
+  final url = Constan.baseUrl;
+  final repo = ApiRepository();
+
+  InvoiceTrx _invoice = InvoiceTrx(
+    recipient: '',
+    senderName: '',
+    bank: '',
+    typeCurrency: '',
+    recipientRek: '',
+    virtualAccount: '',
+    total: 0,
+  );
+  List<Bank> _bank = [];
+
+  _getInvoice() async {
+    await repo.getTrx().then((value) => _invoice = value);
+    print(_invoice.bank);
+  }
+
+  _getBank() async {
+    await repo.getBank().then((bank) => _bank = bank);
+    print(_bank.first.name);
+  }
+
+  @override
+  void initState() {
+    _getInvoice();
+    _getBank();
+    super.initState();
   }
 
   @override
@@ -124,20 +165,20 @@ class _View extends StatelessWidget {
                 child: Column(
                   children: [
                     _titleInvoice('Nama Penerima'),
-                    _descInvoice('Monalisa'),
+                    _descInvoice(_invoice.recipient),
                     _titleInvoice('Jenis Bank'),
-                    _descInvoice("BCC Bank"),
+                    _descInvoice(_invoice.bank),
                     _titleInvoice('Tipe Transaksi'),
-                    _descInvoice('IDR ke IDR'),
+                    _descInvoice(_invoice.typeCurrency),
                     _titleInvoice('No. Rekening'),
-                    _descInvoice('1234-5678-9101-1121-314'),
+                    _descInvoice(_invoice.recipientRek),
                     _titleInvoice('Virtual Akun'),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          va,
+                          _invoice.virtualAccount,
                           style: TextStyle(
                             color: Colors.grey[800],
                             fontSize: 16,
@@ -164,22 +205,87 @@ class _View extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 15),
-                    BlocBuilder<TransferBloc, TransferState>(
-                      builder: (context, state) {
-                        final total = context.read<TransferBloc>().total;
-                        return Text(
-                          "$total IDR",
-                          style: const TextStyle(
-                            color: Colors.green,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        );
-                      },
+                    Text(
+                      "${_invoice.total} IDR",
+                      style: const TextStyle(
+                        color: Colors.green,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ],
                 ),
               ),
+              // child: BlocBuilder<TransferBloc, TransferState>(
+              //   builder: (context, state) {
+              //     print(state);
+              //     if (state is GetInvoiceFailed) {
+              //       return Center(
+              //         child: Text(state.msg),
+              //       );
+              //     }
+              //     if (state is StateInvoiceTrx) {
+              //       return Column(
+              //         children: state.invoices.map((e) {
+              //           return Column(
+              //             children: [
+              //               _titleInvoice('Nama Penerima'),
+              //               _descInvoice(e.recipient),
+              //               _titleInvoice('Jenis Bank'),
+              //               _descInvoice(e.bank),
+              //               _titleInvoice('Tipe Transaksi'),
+              //               _descInvoice(e.typeCurrency),
+              //               _titleInvoice('No. Rekening'),
+              //               _descInvoice(e.recipientRek),
+              //               _titleInvoice('Virtual Akun'),
+              //               Row(
+              //                 crossAxisAlignment: CrossAxisAlignment.center,
+              //                 mainAxisAlignment: MainAxisAlignment.center,
+              //                 children: [
+              //                   Text(
+              //                     e.virtualAccount,
+              //                     style: TextStyle(
+              //                       color: Colors.grey[800],
+              //                       fontSize: 16,
+              //                       fontWeight: FontWeight.w700,
+              //                     ),
+              //                   ),
+              //                   const SizedBox(width: 10),
+              //                   GestureDetector(
+              //                     child: const Icon(
+              //                       FeatherIcons.copy,
+              //                       size: 20.0,
+              //                     ),
+              //                     onTap: () => copyToClipboard(),
+              //                   ),
+              //                 ],
+              //               ),
+              //               const SizedBox(height: 15),
+              //               Text(
+              //                 "Total",
+              //                 style: TextStyle(
+              //                   color: Colors.grey[800],
+              //                   fontSize: 10.0,
+              //                   fontWeight: FontWeight.w700,
+              //                 ),
+              //               ),
+              //               const SizedBox(height: 15),
+              //               Text(
+              //                 "${e.total} IDR",
+              //                 style: const TextStyle(
+              //                   color: Colors.green,
+              //                   fontSize: 20.0,
+              //                   fontWeight: FontWeight.w700,
+              //                 ),
+              //               ),
+              //             ],
+              //           );
+              //         }).toList(),
+              //       );
+              //     }
+              //     return const SizedBox();
+              //   },
+              // ),
             ],
           ),
         ),

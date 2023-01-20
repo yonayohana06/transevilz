@@ -108,7 +108,7 @@ class _View extends StatelessWidget {
                 child: SizedBox(
                   height: 26,
                   child: Icon(
-                    Icons.import_export_sharp,
+                    Icons.arrow_downward_rounded,
                     color: Colors.grey[600],
                     size: 20.0,
                   ),
@@ -218,7 +218,7 @@ class _View extends StatelessWidget {
       bottomNavigationBar: BottomAppBar(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-          height: 180,
+          height: 200,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -29,13 +29,14 @@ class RecipientScreen extends StatelessWidget {
       ],
       child: BlocListener<TransferBloc, TransferState>(
         listener: (context, state) {
+          // print(state);
           if (state is RecipientSuccess) {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => PaymentMethod(
                   type: type,
-                  total: context.read<TransferBloc>().total,
+                  total: total,
                   desBank: context.read<TransferBloc>().recipientBank,
                   noRekening: context.read<TransferBloc>().recipientRek,
                   nama: context.read<TransferBloc>().recipientName,
@@ -162,7 +163,7 @@ class _View extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24.0),
       padding: const EdgeInsets.all(20),
-      height: 120,
+      height: 130,
       width: MediaQuery.of(context).size.width,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(

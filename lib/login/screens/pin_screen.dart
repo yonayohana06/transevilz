@@ -68,7 +68,8 @@ class _View extends StatelessWidget {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('token');
     prefs.remove('pin');
-    prefs.remove('userData');
+    prefs.remove('fullname');
+    prefs.remove('email');
   }
 
   @override

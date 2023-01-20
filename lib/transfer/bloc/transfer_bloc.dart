@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:transevilz/transfer/transfer.dart';
+import 'package:http/http.dart' as http;
+import 'package:transevilz/app/app.dart';
+import 'package:transevilz/transfer/models/model_get_trx.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 part 'transfer_event.dart';
@@ -41,11 +45,38 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
             noRek.text.isNotEmpty &&
             nameRecipient.text.isNotEmpty;
         if (dataRecipient) {
+          recipientBank = destinationBank.text;
+          recipientName = nameRecipient.text;
+          recipientRek = noRek.text;
           emit(RecipientSuccess());
         } else {
           emit(const TransferFailed('Gagal'));
         }
       }
+    });
+
+    on<SubmitAllDataTrx>((event, emit) async {
+      final amount = total - 5000;
+      if (pin.text.length == pinLength) {
+        await repo
+            .createTrx(pin.text, '111', recipientRek, amount.toString())
+            .then((value) => statusCode = value);
+        emit(TransferLoading());
+        if (statusCode == 200) {
+          emit(TransferSuccess());
+        }
+        if (statusCode == 404) {
+          emit(const TransferFailed('Pin yang anda masukkan salah'));
+        }
+      }
+    });
+
+    on<SubmitInvoiceTrx>((event, emit) async {
+      emit(TransferLoading());
+      await repo.getTrx().then((invoices) {
+        print(invoices);
+        emit(StateInvoiceTrx(invoices));
+      });
     });
 
     on<EventInit>((event, emit) {
@@ -61,18 +92,39 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
       recipientName = event.nama;
     });
 
-    on<EventSearchRek>((event, emit) {
+    on<EventSearchRek>((event, emit) async {
       // print(event.keyword.toString());
-      final dataAll = dataRek.map<DataRek>((e) => DataRek.fromJson(e)).toList();
-      // print(dataAll.length);
-      final searchData =
-          dataAll.where((element) => element.rek == event.keyword);
-      if (searchData.isNotEmpty) {
-        final namefound = searchData.first;
-        nameRecipient.text = namefound.name;
-      } else {
-        nameRecipient.text = '';
+      if (event.keyword.length >= 8) {
+        final response = await http.get(
+          Uri.parse(
+              "${url}receipent?bank_code=111&no_rekening=${event.keyword}"),
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        );
+        keywordRek = event.keyword;
+        final output = jsonDecode(response.body);
+        statusCode = response.statusCode;
+        emit(TransferLoading());
+        // print(output);
+        if (statusCode == 200) {
+          nameRecipient.text = output['name'];
+        }
+        if (response.statusCode == 404) {
+          nameRecipient.text = '';
+        }
       }
+      // final dataAll = dataRek.map<DataRek>((e) => DataRek.fromJson(e)).toList();
+      // // print(dataAll.length);
+      // final searchData =
+      //     dataAll.where((element) => element.rek == event.keyword);
+      // if (searchData.isNotEmpty) {
+      //   final namefound = searchData.first;
+      //   nameRecipient.text = namefound.name;
+      // } else {
+      //   nameRecipient.text = '';
+      // }
     });
 
     on<EventTransferButton>((event, emit) {
@@ -155,11 +207,6 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     }
   }
 
-  final dataRek = [
-    {"rek": '9000877724254', "name": "Monalisa"},
-    {"rek": '9000877724253', "name": "Rina"},
-  ];
-
   String? validateNominal(String? v) {
     if (v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
@@ -184,24 +231,35 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     if (v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
+    if (statusCode == 404 && keywordRek.length >= 7) {
+      return 'Nomor rekening tidak ditemukan';
+    }
     // if (v.length < 5) {
     //   return 'Minimal transfer 10.000';
     // }
     return null;
   }
 
+  //response status code
+  final repo = ApiRepository();
+  final url = Constan.baseUrl;
+  int statusCode = 0;
+
+  String keywordRek = '';
+
   //enum for type transfer
   TypeTransaction? type;
 
-  // final String? type;
+  //
+  final pinLength = 6;
   final String feeAdmin = '5000';
   final String adminInter = '100000';
   num total = 0;
 
   //data recipient
-  String recipientBank = '';
-  String recipientRek = '';
-  String recipientName = '';
+  String recipientBank = 'bank';
+  String recipientRek = 'rek';
+  String recipientName = 'nama';
 
   //Controller Transfer Page
   bool isEnableButton = false;
@@ -214,6 +272,7 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
   final paymentBank = TextEditingController();
   final metodBank = TextEditingController();
   final kodeSwift = TextEditingController();
+  final pin = TextEditingController();
 }
 
 enum TypeTransaction {

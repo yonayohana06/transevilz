@@ -5,4 +5,5 @@ export 'screens/recipient_screen.dart';
 export 'screens/transfer_international.dart';
 export 'widgets/form_transfer.dart';
 export 'bloc/transfer_bloc.dart';
-export 'models/model.dart';
+export 'models/model_trx.dart';
+export 'models/model_bank.dart';

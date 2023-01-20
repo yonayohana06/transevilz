@@ -23,25 +23,98 @@ class PinConfirm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TransferBloc(),
-      child: PinTransaction(),
+      child: BlocListener<TransferBloc, TransferState>(
+        listener: (context, state) {
+          final statusCode = context.read<TransferBloc>().statusCode;
+          print(state);
+          // if (state is TransferLoading) {
+          //   showDialog(
+          //     barrierDismissible: false,
+          //     context: context,
+          //     builder: (context) {
+          //       return Container(
+          //         alignment: Alignment.center,
+          //         child: const CircularProgressIndicator(
+          //           color: Colors.green,
+          //         ),
+          //       );
+          //     },
+          //   );
+          // }
+          // if (state is TransferLoading) {
+          //   showDialog(
+          //     barrierDismissible: true,
+          //     context: context,
+          //     builder: (context) {
+          //       if (statusCode == 404) {
+          //         Navigator.pop(context);
+          //       }
+          //       return Container(
+          //         alignment: Alignment.center,
+          //         height: 40,
+          //         width: 20,
+          //         child: const CircularProgressIndicator(
+          //           valueColor: AlwaysStoppedAnimation<Color>(
+          //             Colors.green,
+          //           ),
+          //         ),
+          //       );
+          //     },
+          //   );
+          // }
+          if (state is TransferSuccess) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (_) => InvoiceScreen(
+                  total: total,
+                  desBank: desBank,
+                  noRekening: noRekening,
+                  nama: nama,
+                ),
+              ),
+              (route) => false,
+            );
+          }
+          if (state is TransferFailed) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.msg),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 1),
+              ),
+            );
+          }
+        },
+        child: PinTransaction(
+          desBank: desBank,
+          nama: nama,
+          noRekening: noRekening,
+          total: total,
+        ),
+      ),
     );
   }
 }
 
 class PinTransaction extends StatefulWidget {
-  const PinTransaction({super.key});
+  const PinTransaction({
+    super.key,
+    required this.total,
+    required this.desBank,
+    required this.noRekening,
+    required this.nama,
+  });
+  final num total;
+  final String desBank;
+  final String noRekening;
+  final String nama;
 
   @override
   State<PinTransaction> createState() => _PinTransactionState();
 }
 
 class _PinTransactionState extends State<PinTransaction> {
-  final pinLength = 6;
-
-  final pin = TextEditingController();
-
-  String pinDummy = '123456';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +133,7 @@ class _PinTransactionState extends State<PinTransaction> {
                   child: TextFormField(
                     textAlign: TextAlign.center,
                     readOnly: true,
-                    controller: pin,
+                    controller: context.read<TransferBloc>().pin,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -110,40 +183,54 @@ class _PinTransactionState extends State<PinTransaction> {
                 ),
               ],
             ),
-            PinNumpad(
-              onChanged: (String value) {
-                if (value == 'hapus') {
-                  _deleteLastChar();
-                }
-                if (pin.text.length < pinLength) {
-                  if (value != 'hapus') {
-                    setState(() {
-                      pin.text += value;
-                    });
-                  }
-                  if (pin.text == pinDummy) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => InvoiceScreen(
-                          total: context.read<TransferBloc>().total,
-                          desBank: context.read<TransferBloc>().recipientBank,
-                          noRekening: context.read<TransferBloc>().recipientRek,
-                          nama: context.read<TransferBloc>().recipientName,
-                        ),
-                      ),
-                    );
-                  }
-                  if (pin.text.length == pinLength && pin.text != pinDummy) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Pin Salah'),
-                        backgroundColor: Colors.red,
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                  }
-                }
+            BlocBuilder<TransferBloc, TransferState>(
+              builder: (context, state) {
+                return PinNumpad(
+                  onChanged: (String value) {
+                    final pin = context.read<TransferBloc>().pin;
+                    final pinLength = context.read<TransferBloc>().pinLength;
+                    if (value == 'hapus') {
+                      _deleteLastChar();
+                    }
+                    if (pin.text.length < pinLength) {
+                      if (value != 'hapus') {
+                        setState(() {
+                          pin.text += value;
+                        });
+                      }
+                      context.read<TransferBloc>().recipientRek =
+                          widget.noRekening;
+                      context.read<TransferBloc>().total = widget.total;
+                      if (pin.text.length == pinLength) {
+                        print(pin.text);
+                        context.read<TransferBloc>().add(SubmitAllDataTrx());
+                      }
+                      // if (pin.text == pinDummy) {
+                      //   Navigator.pushAndRemoveUntil(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (_) => InvoiceScreen(
+                      //         total: widget.total,
+                      //         desBank: widget.desBank,
+                      //         noRekening: widget.noRekening,
+                      //         nama: widget.nama,
+                      //       ),
+                      //     ),
+                      //     (route) => false,
+                      //   );
+                      // }
+                      // if (pin.text.length == pinLength && pin.text != pinDummy) {
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     const SnackBar(
+                      //       content: Text('Pin Salah'),
+                      //       backgroundColor: Colors.red,
+                      //       duration: Duration(seconds: 2),
+                      //     ),
+                      //   );
+                      // }
+                    }
+                  },
+                );
               },
             )
           ],
@@ -153,6 +240,7 @@ class _PinTransactionState extends State<PinTransaction> {
   }
 
   void _deleteLastChar() {
+    final pin = context.read<TransferBloc>().pin;
     // print('Semua karakter: $_otpValue');
     // print('Karakter terakhir sekarang: ${_otpValue.split('').last}');
     if (pin.text.isNotEmpty) {

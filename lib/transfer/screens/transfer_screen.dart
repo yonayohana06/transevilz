@@ -38,7 +38,7 @@ class TransferScreen extends StatelessWidget {
 class _View extends StatelessWidget {
   final TypeTransaction type;
 
-  const _View({super.key, required this.type});
+  const _View({required this.type});
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -133,7 +133,7 @@ class _View extends StatelessWidget {
         bottomNavigationBar: BottomAppBar(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-            height: 180,
+            height: 200,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

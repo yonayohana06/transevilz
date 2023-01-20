@@ -27,14 +27,14 @@ class Helpers {
   }
 
   // set user data
-  static Future setUserData(String fullname) async {
+  static Future setUserData(key, String value) async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.setString('fullname', fullname);
+    return prefs.setString(key, value);
   }
 
   //get user data
-  static Future<String> getUserData() async {
+  static Future<String> getUserData(key) async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('fullname') ?? '';
+    return prefs.getString(key) ?? '';
   }
 }

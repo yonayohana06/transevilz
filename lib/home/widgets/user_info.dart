@@ -13,7 +13,7 @@ class _UserInfoState extends State<UserInfo> {
 
   @override
   void initState() {
-    Helpers.getUserData().then((value) {
+    Helpers.getUserData('fullname').then((value) {
       print(value);
       setState(() {
         fullname = value;
@@ -54,14 +54,17 @@ class _UserInfoState extends State<UserInfo> {
               ],
             ),
           ),
-          Container(
-            height: 40,
-            width: 40,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: NetworkImage(
-                  'https://placeimg.com/100/100',
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              height: 45,
+              width: 45,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: NetworkImage(
+                    'https://placeimg.com/100/100',
+                  ),
                 ),
               ),
             ),

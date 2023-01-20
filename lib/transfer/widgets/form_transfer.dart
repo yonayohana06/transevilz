@@ -181,7 +181,7 @@ class FormTransfer extends StatelessWidget {
             ),
             child: GestureDetector(
               onTap: () {
-                context.read<TransferBloc>().launchURL;
+                context.read<TransferBloc>().launchURL();
               },
               child: const Text(
                 'Silakan cek kode swift disini',

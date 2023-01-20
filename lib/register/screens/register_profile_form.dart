@@ -111,12 +111,12 @@ class _RegisterProfileFormState extends State<RegisterProfileForm> {
                     ),
                     buttonlabel: 'Cek Email Sekarang',
                     onpress: () {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const AppScreen(),
-                          ),
-                          (route) => false);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AppScreen(),
+                        ),
+                      );
                     },
                   ),
                 );

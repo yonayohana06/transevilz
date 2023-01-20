@@ -24,6 +24,7 @@ class PaymentMethod extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("ini data : $total $desBank $noRekening $nama $type");
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -31,22 +32,21 @@ class PaymentMethod extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => TransferBloc()
-            ..add(EventInit(
-              total,
-            )),
+            ..add(EventInitRecipient(total, desBank, noRekening, nama)),
         ),
       ],
       child: BlocListener<TransferBloc, TransferState>(
         listener: (context, state) {
+          print(state);
           if (state is PaymentSuccess) {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => PinConfirm(
-                  total: context.read<TransferBloc>().total,
-                  desBank: context.read<TransferBloc>().recipientBank,
-                  noRekening: context.read<TransferBloc>().recipientRek,
-                  nama: context.read<TransferBloc>().recipientName,
+                  total: total,
+                  desBank: desBank,
+                  noRekening: noRekening,
+                  nama: nama,
                 ),
               ),
             );
@@ -91,7 +91,7 @@ class _View extends StatelessWidget {
                       Container(
                         // margin: const EdgeInsets.symmetric(horizontal: 24.0),
                         padding: const EdgeInsets.all(20),
-                        height: 120,
+                        height: 130,
                         width: MediaQuery.of(context).size.width,
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(
@@ -118,14 +118,24 @@ class _View extends StatelessWidget {
                                   fit: BoxFit.fill,
                                 ),
                                 const SizedBox(width: 5),
-                                const Text(
-                                  "IDR ke IDR",
-                                  style: TextStyle(
+                                Text(
+                                  type == TypeTransaction.international
+                                      ? "IDR to USD"
+                                      : "IDR",
+                                  style: const TextStyle(
                                     color: Color(0xFF3A3A3A),
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
+                                const SizedBox(width: 5),
+                                type == TypeTransaction.international
+                                    ? Image.asset(
+                                        "assets/icon/flag_usa.png",
+                                        height: 16.0,
+                                        fit: BoxFit.fill,
+                                      )
+                                    : const SizedBox(),
                               ],
                             ),
                             const SizedBox(height: 10),

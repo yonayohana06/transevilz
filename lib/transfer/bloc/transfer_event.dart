@@ -13,6 +13,10 @@ class SubmitRecipient extends TransferEvent {}
 
 class SubmitPaymentMethod extends TransferEvent {}
 
+class SubmitAllDataTrx extends TransferEvent {}
+
+class SubmitInvoiceTrx extends TransferEvent {}
+
 class EventInit extends TransferEvent {
   final num total;
 

@@ -23,6 +23,14 @@ class TransferFailed extends TransferState {
   List<Object> get props => [msg];
 }
 
+class GetInvoiceFailed extends TransferState {
+  final String msg;
+
+  const GetInvoiceFailed(this.msg);
+  @override
+  List<Object> get props => [msg];
+}
+
 class TransferLoading extends TransferState {}
 
 class StateTransferButton extends TransferState {
@@ -39,4 +47,12 @@ class StateTotal extends TransferState {
   const StateTotal(this.total);
   @override
   List<Object> get props => [total];
+}
+
+class StateInvoiceTrx extends TransferState {
+  final InvoiceTrx invoices;
+
+  const StateInvoiceTrx(this.invoices);
+  @override
+  List<Object> get props => [invoices];
 }

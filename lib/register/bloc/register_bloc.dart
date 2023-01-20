@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-
 
 part 'register_event.dart';
 
@@ -55,19 +54,19 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<PhoneNumValidateEvent>((event, emit) {
       RegExp phonerex = RegExp(r'^[8][0-9]{10}');
       final match = phonerex.hasMatch(phoneNumber.text);
-      if(match) {
+      if (match) {
         emit(PhoneNumberValidateState(submitValidator = match));
       }
-      if(phoneNumber.text.length < 1) {
+      if (phoneNumber.text.length < 1) {
         emit(PhoneNumEmptyState());
       }
-      if(phoneNumber.text.length > 11) {
+      if (phoneNumber.text.length > 11) {
         emit(PhoneNumberValidateState(submitValidator = false));
         emit(PhoneNumFormatState());
       }
-      if(phoneNumber.text.length < 11
-          && phoneNumber.text.length >= 1
-          && !match) {
+      if (phoneNumber.text.length < 11 &&
+          phoneNumber.text.length >= 1 &&
+          !match) {
         emit(PhoneNumberValidateState(submitValidator = false));
         emit(PhoneNumFormatState());
       }
@@ -87,26 +86,27 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       File? img = File(image!.path);
       imageContain = img;
       emit(RegisterInitial());
-      emit(RegisterFormButton(isActive==!isActive));
+      emit(RegisterFormButton(isActive == !isActive));
     });
     on<ImageRefresh>((event, emit) {
-      emit(RegisterFormButton(isActive==!isActive));
+      emit(RegisterFormButton(isActive == !isActive));
     });
     on<PostData>((event, emit) async {
       emit(RegisterInitial());
-      final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/register');
+      final Uri backOfficeUrl =
+          Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/register');
       Map<String, dynamic> dataMap = {
-        "email":email.text,
-        "doc_type":"${type}",
-        "doc_number":"${int.parse(noDokumen.text)}",
-        "firstname":namaDepan.text,
-        "lastname":namaBelakang.text,
-        "birth_place":tempatLahir.text,
-        "birth_date":tanggalLahir.text,
-        "address":alamat.text,
-        "phone_number":"${formatNumber}${int.parse(phoneNumber.text)}",
-        "password":kataSandi.text,
-        "sex":chosen,
+        "email": email.text,
+        "doc_type": "${type}",
+        "doc_number": "${int.parse(noDokumen.text)}",
+        "firstname": namaDepan.text,
+        "lastname": namaBelakang.text,
+        "birth_place": tempatLahir.text,
+        "birth_date": tanggalLahir.text,
+        "address": alamat.text,
+        "phone_number": "${formatNumber}${int.parse(phoneNumber.text)}",
+        "password": kataSandi.text,
+        "sex": chosen,
       };
 
       Map<String, String> headerSet = {
@@ -115,27 +115,30 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       };
 
       print(dataMap);
-      // http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
-      // print(response.body);
-      // if(response.body== '{"message":"user created!"}') {
-      //   emit(RegisterSuccess());
-      // }
-      // if(response.body=='{"message":"email already registered!"}') {
-      //   emit(RegisterFormButton(isActive));
-      //   emit(RegisterFailed());
-      // }
+      http.Response response = await httpClient.post(backOfficeUrl,
+          headers: headerSet, body: jsonEncode(dataMap));
+      print(response.body);
+      if (response.body == '{"message":"user created!"}') {
+        emit(RegisterSuccess());
+      }
+      if (response.body == '{"message":"email already registered!"}') {
+        emit(RegisterFormButton(isActive));
+        emit(RegisterFailed());
+      }
     });
     on<PhoneApiCheck>((event, emit) async {
-      final Uri backOfficeUrl = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/register');
+      final Uri backOfficeUrl =
+          Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/register');
       Map<String, dynamic> dataMap = {
-        "phone_number":"${int.parse(phoneNumber.text)}",
+        "phone_number": "${int.parse(phoneNumber.text)}",
       };
 
       Map<String, String> headerSet = {
         "Accept": "application/json",
         "Content-Type": "application/json;charset=UTF-8",
       };
-      http.Response response = await httpClient.post(backOfficeUrl, headers: headerSet, body: jsonEncode(dataMap));
+      http.Response response = await httpClient.post(backOfficeUrl,
+          headers: headerSet, body: jsonEncode(dataMap));
       print(response.body);
       // if(response.body== '{"message": "user created!"}') {
       //   emit(RegisterSuccess());
@@ -147,12 +150,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     });
   }
 
-
   String? validatePhoneNumber(String? v) {
-    if(v==null || v.isEmpty) {
+    if (v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
-    if(!RegExp(r'^[8][0-9]{11}').hasMatch(v)) {
+    if (!RegExp(r'^[8][0-9]{11}').hasMatch(v)) {
       return 'Format No.HP tidak sesuai';
     }
   }
@@ -173,7 +175,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   String? validatePassword(String? v) {
     RegExp regex =
-    RegExp(r'^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[@#&*]).{8,}$');
+        RegExp(r'^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[@#&*]).{8,}$');
     if (v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     } else if (v.length < 8) {
@@ -197,50 +199,50 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   String? validateNoDok(String? v) {
-    if(type==null) {
+    if (type == null) {
       return 'Anda harus memilih Tipe Dokumen';
     }
-    if(type=='KTP') {
-      if(v!.isEmpty) {
+    if (type == 'KTP') {
+      if (v!.isEmpty) {
         return 'Anda harus mengisi bagian ini';
       }
-      if(!RegExp(r'^[0-9]{16}').hasMatch(v)) {
+      if (!RegExp(r'^[0-9]{16}').hasMatch(v)) {
         return 'Format KTP tidak sesuai';
       }
     }
-    if(type=='SIM') {
-      if(v!.isEmpty) {
+    if (type == 'SIM') {
+      if (v!.isEmpty) {
         return 'Anda harus mengisi bagian ini';
       }
-      if(!RegExp(r'^[0-9]{12}').hasMatch(v)) {
+      if (!RegExp(r'^[0-9]{12}').hasMatch(v)) {
         return 'Format SIM tidak sesuai';
       }
     }
-    if(type=='Passport') {
-      if(v!.isEmpty) {
+    if (type == 'Passport') {
+      if (v!.isEmpty) {
         return 'Anda harus mengisi bagian ini';
       }
-      if(!RegExp(r'^[0-9]{16}').hasMatch(v)) {
+      if (!RegExp(r'^[0-9]{16}').hasMatch(v)) {
         return 'Format Passport tidak sesuai';
       }
     }
   }
 
   String? validateNamaDepan(String? v) {
-    if(v==null || v.isEmpty) {
+    if (v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
-    if(!RegExp(r'^[a-zA-Z]+$').hasMatch(v)){
+    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(v)) {
       return 'Format nama depan salah';
     }
     return null;
   }
 
   String? validateNamaBelakang(String? v) {
-    if(v==null || v.isEmpty) {
+    if (v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
-    if(!RegExp(r'^[a-zA-Z]+$').hasMatch(v)){
+    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(v)) {
       return 'Format nama belakang salah';
     }
     return null;
@@ -249,13 +251,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   String? validateTempatLahir(String? v) {
     final regTempatLahir = RegExp(r'^[a-zA-Z-.,/#& ()*:0-9]+$');
     final wholeNumberTempatLahir = RegExp(r'^[0-9]+$');
-    if(v==null || v.isEmpty) {
+    if (v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
-    if(!regTempatLahir.hasMatch(v)) {
+    if (!regTempatLahir.hasMatch(v)) {
       return 'Format tempat lahir salah';
     }
-    if(wholeNumberTempatLahir.hasMatch(v)) {
+    if (wholeNumberTempatLahir.hasMatch(v)) {
       return 'Format tempat lahir salah';
     }
     // if(v.length < 10) {
@@ -271,26 +273,28 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
-    if(pickedDate != null) {
+    if (pickedDate != null) {
       tanggalLahir.text = DateFormat('dd/MM/yyyy').format(pickedDate!);
     }
   }
 
   String? validateTanggalLahir(String? v) {
-    final tidakSesuai = RegExp(r'^[0-1][0-9]+/[0-2][0-9]+/[0-9][0-9][0-9][0-9]$|[0-3][0-1]+/[0-9][0-9][0-9][0-9]$');
+    final tidakSesuai = RegExp(
+        r'^[0-1][0-9]+/[0-2][0-9]+/[0-9][0-9][0-9][0-9]$|[0-3][0-1]+/[0-9][0-9][0-9][0-9]$');
     // final umurTidakCukup = RegExp(r'^[0-1][0-9]+/[0-2][0-9]+/[0-2][0][0][0-5]|[0-3][0-1]+/[0-2][0][0][0-5]|[0-2][0-9]+/[0-1][0-9][0-9][0-9]|[0-3][0-1]+/[0-1][0-9][0-9][0-9]');
     final dateNow = DateTime.now();
     int yearValidation = dateNow.year - 17;
     int monthValidation = dateNow.month;
     int dayValidation = dateNow.day;
-    final underAgeValidation = DateTime(yearValidation, monthValidation, dayValidation);
-    if(v==null || v.isEmpty) {
+    final underAgeValidation =
+        DateTime(yearValidation, monthValidation, dayValidation);
+    if (v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
-    if(!tidakSesuai.hasMatch(v)) {
+    if (!tidakSesuai.hasMatch(v)) {
       return 'Format tidak sesuai';
     }
-    if(pickedDate!.isAfter(underAgeValidation)) {
+    if (pickedDate!.isAfter(underAgeValidation)) {
       return 'Umur tidak cukup';
     }
     return null;
@@ -298,19 +302,19 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   String? validateAlamat(String? v) {
     final wholeNumberTempatLahir = RegExp(r'^[0-9]+$');
-    if(v == null || v.isEmpty) {
+    if (v == null || v.isEmpty) {
       return 'Anda harus mengisi bagian ini';
     }
-    if(!RegExp(r'^[a-zA-Z0-9-.,/#& ()*:]+$').hasMatch(v)){
+    if (!RegExp(r'^[a-zA-Z0-9-.,/#& ()*:]+$').hasMatch(v)) {
       return 'Format alamat salah';
     }
-    if(wholeNumberTempatLahir.hasMatch(v)) {
+    if (wholeNumberTempatLahir.hasMatch(v)) {
       return 'Format alamat salah';
     }
   }
 
   String? validateCheckBox(String? v) {
-    if(v==false) {
+    if (v == false) {
       return 'Mohon setujui bagian ini';
     }
   }
