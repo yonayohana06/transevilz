@@ -39,7 +39,7 @@ class _UserInfoState extends State<UserInfo> {
                   'Hai, $fullname',
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 24,
+                    fontSize: 22,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -55,10 +55,10 @@ class _UserInfoState extends State<UserInfo> {
             ),
           ),
           Align(
-            alignment: Alignment.center,
+            alignment: Alignment.centerRight,
             child: Container(
-              height: 45,
-              width: 45,
+              height: 40,
+              width: 40,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(

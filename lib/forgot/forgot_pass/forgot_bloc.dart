@@ -14,13 +14,12 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState> {
       final isValid = formKey.currentState!.validate();
       if (isValid) {
         emit(ForgotLoading());
-        print('Form Validated Succesfully');
         if (email.text.isNotEmpty) {
           emailToSend = email.text;
           emit(EmailSuccess());
-          print("ini emailnya : ${email.text}");
+          // print("ini emailnya : $emailToSend");
         } else {
-          emit(EmailFailed('Email belum terdaftar'));
+          emit(const EmailFailed('Email belum terdaftar'));
         }
       }
     });
@@ -29,8 +28,7 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState> {
       final isValid = formKey.currentState!.validate();
       if (isValid) {
         emit(ForgotLoading());
-        print("email new: $emailToSend");
-        const baseUrlJava = "http://103.152.119.157:5555/api/v1/new_password";
+        // print("email new: $emailToSend");
         const baseUrlExpress =
             "https://red-gifted-squid.cyclic.app/api/v1/new_password";
         final response = await http.put(Uri.parse(baseUrlExpress),
@@ -42,10 +40,9 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState> {
               "password": newPass.text,
               "email": emailToSend,
             }));
-        final output = jsonDecode(response.body);
-        print(response.statusCode);
+        // final output = jsonDecode(response.body);
+        // print(response.statusCode);
         if (response.statusCode == 200) {
-          print(output);
           emit(NewPassSuccess());
         } else {
           emit(const NewPassFailed('Email tidak terdaftar'));
@@ -54,27 +51,27 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState> {
     });
 
     on<InitEmail>((event, emit) {
-      print('email event : ${event.email}');
-      emailToSend = event.email;
+      // print('email event : $emailToSend');
+      emailToSend = email.text;
     });
 
     on<StatusButton>((event, emit) {
       final emailValidate =
           email.text.isNotEmpty && formKey.currentState!.validate();
       final newPassValidate = newPass.text.isNotEmpty &&
-          newPass.text.isNotEmpty &&
+          confirmPass.text.isNotEmpty &&
           formKey.currentState!.validate();
       final formValidate = emailValidate || newPassValidate;
       emit(ButtonStatus(buttonEnable = formValidate));
     });
 
     on<ShowNewPass>((event, emit) {
-      print('pass : $showPass');
+      // print('pass : $showPass');
       emit(PassStatus(showPass = !showPass));
     });
 
     on<ShowNewPassAgain>((event, emit) {
-      print('pass kedua : $showPassAgain');
+      // print('pass kedua : $showPassAgain');
       emit(PassStatusAgain(showPassAgain = !showPassAgain));
     });
   }
@@ -134,5 +131,5 @@ class ForgotBloc extends Bloc<ForgotEvent, ForgotState> {
 
   //Controller New Password
   final newPass = TextEditingController();
-  final newPassAgain = TextEditingController();
+  final confirmPass = TextEditingController();
 }

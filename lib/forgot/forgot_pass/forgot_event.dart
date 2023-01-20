@@ -32,7 +32,7 @@ class ShowNewPassAgain extends ForgotEvent {
 class InitEmail extends ForgotEvent {
   final String email;
 
-  InitEmail(this.email);
+  const InitEmail(this.email);
   @override
   List<Object> get props => [email];
 }

@@ -25,55 +25,39 @@ class PinConfirm extends StatelessWidget {
       create: (context) => TransferBloc(),
       child: BlocListener<TransferBloc, TransferState>(
         listener: (context, state) {
-          final statusCode = context.read<TransferBloc>().statusCode;
-          print(state);
-          // if (state is TransferLoading) {
-          //   showDialog(
-          //     barrierDismissible: false,
-          //     context: context,
-          //     builder: (context) {
-          //       return Container(
-          //         alignment: Alignment.center,
-          //         child: const CircularProgressIndicator(
-          //           color: Colors.green,
-          //         ),
-          //       );
-          //     },
-          //   );
-          // }
-          // if (state is TransferLoading) {
-          //   showDialog(
-          //     barrierDismissible: true,
-          //     context: context,
-          //     builder: (context) {
-          //       if (statusCode == 404) {
-          //         Navigator.pop(context);
-          //       }
-          //       return Container(
-          //         alignment: Alignment.center,
-          //         height: 40,
-          //         width: 20,
-          //         child: const CircularProgressIndicator(
-          //           valueColor: AlwaysStoppedAnimation<Color>(
-          //             Colors.green,
-          //           ),
-          //         ),
-          //       );
-          //     },
-          //   );
-          // }
           if (state is TransferSuccess) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (_) => InvoiceScreen(
-                  total: total,
-                  desBank: desBank,
-                  noRekening: noRekening,
-                  nama: nama,
-                ),
-              ),
-              (route) => false,
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (context) {
+                Future.delayed(
+                  const Duration(seconds: 1),
+                  () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => InvoiceScreen(
+                          total: total,
+                          desBank: desBank,
+                          noRekening: noRekening,
+                          nama: nama,
+                        ),
+                      ),
+                      (route) => false,
+                    );
+                  },
+                );
+                return Container(
+                  alignment: Alignment.center,
+                  height: 40,
+                  width: 20,
+                  child: const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Colors.green,
+                    ),
+                  ),
+                );
+              },
             );
           }
           if (state is TransferFailed) {
@@ -167,7 +151,7 @@ class _PinTransactionState extends State<PinTransaction> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => const ForgotScreen(),
+                          builder: (context) => const ForgotPinScreen(),
                         ),
                       );
                     },

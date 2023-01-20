@@ -62,6 +62,31 @@ class ApiRepository {
     return statusCode;
   }
 
+  // FORGOT PIN
+  Future forgotPin(pin) async {
+    String token = '';
+    await Helpers.getToken().then((value) => token = value);
+    // print(token);
+    final response = await http.put(
+      Uri.parse("${url}new_pin"),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'pin': pin,
+      }),
+    );
+    final statusCode = response.statusCode;
+    if (statusCode == 200) {
+      // print(statusCode);
+      // print(response.body);
+      // Helpers.setUsrPin(true);
+    }
+    return statusCode;
+  }
+
   // CREATE TRANSACTIONS
   Future createTrx(pin, String bankCode, String rek, String amount) async {
     String token = '';

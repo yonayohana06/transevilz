@@ -46,7 +46,7 @@ class _View extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const UserInfo(),
-          const SizedBox(height: 35),
+          const SizedBox(height: 30),
           Container(
             margin: const EdgeInsets.only(bottom: 10),
             padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -59,7 +59,7 @@ class _View extends StatelessWidget {
               ),
             ),
           ),
-          UserHistory(),
+          Flexible(flex: 1, child: UserHistory()),
         ],
       ),
     );
