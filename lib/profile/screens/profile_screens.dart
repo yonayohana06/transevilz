@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:transevilz/profile/bloc/profile_bloc.dart';
+import 'package:transevilz/profile/screens/syarat_dan_ketentuan.dart';
 import 'package:transevilz/profile/widget/reuse_app_bar_profile.dart';
 import 'package:transevilz/profile/widget/switch_button.dart';
 
@@ -79,10 +81,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           fontSize: 18,
                                           fontWeight: FontWeight.w700),
                                     ),
-                                    Icon(
-                                      Icons.edit,
-                                      size: 15,
-                                    )
                                   ],
                                 )
                               ],
@@ -93,6 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         FutureBuilder<bool>(
                           future: context.read<ProfileBloc>().getLanguage(context.read<ProfileBloc>().isLanguageID),
                           builder: (context, snap) {
+                            print('Language: ${snap.data}');
                             if(snap.connectionState==ConnectionState.done) {
                               if(snap.hasData) {
                                 return LanguageSwitch(
@@ -104,6 +103,74 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               }
                             } return Container();
                           },
+                        ),
+                        FutureBuilder<bool>(
+                          future: context.read<ProfileBloc>().getPermission(context.read<ProfileBloc>().isAllowed),
+                          builder: (context, snap) {
+                            print('Permission: ${snap.data}');
+                            if(snap.connectionState==ConnectionState.done) {
+                              if(snap.hasData) {
+                                return PermissionSwitch(
+                                  nilai: (snap.data) ?? context.read<ProfileBloc>().isAllowed,
+                                  onchanged: (v) {
+                                    context.read<ProfileBloc>().setPermission(context.read<ProfileBloc>().isAllowed=v);
+                                  },
+                                );
+                              }
+                            } return Container();
+                          },
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return Syarat();
+                                },
+                              ),
+                            );
+                          },
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Syarat & Ketentuan',
+                                    ),
+                                    Icon(Icons.arrow_forward_ios_rounded, color: Color(0xFF2075F3), size: 16,),
+                                  ],
+                                ),
+                                SizedBox(height: 18),
+                                Divider(thickness: 1,)
+                              ],
+                            ),
+                          )
+                        ),
+                        SizedBox(height: 24),
+                        GestureDetector(
+                          onTap: () {
+
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(FeatherIcons.power, color: Colors.red, size: 24,),
+                              SizedBox(width: 11),
+                              Text(
+                                'Keluar',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.red,
+                                ),
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),

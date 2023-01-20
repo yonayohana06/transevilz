@@ -24,6 +24,7 @@ class _LanguageSwitchState extends State<LanguageSwitch>
   @override
   void initState() {
     super.initState();
+    print('language: ${widget.nilai}');
     languageAnimationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: languageAnimationDuration)
@@ -74,7 +75,7 @@ class _LanguageSwitchState extends State<LanguageSwitch>
                         width: languagePlaceHolderWidth,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(40),
-                          color: Colors.blue
+                          color: Color(0xFFB8DAFF)
                         ),
                       ),
                     ),
@@ -83,8 +84,21 @@ class _LanguageSwitchState extends State<LanguageSwitch>
                       width: languageCircleSize,
                       margin: EdgeInsets.only(left: languageHorizontalMovement.value),
                       decoration: BoxDecoration(
-                        color: Colors.red,
+                        border: Border.all(width: 1, color: Colors.white),
+                        color: Color(0xFF3A90EF),
                         borderRadius: BorderRadius.circular(languageCircleSize),
+                      ),
+                      child: Center(
+                        child: Text(
+                          widget.nilai==false
+                              ? 'EN'
+                              : 'ID',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400
+                          ),
+                        ),
                       ),
                     )
                   ],
@@ -93,7 +107,107 @@ class _LanguageSwitchState extends State<LanguageSwitch>
             )
           ],
         ),
-        SizedBox(height: 14),
+        SizedBox(height: 10),
+        Divider(thickness: 1,)
+      ],
+    );
+  }
+}
+
+
+class PermissionSwitch extends StatefulWidget {
+  PermissionSwitch({Key? key, required this.nilai, required this.onchanged}) : super(key: key);
+  bool nilai;
+  final Function(bool) onchanged;
+  @override
+  State<PermissionSwitch> createState() => _PermissionSwitchState();
+}
+
+class _PermissionSwitchState extends State<PermissionSwitch>
+    with SingleTickerProviderStateMixin {
+  final permissionCircleSize = 24.0;
+  final permissionPlaceHolderWidth = 36.0;
+  final permissionPlaceHolderHeight = 12.0;
+  final permissionContainerHeight = 24.0;
+  final permissionAnimationDuration = 100;
+  late AnimationController permissionAnimationController;
+  late Animation permissionHorizontalMovement;
+
+  @override
+  void initState() {
+    super.initState();
+    print('permission: ${widget.nilai}');
+    permissionAnimationController = AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: permissionAnimationDuration)
+    );
+    permissionHorizontalMovement = Tween<double>(
+        begin: 0.0,
+        end: 12.0
+    ).animate(permissionAnimationController);
+    permissionAnimationController.addListener(() {
+      setState(() {
+
+      });
+    });
+    (widget.nilai==true)
+        ? permissionAnimationController.forward()
+        : permissionAnimationController.reverse();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Izin'),
+            GestureDetector(
+              onTap: () {
+                // print(widget.nilai);
+                widget.nilai = !widget.nilai;
+                widget.onchanged(widget.nilai);
+                print(widget.nilai);
+                if(widget.nilai==false) {
+                  permissionAnimationController.reverse();
+                } else {
+                  permissionAnimationController.forward();
+                }
+              },
+              child: Container(
+                height: permissionContainerHeight,
+                width: permissionPlaceHolderWidth,
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: permissionPlaceHolderHeight,
+                        width: permissionPlaceHolderWidth,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: Color(0xFFB8DAFF)
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: permissionCircleSize,
+                      width: permissionCircleSize,
+                      margin: EdgeInsets.only(left: permissionHorizontalMovement.value),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: Colors.white),
+                        color: Color(0xFFB8DAFF),
+                        borderRadius: BorderRadius.circular(permissionCircleSize),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+        SizedBox(height: 10),
         Divider(thickness: 1,)
       ],
     );

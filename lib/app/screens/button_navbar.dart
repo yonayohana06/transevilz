@@ -23,7 +23,7 @@ class _MainMenuState extends State<MainMenu> {
       create: (context) => HistoryBloc(),
       child: HistoryScreen(),
     ),
-    const ProfileScreen()
+    const ProfilePrep(),
   ];
   @override
   Widget build(BuildContext context) {
