@@ -1,9 +1,13 @@
 
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:transevilz/history/model_data/modelJson.dart';
+import 'package:http/http.dart' as http;
 
 import '../model_data/model.dart';
 
@@ -178,5 +182,23 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     }
     final dateFormattedTill = DateFormat('dd/MM/yyyy').format(pickedTill!);
     lastRange.text = dateFormattedTill.toString();
+  }
+
+
+  Future<List<HistoryTrans>> fetchDataUser() async {
+    final urlUp = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/myTransaction');
+    final String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhYjUzNGRjOC05MzllLTRkYzMtYmRlMi1jOTRlZWQ5YWRlNzkiLCJpYXQiOjE2NzQwMjYzNzIsImV4cCI6MTY3NDQ1ODM3Mn0.xuHtEWZsEGGJuVbcYRkVR73wB_vh1DcBS2EaOoZKWlE';
+
+    Map<String, String> headersCust = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${token}'
+    };
+
+    final response = await http.post(urlUp, headers: headersCust);
+    print(response.body);
+
+    final List result = jsonDecode(response.body);
+    return result.map((e) => HistoryTrans.fromJson(e)).toList();
   }
 }
