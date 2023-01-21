@@ -45,7 +45,7 @@ class HistoryScreen extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 25),
+                margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16.5),
                 child: Column(
                   children: [
                     const Text(
