@@ -22,9 +22,8 @@ class RecipientScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => TransferBloc()
-            ..add(EventInit(
-              total,
-            )),
+            ..add(EventInit(total))
+            ..add(GetDataBank()),
         ),
       ],
       child: BlocListener<TransferBloc, TransferState>(
@@ -38,6 +37,7 @@ class RecipientScreen extends StatelessWidget {
                   type: type,
                   total: total,
                   desBank: context.read<TransferBloc>().recipientBank,
+                  codeBank: context.read<TransferBloc>().recipientBankCode,
                   noRekening: context.read<TransferBloc>().recipientRek,
                   nama: context.read<TransferBloc>().recipientName,
                 ),

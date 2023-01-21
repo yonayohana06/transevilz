@@ -12,6 +12,7 @@ class InvoiceTrx {
   final String status;
   final String trxDate;
   final String expired;
+  final bool isExpired;
 
   InvoiceTrx({
     required this.id,
@@ -20,6 +21,7 @@ class InvoiceTrx {
     required this.status,
     required this.trxDate,
     required this.expired,
+    required this.isExpired,
     required this.recipient,
     required this.senderName,
     required this.bank,
@@ -44,6 +46,7 @@ class InvoiceTrx {
       recipientRek: json['recipient_norek'] as String,
       virtualAccount: json['virtual_account'] as String,
       total: json['total'] as num,
+      isExpired: json['isExpired'] as bool,
     );
   }
 }

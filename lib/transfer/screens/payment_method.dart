@@ -14,12 +14,14 @@ class PaymentMethod extends StatelessWidget {
     required this.desBank,
     required this.noRekening,
     required this.nama,
+    required this.codeBank,
   });
 
   final num total;
   final String desBank;
   final String noRekening;
   final String nama;
+  final String codeBank;
   final TypeTransaction type;
 
   @override
@@ -32,7 +34,9 @@ class PaymentMethod extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => TransferBloc()
-            ..add(EventInitRecipient(total, desBank, noRekening, nama)),
+            ..add(
+              EventInitRecipient(total, desBank, noRekening, nama, codeBank),
+            ),
         ),
       ],
       child: BlocListener<TransferBloc, TransferState>(
@@ -47,6 +51,7 @@ class PaymentMethod extends StatelessWidget {
                   desBank: desBank,
                   noRekening: noRekening,
                   nama: nama,
+                  codeBank: codeBank,
                 ),
               ),
             );

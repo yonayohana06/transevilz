@@ -153,9 +153,9 @@ class ApiRepository {
     });
     final output = jsonDecode(response.body) as List;
     // final statusCode = response.statusCode;
-    print(output);
     if (response.statusCode == 200) {
-      final dataBank = output.map((e) => Bank.fromJson(e)).toList();
+      final dataBank =
+          output.map((e) => Bank.fromJson(e as Map<String, dynamic>)).toList();
       print(dataBank);
       return dataBank;
     } else {

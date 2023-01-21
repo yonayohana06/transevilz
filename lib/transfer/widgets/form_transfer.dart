@@ -2,28 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:transevilz/app/app.dart';
 import 'package:transevilz/login/login.dart';
 import 'package:transevilz/transfer/transfer.dart';
 
-class FormTransfer extends StatelessWidget {
-  FormTransfer({super.key, required this.type});
+class FormTransfer extends StatefulWidget {
+  const FormTransfer({super.key, required this.type});
 
   final TypeTransaction type;
 
-  final items = [
-    'BCA',
-    'BNI',
-    'BRI',
-    'CIMB Niaga',
-    'Mandiri',
-  ];
+  @override
+  State<FormTransfer> createState() => _FormTransferState();
+}
+
+class _FormTransferState extends State<FormTransfer> {
+  final _repo = ApiRepository();
+  List<Bank> _listBank = [];
+
+  _getBank() async {
+    await _repo.getBank().then((value) {
+      setState(() {
+        _listBank = value;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    _getBank();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: context.read<TransferBloc>().formKey,
       onChanged: () =>
-          context.read<TransferBloc>().add(EventTransferButton(type)),
+          context.read<TransferBloc>().add(EventTransferButton(widget.type)),
       child: Container(
         margin: const EdgeInsets.all(24.0),
         child: Column(
@@ -50,18 +65,29 @@ class FormTransfer extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                   ),
                   hintText: 'Bank',
-                  suffixIcon: PopupMenuButton<String>(
+                  suffixIcon: PopupMenuButton(
                     icon: const Icon(FeatherIcons.chevronDown),
-                    onSelected: (String value) {
+                    onSelected: (value) {
                       context.read<TransferBloc>().destinationBank.text = value;
+                      print(value);
                     },
                     itemBuilder: (context) {
-                      return items.map<PopupMenuItem<String>>((String value) {
+                      return _listBank.map<PopupMenuItem>((e) {
                         return PopupMenuItem(
-                          value: value,
-                          child: Text(value),
+                          value: e.name,
+                          child: Text(e.name),
+                          onTap: () => context
+                              .read<TransferBloc>()
+                              .recipientBankCode = e.code,
                         );
                       }).toList();
+                      // return bank
+                      //     .map<PopupMenuItem>(() {
+                      //   return PopupMenuItem(
+                      //     value: value,
+                      //     child: Text(value),
+                      //   );
+                      // }).toList();
                     },
                     position: PopupMenuPosition.under,
                   ),
@@ -146,7 +172,7 @@ class FormTransfer extends StatelessWidget {
   }
 
   Widget _kodeSwift(BuildContext context) {
-    if (type == TypeTransaction.international) {
+    if (widget.type == TypeTransaction.international) {
       return Column(
         children: [
           const TitleForm(title: 'Kode Swift'),

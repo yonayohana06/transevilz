@@ -12,12 +12,14 @@ class PinConfirm extends StatelessWidget {
     required this.desBank,
     required this.noRekening,
     required this.nama,
+    required this.codeBank,
   });
 
   final num total;
   final String desBank;
   final String noRekening;
   final String nama;
+  final String codeBank;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +77,7 @@ class PinConfirm extends StatelessWidget {
           nama: nama,
           noRekening: noRekening,
           total: total,
+          codeBank: codeBank,
         ),
       ),
     );
@@ -88,11 +91,13 @@ class PinTransaction extends StatefulWidget {
     required this.desBank,
     required this.noRekening,
     required this.nama,
+    required this.codeBank,
   });
   final num total;
   final String desBank;
   final String noRekening;
   final String nama;
+  final String codeBank;
 
   @override
   State<PinTransaction> createState() => _PinTransactionState();
@@ -185,6 +190,8 @@ class _PinTransactionState extends State<PinTransaction> {
                       context.read<TransferBloc>().recipientRek =
                           widget.noRekening;
                       context.read<TransferBloc>().total = widget.total;
+                      context.read<TransferBloc>().recipientBankCode =
+                          widget.codeBank;
                       if (pin.text.length == pinLength) {
                         print(pin.text);
                         context.read<TransferBloc>().add(SubmitAllDataTrx());

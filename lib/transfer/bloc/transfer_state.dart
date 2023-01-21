@@ -56,3 +56,21 @@ class InvoiceTrxLoaded extends TransferState {
   @override
   List<Object> get props => [invoices];
 }
+
+class DataBankLoaded extends TransferState {
+  final List<Bank> bank;
+
+  const DataBankLoaded(this.bank);
+  @override
+  List<Object> get props => [bank];
+}
+
+class GetBankSuccess extends TransferState {}
+
+class GetBankFailed extends TransferState {
+  final String msg;
+
+  const GetBankFailed(this.msg);
+  @override
+  List<Object> get props => [msg];
+}

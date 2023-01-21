@@ -17,6 +17,8 @@ class SubmitAllDataTrx extends TransferEvent {}
 
 class SubmitInvoiceTrx extends TransferEvent {}
 
+class GetDataBank extends TransferEvent {}
+
 class EventInit extends TransferEvent {
   final num total;
 
@@ -32,12 +34,14 @@ class EventInitRecipient extends TransferEvent {
   final String destinationBank;
   final String noRekening;
   final String nama;
+  final String codeBank;
 
   const EventInitRecipient(
     this.total,
     this.destinationBank,
     this.noRekening,
     this.nama,
+    this.codeBank,
   );
   @override
   List<Object> get props => [

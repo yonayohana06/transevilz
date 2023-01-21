@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
 import 'package:transevilz/app/app.dart';
+import 'package:transevilz/transfer/models/model_bank.dart';
 import 'package:transevilz/transfer/models/model_get_trx.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -59,7 +60,8 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
       final amount = total - 5000;
       if (pin.text.length == pinLength) {
         await repo
-            .createTrx(pin.text, '111', recipientRek, amount.toString())
+            .createTrx(
+                pin.text, recipientBankCode, recipientRek, amount.toString())
             .then((value) => statusCode = value);
         emit(TransferLoading());
         if (statusCode == 200) {
@@ -82,6 +84,14 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
       });
     });
 
+    on<GetDataBank>((event, emit) async {
+      // emit(TransferLoading());
+      await repo.getBank().then((bank) {
+        listBank = bank;
+        // print("ini data bank: $bank");
+      });
+    });
+
     on<EventInit>((event, emit) {
       emit(TransferLoading());
       total = event.total;
@@ -91,6 +101,7 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
       emit(TransferLoading());
       total = event.total;
       recipientBank = event.destinationBank;
+      recipientBankCode = event.codeBank;
       recipientRek = event.noRekening;
       recipientName = event.nama;
     });
@@ -100,7 +111,7 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
       if (event.keyword.length >= 8) {
         final response = await http.get(
           Uri.parse(
-              "${url}receipent?bank_code=111&no_rekening=${event.keyword}"),
+              "${url}receipent?bank_code=$recipientBankCode&no_rekening=${event.keyword}"),
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json; charset=UTF-8',
@@ -243,6 +254,8 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     return null;
   }
 
+  List<Bank> listBank = [];
+
   bool loading = true;
 
   //response status code
@@ -263,6 +276,7 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
 
   //data recipient
   String recipientBank = 'bank';
+  String recipientBankCode = '';
   String recipientRek = 'rek';
   String recipientName = 'nama';
 
