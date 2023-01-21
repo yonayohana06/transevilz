@@ -52,19 +52,19 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       emit(NextState(phoneNumber.text));
     });
     on<PhoneNumValidateEvent>((event, emit) {
-      RegExp phonerex = RegExp(r'^[8][0-9]{10}');
+      RegExp phonerex = RegExp(r'^[08][0-9]{10}');
       final match = phonerex.hasMatch(phoneNumber.text);
       if (match) {
         emit(PhoneNumberValidateState(submitValidator = match));
       }
-      if (phoneNumber.text.length < 1) {
+      if (phoneNumber.text.isEmpty) {
         emit(PhoneNumEmptyState());
       }
-      if (phoneNumber.text.length > 11) {
+      if (phoneNumber.text.length > 12) {
         emit(PhoneNumberValidateState(submitValidator = false));
         emit(PhoneNumFormatState());
       }
-      if (phoneNumber.text.length < 11 &&
+      if (phoneNumber.text.length < 12 &&
           phoneNumber.text.length >= 1 &&
           !match) {
         emit(PhoneNumberValidateState(submitValidator = false));
