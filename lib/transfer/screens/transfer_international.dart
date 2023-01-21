@@ -38,7 +38,7 @@ class TransferInter extends StatelessWidget {
 class _View extends StatelessWidget {
   final TypeTransaction type;
 
-  const _View({super.key, required this.type});
+  const _View({required this.type});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../widget/reuse_app_bar_profile.dart';
-
 
 class Syarat extends StatefulWidget {
   const Syarat({Key? key}) : super(key: key);
@@ -18,22 +15,22 @@ class _SyaratState extends State<Syarat> {
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomAppBar(
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 41),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(
-                    double.infinity,
-                    48,
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  backgroundColor: const Color(0xFF2075F3)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Ya, Saya Mengerti'),
-            ),
-          )),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 41),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              fixedSize: const Size(
+                double.infinity,
+                48,
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              backgroundColor: const Color(0xFF2075F3)),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Ya, Saya Mengerti'),
+        ),
+      )),
       body: SafeArea(
         child: Stack(
           children: [
@@ -43,7 +40,7 @@ class _SyaratState extends State<Syarat> {
                   color: Color(0xFFF1F7FF),
                 ),
                 margin:
-                const EdgeInsets.symmetric(vertical: 64, horizontal: 24),
+                    const EdgeInsets.symmetric(vertical: 64, horizontal: 24),
                 padding: const EdgeInsets.only(bottom: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -76,15 +73,15 @@ class _SyaratState extends State<Syarat> {
                             margin: const EdgeInsets.only(left: 3),
                             child: const Text(
                               'TransEvilz (Mobile Banking) adalah layanan'
-                                  'produk perbankan TransEvilz yang dapat diakses'
-                                  'secara langsung oleh Nasabah melalui telepon'
-                                  'seluler/handphone, baik dengan menggunakan menu'
-                                  'yang sudah tersedia di Subscriber Identification'
-                                  'Module (SIM) Card, dengan menggunakan media SMS'
-                                  'atau menggunakan menu pada TransEvilz mobile'
-                                  'dengan menggunakan media jaringan internet pada'
-                                  'handphone dikombinasikan dengan media SMS sesuai'
-                                  'ketentuan yang berlaku di TransEvilz.',
+                              'produk perbankan TransEvilz yang dapat diakses'
+                              'secara langsung oleh Nasabah melalui telepon'
+                              'seluler/handphone, baik dengan menggunakan menu'
+                              'yang sudah tersedia di Subscriber Identification'
+                              'Module (SIM) Card, dengan menggunakan media SMS'
+                              'atau menggunakan menu pada TransEvilz mobile'
+                              'dengan menggunakan media jaringan internet pada'
+                              'handphone dikombinasikan dengan media SMS sesuai'
+                              'ketentuan yang berlaku di TransEvilz.',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,

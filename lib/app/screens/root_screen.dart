@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transevilz/app/app.dart';
 import 'package:transevilz/forgot/forgot.dart';
-import 'package:transevilz/transfer/transfer.dart';
 
 class RootScreen extends StatelessWidget {
   const RootScreen({super.key});

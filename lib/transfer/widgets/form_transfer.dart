@@ -69,7 +69,6 @@ class _FormTransferState extends State<FormTransfer> {
                     icon: const Icon(FeatherIcons.chevronDown),
                     onSelected: (value) {
                       context.read<TransferBloc>().destinationBank.text = value;
-                      print(value);
                     },
                     itemBuilder: (context) {
                       return _listBank.map<PopupMenuItem>((e) {

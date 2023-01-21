@@ -26,7 +26,6 @@ class PaymentMethod extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("ini data : $total $desBank $noRekening $nama $type");
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -41,7 +40,6 @@ class PaymentMethod extends StatelessWidget {
       ],
       child: BlocListener<TransferBloc, TransferState>(
         listener: (context, state) {
-          print(state);
           if (state is PaymentSuccess) {
             Navigator.push(
               context,

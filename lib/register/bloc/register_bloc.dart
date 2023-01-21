@@ -97,14 +97,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/register');
       Map<String, dynamic> dataMap = {
         "email": email.text,
-        "doc_type": "${type}",
+        "doc_type": "$type",
         "doc_number": "${int.parse(noDokumen.text)}",
         "firstname": namaDepan.text,
         "lastname": namaBelakang.text,
         "birth_place": tempatLahir.text,
         "birth_date": tanggalLahir.text,
         "address": alamat.text,
-        "phone_number": "${formatNumber}${int.parse(phoneNumber.text)}",
+        "phone_number": "$formatNumber${int.parse(phoneNumber.text)}",
         "password": kataSandi.text,
         "sex": chosen,
       };
@@ -123,7 +123,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       }
       if (response.body == '{"message":"email already registered!"}') {
         emit(RegisterFormButton(isActive));
-        emit(RegisterFailed());
+        emit(const RegisterFailed());
       }
     });
     on<PhoneApiCheck>((event, emit) async {
@@ -157,6 +157,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (!RegExp(r'^[8][0-9]{11}').hasMatch(v)) {
       return 'Format No.HP tidak sesuai';
     }
+    return null;
   }
 
   String? validateEmail(String? v) {
@@ -226,6 +227,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         return 'Format Passport tidak sesuai';
       }
     }
+    return null;
   }
 
   String? validateNamaDepan(String? v) {
@@ -311,12 +313,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (wholeNumberTempatLahir.hasMatch(v)) {
       return 'Format alamat salah';
     }
+    return null;
   }
 
   String? validateCheckBox(String? v) {
     if (v == false) {
       return 'Mohon setujui bagian ini';
     }
+    return null;
   }
 
   //OtpLogic

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:transevilz/profile/bloc/profile_bloc.dart';
-
 
 class LanguageSwitch extends StatefulWidget {
-  LanguageSwitch({Key? key, required this.nilai, required this.onchanged}) : super(key: key);
+  LanguageSwitch({
+    Key? key,
+    required this.nilai,
+    required this.onchanged,
+  }) : super(key: key);
   bool nilai;
   final Function(bool) onchanged;
   @override
@@ -26,19 +27,14 @@ class _LanguageSwitchState extends State<LanguageSwitch>
     super.initState();
     print('language: ${widget.nilai}');
     languageAnimationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: languageAnimationDuration)
-    );
-    languageHorizontalMovement = Tween<double>(
-      begin: 12.0,
-      end: 0.0
-    ).animate(languageAnimationController);
+        vsync: this,
+        duration: Duration(milliseconds: languageAnimationDuration));
+    languageHorizontalMovement = Tween<double>(begin: 12.0, end: 0.0)
+        .animate(languageAnimationController);
     languageAnimationController.addListener(() {
-      setState(() {
-
-      });
+      setState(() {});
     });
-    (widget.nilai==false)
+    (widget.nilai == false)
         ? languageAnimationController.forward()
         : languageAnimationController.reverse();
   }
@@ -50,20 +46,20 @@ class _LanguageSwitchState extends State<LanguageSwitch>
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Bahasa'),
+            const Text('Bahasa'),
             GestureDetector(
               onTap: () {
                 // print(widget.nilai);
                 widget.nilai = !widget.nilai;
                 widget.onchanged(widget.nilai);
                 print(widget.nilai);
-                if(widget.nilai==true) {
+                if (widget.nilai == true) {
                   languageAnimationController.reverse();
                 } else {
                   languageAnimationController.forward();
                 }
               },
-              child: Container(
+              child: SizedBox(
                 height: languageContainerHeight,
                 width: languagePlaceHolderWidth,
                 child: Stack(
@@ -74,30 +70,27 @@ class _LanguageSwitchState extends State<LanguageSwitch>
                         height: languagePlaceHolderHeight,
                         width: languagePlaceHolderWidth,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          color: Color(0xFFB8DAFF)
-                        ),
+                            borderRadius: BorderRadius.circular(40),
+                            color: const Color(0xFFB8DAFF)),
                       ),
                     ),
                     Container(
                       height: languageCircleSize,
                       width: languageCircleSize,
-                      margin: EdgeInsets.only(left: languageHorizontalMovement.value),
+                      margin: EdgeInsets.only(
+                          left: languageHorizontalMovement.value),
                       decoration: BoxDecoration(
                         border: Border.all(width: 1, color: Colors.white),
-                        color: Color(0xFF3A90EF),
+                        color: const Color(0xFF3A90EF),
                         borderRadius: BorderRadius.circular(languageCircleSize),
                       ),
                       child: Center(
                         child: Text(
-                          widget.nilai==false
-                              ? 'EN'
-                              : 'ID',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400
-                          ),
+                          widget.nilai == false ? 'EN' : 'ID',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400),
                         ),
                       ),
                     )
@@ -107,16 +100,18 @@ class _LanguageSwitchState extends State<LanguageSwitch>
             )
           ],
         ),
-        SizedBox(height: 10),
-        Divider(thickness: 1,)
+        const SizedBox(height: 10),
+        const Divider(
+          thickness: 1,
+        )
       ],
     );
   }
 }
 
-
 class PermissionSwitch extends StatefulWidget {
-  PermissionSwitch({Key? key, required this.nilai, required this.onchanged}) : super(key: key);
+  PermissionSwitch({Key? key, required this.nilai, required this.onchanged})
+      : super(key: key);
   bool nilai;
   final Function(bool) onchanged;
   @override
@@ -139,18 +134,13 @@ class _PermissionSwitchState extends State<PermissionSwitch>
     print('permission: ${widget.nilai}');
     permissionAnimationController = AnimationController(
         vsync: this,
-        duration: Duration(milliseconds: permissionAnimationDuration)
-    );
-    permissionHorizontalMovement = Tween<double>(
-        begin: 0.0,
-        end: 12.0
-    ).animate(permissionAnimationController);
+        duration: Duration(milliseconds: permissionAnimationDuration));
+    permissionHorizontalMovement = Tween<double>(begin: 0.0, end: 12.0)
+        .animate(permissionAnimationController);
     permissionAnimationController.addListener(() {
-      setState(() {
-
-      });
+      setState(() {});
     });
-    (widget.nilai==true)
+    (widget.nilai == true)
         ? permissionAnimationController.forward()
         : permissionAnimationController.reverse();
   }
@@ -162,20 +152,20 @@ class _PermissionSwitchState extends State<PermissionSwitch>
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Izin'),
+            const Text('Izin'),
             GestureDetector(
               onTap: () {
                 // print(widget.nilai);
                 widget.nilai = !widget.nilai;
                 widget.onchanged(widget.nilai);
                 print(widget.nilai);
-                if(widget.nilai==false) {
+                if (widget.nilai == false) {
                   permissionAnimationController.reverse();
                 } else {
                   permissionAnimationController.forward();
                 }
               },
-              child: Container(
+              child: SizedBox(
                 height: permissionContainerHeight,
                 width: permissionPlaceHolderWidth,
                 child: Stack(
@@ -187,18 +177,19 @@ class _PermissionSwitchState extends State<PermissionSwitch>
                         width: permissionPlaceHolderWidth,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40),
-                            color: Color(0xFFB8DAFF)
-                        ),
+                            color: const Color(0xFFB8DAFF)),
                       ),
                     ),
                     Container(
                       height: permissionCircleSize,
                       width: permissionCircleSize,
-                      margin: EdgeInsets.only(left: permissionHorizontalMovement.value),
+                      margin: EdgeInsets.only(
+                          left: permissionHorizontalMovement.value),
                       decoration: BoxDecoration(
                         border: Border.all(width: 1, color: Colors.white),
-                        color: Color(0xFFB8DAFF),
-                        borderRadius: BorderRadius.circular(permissionCircleSize),
+                        color: const Color(0xFFB8DAFF),
+                        borderRadius:
+                            BorderRadius.circular(permissionCircleSize),
                       ),
                     )
                   ],
@@ -207,8 +198,10 @@ class _PermissionSwitchState extends State<PermissionSwitch>
             )
           ],
         ),
-        SizedBox(height: 10),
-        Divider(thickness: 1,)
+        const SizedBox(height: 10),
+        const Divider(
+          thickness: 1,
+        )
       ],
     );
   }

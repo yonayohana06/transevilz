@@ -193,7 +193,6 @@ class _PinTransactionState extends State<PinTransaction> {
                       context.read<TransferBloc>().recipientBankCode =
                           widget.codeBank;
                       if (pin.text.length == pinLength) {
-                        print(pin.text);
                         context.read<TransferBloc>().add(SubmitAllDataTrx());
                       }
                       // if (pin.text == pinDummy) {
