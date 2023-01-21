@@ -59,7 +59,7 @@ class _View extends StatelessWidget {
               ),
             ),
           ),
-          Flexible(flex: 1, child: UserHistory()),
+          const Flexible(flex: 1, child: UserHistory()),
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:transevilz/app/app.dart';
+import 'package:transevilz/home/home.dart';
 import 'package:transevilz/transfer/models/model_get_trx.dart';
 import 'package:transevilz/transfer/transfer.dart';
 
@@ -138,6 +139,32 @@ class ApiRepository {
     if (statusCode == 200) {
       print(output);
       return InvoiceTrx.fromJson(output);
+      // print(statusCode);
+      // print(output);
+      // Helpers.setUserData('trx_id', id);
+    }
+    throw Exception('Gagal get data');
+  }
+
+  //GET DATA TRANSACTION BY ID
+  Future<List<LastTrx>> getLastTrx() async {
+    String token = '';
+    await Helpers.getToken().then((value) => token = value);
+    // print(token);
+    final response = await http.post(
+      Uri.parse("${url}myTransaction"),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    final statusCode = response.statusCode;
+    final output = jsonDecode(response.body) as List;
+    if (statusCode == 200) {
+      return output
+          .map<LastTrx>((e) => LastTrx.fromJson(e as Map<String, dynamic>))
+          .toList();
       // print(statusCode);
       // print(output);
       // Helpers.setUserData('trx_id', id);
