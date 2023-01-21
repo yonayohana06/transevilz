@@ -1,11 +1,10 @@
-
 import 'dart:convert';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:transevilz/app/app.dart';
 import 'package:transevilz/history/model_data/modelJson.dart';
 import 'package:http/http.dart' as http;
 
@@ -147,9 +146,9 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       emit(HistoryLoading());
     });
     on<DariEvent>((event, emit) {
-      if(pickedFrom != null && pickedTill != null) {
+      if (pickedFrom != null && pickedTill != null) {
         emit(HistoryLoaded());
-        if(pickedTill!.isBefore(pickedFrom!)) {
+        if (pickedTill!.isBefore(pickedFrom!)) {
           emit(InversedDate());
         }
       }
@@ -163,7 +162,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       firstDate: DateTime(2010),
       lastDate: DateTime.now(),
     );
-    if(pickedFrom==null) {
+    if (pickedFrom == null) {
       return null;
     }
     final dateFormatedFrom = DateFormat('dd/MM/yyyy').format(pickedFrom!);
@@ -177,22 +176,22 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       firstDate: DateTime(2010),
       lastDate: DateTime.now(),
     );
-    if(pickedTill==null) {
+    if (pickedTill == null) {
       return null;
     }
     final dateFormattedTill = DateFormat('dd/MM/yyyy').format(pickedTill!);
     lastRange.text = dateFormattedTill.toString();
   }
 
-
   Future<List<HistoryTrans>> fetchDataUser() async {
-    final urlUp = Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/myTransaction');
-    final String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhYjUzNGRjOC05MzllLTRkYzMtYmRlMi1jOTRlZWQ5YWRlNzkiLCJpYXQiOjE2NzQwMjYzNzIsImV4cCI6MTY3NDQ1ODM3Mn0.xuHtEWZsEGGJuVbcYRkVR73wB_vh1DcBS2EaOoZKWlE';
-
+    final urlUp =
+        Uri.parse('https://red-gifted-squid.cyclic.app/api/v1/myTransaction');
+    String token = '';
+    await Helpers.getToken().then((value) => token = value);
     Map<String, String> headersCust = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
+      'Authorization': 'Bearer $token'
     };
 
     final response = await http.post(urlUp, headers: headersCust);
