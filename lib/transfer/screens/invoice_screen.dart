@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,7 +63,7 @@ class InvoiceScreen extends StatelessWidget {
   }
 }
 
-class _View extends StatelessWidget {
+class _View extends StatefulWidget {
   _View({
     required this.total,
     required this.desBank,
@@ -72,22 +74,21 @@ class _View extends StatelessWidget {
   final String desBank;
   final String noRekening;
   final String nama;
+
+  @override
+  State<_View> createState() => _ViewState();
+}
+
+class _ViewState extends State<_View> {
   final formatter = NumberFormat('#,###', 'id_ID');
+  late Timer timerTrx;
+  @override
+  void dispose() {
+    super.dispose();
+    timerTrx.cancel();
+  }
 
   // final String va = '9999-5678-0033-1121-314';
-
-  // // This function is triggered when the copy icon is pressed
-  // void copyToClipboard() {
-  //   Clipboard.setData(ClipboardData(text: va));
-  //   Fluttertoast.showToast(
-  //     msg: 'Copied to clipboard',
-  //     backgroundColor: Colors.white,
-  //     textColor: Colors.grey[800],
-  //     toastLength: Toast.LENGTH_LONG,
-  //     gravity: ToastGravity.SNACKBAR,
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,25 +135,84 @@ class _View extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 20),
-                    Text(
-                      "Selesaikan Pembayaran sebelum",
-                      style: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      textAlign: TextAlign.center,
+                    BlocBuilder<TransferBloc, TransferState>(
+                      builder: (context, state) {
+                        if (state is InvoiceTrxLoaded) {
+                          final invoice = state.invoices;
+                          final expireAtDateParse =
+                              DateFormat('yyyy-MM-ddTHH:mm:ss')
+                                  .parse(invoice.expired)
+                                  .difference(DateTime.now());
+                          var secondCount = expireAtDateParse.inSeconds;
+                          // int seconds = (secondCount % 60);
+                          // int minutes = (secondCount / 60).toInt();
+                          // int minutesShowed = (minutes % 60);
+                          // int hour = (minutes / 60).toInt();
+                          timerTrx = Timer.periodic(const Duration(seconds: 1),
+                              (timer) {
+                            if (!mounted) {
+                              return;
+                            }
+                            setState(() {
+                              secondCount--;
+                            });
+                          });
+                          String trxTimer(int hour, minutes, seconds) {
+                            return '$hour Jam $minutes Menit $seconds Detik';
+                          }
+
+                          return Column(
+                            children: [
+                              Text(
+                                "Selesaikan Pembayaran sebelum",
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              // trxTimer((secondCount/60/60).toInt(), (secondCount/60%60).toInt(), secondCount%60),
+                              Text(
+                                trxTimer(
+                                    secondCount / 60 ~/ 60,
+                                    (secondCount / 60 % 60).toInt(),
+                                    secondCount % 60),
+                                style: const TextStyle(
+                                  color: Colors.green,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          );
+                        }
+                        return Column(
+                          children: [
+                            Text(
+                              "Selesaikan Pembayaran sebelum",
+                              style: TextStyle(
+                                color: Colors.grey[500],
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            // const Text(
+                            //   "23 Jam 30 Menit 10 Detik",
+                            //   style: TextStyle(
+                            //     color: Colors.green,
+                            //     fontSize: 18,
+                            //     fontWeight: FontWeight.w700,
+                            //   ),
+                            //   textAlign: TextAlign.center,
+                            // ),
+                          ],
+                        );
+                      },
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      "23 Jam 30 Menit 10 Detik",
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
                   ],
                 ),
               ),
@@ -281,7 +341,7 @@ class _View extends StatelessWidget {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const MainMenu(),
+                            builder: (context) => const MainMenu(),
                           ),
                           (route) => false,
                         );
