@@ -109,9 +109,10 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     on<EventSearchRek>((event, emit) async {
       // print(event.keyword.toString());
       if (event.keyword.length >= 8) {
+        loading = true;
+        final url2 = "${url}receipent?bank_code=";
         final response = await http.get(
-          Uri.parse(
-              "${url}receipent?bank_code=$recipientBankCode&no_rekening=${event.keyword}"),
+          Uri.parse("$url2$recipientBankCode&no_rekening=${event.keyword}"),
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json; charset=UTF-8',
@@ -126,6 +127,7 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
           nameRecipient.text = output['name'];
         }
         if (response.statusCode == 404) {
+          loading = false;
           nameRecipient.text = '';
         }
       }

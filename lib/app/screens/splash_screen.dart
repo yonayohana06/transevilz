@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final valueOnboard = prefs.getBool('skipOnboard');
 
-    Timer(const Duration(milliseconds: 400), () {
+    Timer(const Duration(milliseconds: 800), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

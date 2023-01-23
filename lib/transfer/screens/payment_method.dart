@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:intl/intl.dart';
 import 'package:transevilz/app/app.dart';
 import 'package:transevilz/app/transaction/transaction.dart';
 import 'package:transevilz/login/login.dart';
@@ -70,6 +71,7 @@ class _View extends StatelessWidget {
     'Mandiri',
   ];
   final TypeTransaction type;
+  final formatter = NumberFormat('#,###', 'id_ID');
 
   _View({required this.type});
 
@@ -80,7 +82,7 @@ class _View extends StatelessWidget {
         child: Column(
           children: [
             const ButtonApp(
-              title: 'Akun Bank',
+              title: 'Metode Pembayaran',
               color: Colors.blue,
             ),
             Expanded(
@@ -153,10 +155,12 @@ class _View extends StatelessWidget {
                             const SizedBox(height: 10),
                             BlocBuilder<TransferBloc, TransferState>(
                               builder: (context, state) {
+                                final formatter =
+                                    NumberFormat('#,###', 'id_ID');
                                 final total =
                                     context.read<TransferBloc>().total;
                                 return Text(
-                                  "$total IDR",
+                                  "${formatter.format(total)} IDR",
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 24,

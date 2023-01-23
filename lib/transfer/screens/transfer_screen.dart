@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:transevilz/app/app.dart';
 import 'package:transevilz/transfer/transfer.dart';
 
@@ -15,13 +16,14 @@ class TransferScreen extends StatelessWidget {
       create: (context) => TransferBloc(),
       child: BlocListener<TransferBloc, TransferState>(
         listener: (context, state) {
+          final total = context.read<TransferBloc>().total;
           if (state is TransferSuccess) {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => RecipientScreen(
                   type: TypeTransaction.local,
-                  total: context.read<TransferBloc>().total,
+                  total: total,
                 ),
               ),
             );
@@ -37,10 +39,12 @@ class TransferScreen extends StatelessWidget {
 
 class _View extends StatelessWidget {
   final TypeTransaction type;
+  final formatter = NumberFormat('#,###', 'id_ID');
 
-  const _View({required this.type});
+  _View({required this.type});
   @override
   Widget build(BuildContext context) {
+    final feeAdmin = int.parse(context.read<TransferBloc>().feeAdmin);
     return Form(
       key: context.read<TransferBloc>().formKey,
       onChanged: () => context.read<TransferBloc>().add(
@@ -117,7 +121,7 @@ class _View extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "${context.read<TransferBloc>().feeAdmin} IDR",
+                      "${formatter.format(feeAdmin)} IDR",
                       style: const TextStyle(
                         color: Color(0xFF98A5D3),
                         fontSize: 14,
@@ -161,7 +165,7 @@ class _View extends StatelessWidget {
                     final total = context.read<TransferBloc>().total;
                     if (state is StateTotal) {
                       return Text(
-                        "$total IDR",
+                        "${formatter.format(total)} IDR",
                         style: const TextStyle(
                           color: Colors.green,
                           fontSize: 18,
@@ -169,9 +173,9 @@ class _View extends StatelessWidget {
                         ),
                       );
                     }
-                    return const Text(
-                      "IDR",
-                      style: TextStyle(
+                    return Text(
+                      "${formatter.format(total)} IDR",
+                      style: const TextStyle(
                         color: Colors.green,
                         fontSize: 18,
                         fontWeight: FontWeight.w700,

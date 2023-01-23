@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:transevilz/app/app.dart';
 import 'package:transevilz/transfer/transfer.dart';
 
@@ -53,8 +54,9 @@ class RecipientScreen extends StatelessWidget {
 
 class _View extends StatelessWidget {
   final TypeTransaction type;
+  final formatter = NumberFormat('#,###', 'id_ID');
 
-  const _View({required this.type});
+  _View({required this.type});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +64,7 @@ class _View extends StatelessWidget {
         child: Column(
           children: [
             const ButtonApp(
-              title: 'Akun Bank',
+              title: 'Data Penerima',
               color: Colors.blue,
             ),
             Expanded(
@@ -222,7 +224,7 @@ class _View extends StatelessWidget {
             builder: (context, state) {
               final total = context.read<TransferBloc>().total;
               return Text(
-                "$total IDR",
+                "${formatter.format(total)} IDR",
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 24,

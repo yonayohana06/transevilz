@@ -18,13 +18,16 @@ class FormTransfer extends StatefulWidget {
 class _FormTransferState extends State<FormTransfer> {
   final _repo = ApiRepository();
   List<Bank> _listBank = [];
+  bool _loading = true;
 
   _getBank() async {
+    _loading = true;
     await _repo.getBank().then((value) {
       setState(() {
         _listBank = value;
       });
     });
+    _loading = false;
   }
 
   @override
@@ -64,7 +67,7 @@ class _FormTransferState extends State<FormTransfer> {
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                   ),
-                  hintText: 'Bank',
+                  hintText: _loading ? 'loading...' : 'Pilih Bank',
                   suffixIcon: PopupMenuButton(
                     icon: const Icon(FeatherIcons.chevronDown),
                     onSelected: (value) {
@@ -94,6 +97,7 @@ class _FormTransferState extends State<FormTransfer> {
               ),
             ),
             const SizedBox(height: 20),
+            _kodeSwift(context),
             const TitleForm(title: 'Nomor Rekening'),
             TextFormField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -127,29 +131,34 @@ class _FormTransferState extends State<FormTransfer> {
             ),
             const SizedBox(height: 20),
             _nameRecipient('Nama Penerima'),
-            TextFormField(
-              readOnly: true,
-              controller: context.read<TransferBloc>().nameRecipient,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
+            BlocBuilder<TransferBloc, TransferState>(
+              builder: (context, state) {
+                // final loading = context.read<TransferBloc>().loading;
+                // final status = context.read<TransferBloc>().statusCode;
+                return TextFormField(
+                  readOnly: true,
+                  controller: context.read<TransferBloc>().nameRecipient,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.all(10),
+                    fillColor: Color(0xFFE5F2FF),
+                    filled: true,
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    hintText: 'Nama Penerima',
                   ),
-                ),
-                contentPadding: EdgeInsets.all(10),
-                fillColor: Color(0xFFE5F2FF),
-                filled: true,
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                ),
-                hintText: 'Nama Penerima',
-              ),
+                );
+              },
             ),
-            const SizedBox(height: 20),
-            _kodeSwift(context),
+            const SizedBox(height: 50),
           ],
         ),
       ),
@@ -201,7 +210,7 @@ class _FormTransferState extends State<FormTransfer> {
             alignment: Alignment.centerLeft,
             margin: const EdgeInsets.only(
               top: 10,
-              bottom: 50,
+              bottom: 20,
               right: 24,
             ),
             child: GestureDetector(

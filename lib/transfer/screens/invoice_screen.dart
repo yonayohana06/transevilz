@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:intl/intl.dart';
 import 'package:transevilz/app/app.dart';
 import 'package:transevilz/transfer/transfer.dart';
 
@@ -61,7 +62,7 @@ class InvoiceScreen extends StatelessWidget {
 }
 
 class _View extends StatelessWidget {
-  const _View({
+  _View({
     required this.total,
     required this.desBank,
     required this.noRekening,
@@ -71,6 +72,7 @@ class _View extends StatelessWidget {
   final String desBank;
   final String noRekening;
   final String nama;
+  final formatter = NumberFormat('#,###', 'id_ID');
 
   // final String va = '9999-5678-0033-1121-314';
 
@@ -239,7 +241,7 @@ class _View extends StatelessWidget {
                           ),
                           const SizedBox(height: 15),
                           Text(
-                            "${invoice.total} IDR",
+                            "${formatter.format(invoice.total)} IDR",
                             style: const TextStyle(
                               color: Colors.green,
                               fontSize: 20.0,
