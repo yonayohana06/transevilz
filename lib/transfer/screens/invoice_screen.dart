@@ -139,9 +139,12 @@ class _ViewState extends State<_View> {
                       builder: (context, state) {
                         if (state is InvoiceTrxLoaded) {
                           final invoice = state.invoices;
+                          final expiredPar = DateFormat('yyyy-MM-ddTHH:mm:ss').parse(invoice.expired);
+                          final expiredLocal = DateTime(expiredPar.year, expiredPar.month, expiredPar.day, expiredPar.hour + 7, expiredPar.minute, expiredPar.second);
+                          final expireLocalToString = DateFormat('yyyy-MM-ddTHH:mm:ss').format(expiredLocal);
                           final expireAtDateParse =
                               DateFormat('yyyy-MM-ddTHH:mm:ss')
-                                  .parse(invoice.expired)
+                                  .parse(expireLocalToString)
                                   .difference(DateTime.now());
                           var secondCount = expireAtDateParse.inSeconds;
                           // int seconds = (secondCount % 60);
@@ -156,6 +159,9 @@ class _ViewState extends State<_View> {
                             setState(() {
                               secondCount--;
                             });
+                            if(secondCount==0) {
+                              timerTrx.cancel();
+                            }
                           });
                           String trxTimer(int hour, minutes, seconds) {
                             return '$hour Jam $minutes Menit $seconds Detik';

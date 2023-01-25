@@ -226,13 +226,17 @@ class HistoryScreen extends StatelessWidget {
                                     final itsTill = formatDateNow.isBefore(context.read<HistoryBloc>().pickedTill!);
                                     final formatToShow = DateFormat('dd MMMM yyyy').format(formatDateNow);
                                     final dateParse = DateFormat('yyyy-MM-ddTHH:mm:ss').parse(sorter[historyData].transaction_date!);
-                                    final toDateTime = DateTime(dateParse.year, dateParse.month, dateParse.day, dateParse.hour, dateParse.minute, dateParse.second);
+                                    final toDateTime = DateTime(dateParse.year, dateParse.month, dateParse.day, dateParse.hour + 7, dateParse.minute, dateParse.second);
                                     final backToString = DateFormat('dd MMMM yyyy HH:mm:ss').format(toDateTime);
                                     final totalFormat = formatter.format(sorter[historyData].total);
                                     final nominalFormat = formatter.format(sorter[historyData].nominal);
                                     final adminFeeFormat = formatter.format(sorter[historyData].admin_fee);
                                     final now = DateTime.now();
-                                    final expireAtDateParse = DateFormat('yyyy-MM-ddTHH:mm:ss').parse(sorter[historyData].expired_at!).difference(now);
+                                    final expiredFromDatabase = sorter[historyData].expired_at!;
+                                    final expireExpiredParse = DateFormat('yyyy-MM-ddTHH:mm:ss').parse(expiredFromDatabase);
+                                    final expiredLocalTime = DateTime(expireExpiredParse.year, expireExpiredParse.month, expireExpiredParse.day, expireExpiredParse.hour + 7, expireExpiredParse.minute, expireExpiredParse.second);
+                                    final expiredLocalToString = DateFormat('yyyy-MM-ddTHH:mm:ss').format(expiredLocalTime);
+                                    final expireAtDateParse = DateFormat('yyyy-MM-ddTHH:mm:ss').parse(expiredLocalToString).difference(now);
                                     final secondsCount = expireAtDateParse.inSeconds;
                                     print(formatToShow);
                                     if(sameFrom | itsFrom && sameTill | itsTill) {

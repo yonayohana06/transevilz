@@ -56,6 +56,7 @@ class _BuktiTransferState extends State<BuktiTransfer> {
   @override
   void initState() {
     timeLeftNow = widget.timeLeft!;
+    print(timeLeftNow);
     int seconds = (widget.timeLeft!%60);
     int minutes = (widget.timeLeft!/60).toInt();
     int minutesShowed = (minutes%60);
@@ -67,6 +68,9 @@ class _BuktiTransferState extends State<BuktiTransfer> {
       setState(() {
         timeLeftNow--;
       });
+      if(timeLeftNow==0) {
+        return timerCount!.cancel();
+      }
     });
     print(otpTimer(hour, minutesShowed, seconds));
   }
